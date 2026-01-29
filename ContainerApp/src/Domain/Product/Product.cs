@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Domain.Container;
+using Domain.ContainerType;
+using Domain.ProductType;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +11,55 @@ namespace Domain.Product
 {
     public class Product
     {
+        public ProductId Id { get; }
+        public ProductTypeId TypeId { get; }
+        public string Name { get; private set; }
+        public double Capacity { get; private set; }
+        public DateTime ExpirationDate { get; private set; }
+        public DateTime? FullingDate { get; private set; }
+        public string Description { get; private set; }
+
+        private Product(ProductId id, ProductTypeId type_id, string name, double capacity , DateTime expirationDate, DateTime? fullingDate, string description)
+        {
+            Id = id;
+            TypeId = type_id;
+            Name = name;
+            Capacity = capacity;
+            ExpirationDate = expirationDate;
+            FullingDate = fullingDate;
+            Description = description;
+        }
+
+        public static Product Create(
+            ProductId id,
+            ProductTypeId typeId,
+            string name,
+            double capacity,
+            DateTime expirationDate,
+            string description)
+        {
+            return new Product(
+                id,
+                typeId,
+                name,
+                capacity,
+                expirationDate,
+                null,
+                description);
+        }
+
+        public void UpdateProduct(
+            string name,
+            double capacity,
+            DateTime expirationDate,
+            DateTime? fullingDate,
+            string description)
+        {
+            Name = name;
+            Capacity = capacity;
+            ExpirationDate = expirationDate;
+            FullingDate = fullingDate;
+            Description = description;
+        }
     }
 }
