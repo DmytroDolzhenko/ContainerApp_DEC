@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Users;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces.Repositories
 {
-    internal class IUserRepositories
+    public interface IUserRepository
     {
+        Task<User> AddAsync(User entity, CancellationToken cancellationToken);
+        Task<User> UpdateAsync(User entity, CancellationToken cancellationToken);
+        Task<User> DeleteAsync(User entity, CancellationToken cancellationToken);
     }
 }
