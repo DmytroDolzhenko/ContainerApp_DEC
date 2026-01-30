@@ -1,12 +1,12 @@
-﻿using Domain.ContainerType;
-using Domain.Product;
+﻿using Domain.ContainerTypes;
+using Domain.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Container
+namespace Domain.Containers
 {
     public class Container
     {

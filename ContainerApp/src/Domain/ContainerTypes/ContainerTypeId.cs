@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ContainerType
+namespace Domain.ContainerTypes
 {
     public record ContainerTypeId(Guid value)
     {

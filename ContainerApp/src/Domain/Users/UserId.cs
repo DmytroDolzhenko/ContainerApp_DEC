@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.User
+namespace Domain.Users
 {
     public record UserId(Guid value)
     {

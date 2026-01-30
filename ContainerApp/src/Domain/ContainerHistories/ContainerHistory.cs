@@ -1,12 +1,12 @@
-﻿using Domain.Container;
-using Domain.Product;
+﻿using Domain.Containers;
+using Domain.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ContainerHistory
+namespace Domain.ContainerHistories
 {
     public class ContainerHistory
     {

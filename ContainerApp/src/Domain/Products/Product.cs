@@ -1,13 +1,13 @@
-﻿using Domain.Container;
-using Domain.ContainerType;
-using Domain.ProductType;
+﻿using Domain.Containers;
+using Domain.ContainerTypes;
+using Domain.ProductTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Product
+namespace Domain.Products
 {
     public class Product
     {

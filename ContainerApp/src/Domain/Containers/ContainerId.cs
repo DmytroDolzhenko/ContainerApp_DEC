@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Product
+namespace Domain.Containers
 {
-    public record ProductId(Guid value)
+    public record ContainerId(Guid value)
     {
-        public static ProductId Empty() => new(Guid.Empty);
-        public static ProductId New() => new(Guid.NewGuid());
+        public static ContainerId New() => new(Guid.NewGuid());
+        public static ContainerId Empty() => new(Guid.Empty);
         public override string ToString() => value.ToString();
-
     }
 }

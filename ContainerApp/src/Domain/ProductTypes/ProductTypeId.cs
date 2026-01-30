@@ -1,4 +1,4 @@
-﻿namespace Domain.ProductType
+﻿namespace Domain.ProductTypes
 {
     public record ProductTypeId(Guid value)
     {

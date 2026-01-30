@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ContainerHistory
+namespace Domain.ContainerHistories
 {
     public record ContainerHistoryId(Guid value)
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.ProductType
+namespace Domain.ProductTypes
 {
     public class ProductType
     {
