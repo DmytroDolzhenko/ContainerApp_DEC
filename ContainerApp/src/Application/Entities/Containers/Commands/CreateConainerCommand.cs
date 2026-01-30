@@ -1,12 +1,10 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Entities.User.Commands
+namespace Application.Entities.Containers.Commands
 {
-    internal class FileName
-    {
-    }
 }

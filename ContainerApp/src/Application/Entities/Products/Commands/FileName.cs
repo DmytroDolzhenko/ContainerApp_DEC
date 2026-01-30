@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Entities.ContainerType.Commands
+namespace Application.Entities.Products.Commands
 {
     internal class FileName
     {

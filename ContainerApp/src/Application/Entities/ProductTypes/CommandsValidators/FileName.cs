@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Entities.ProductType.CommandsValidators
+namespace Application.Entities.ProductTypes.CommandsValidators
 {
     internal class FileName
     {
