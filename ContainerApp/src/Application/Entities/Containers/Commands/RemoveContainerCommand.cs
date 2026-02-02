@@ -28,8 +28,6 @@ namespace Application.Entities.Containers.Commands
             }
 
             await repositories.DeleteAsync(container, cancellationToken);
-            await repositories.SaveChangeAsync(cancellationToken);
-
         }
     }
 }

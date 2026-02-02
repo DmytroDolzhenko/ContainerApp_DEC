@@ -17,16 +17,19 @@ namespace Application.Entities.Containers.Commands
         public required UserId UserId { get; init; }
     }
     public class CleanContainerCommandHandler
-        (IContainerQueries queries, IContainerRepositories repositories)
+        (IContainerQueries queries)
         : IRequestHandler<CleanContainerCommand>
     {
         public async Task Handle(CleanContainerCommand request, CancellationToken cancellationToken)
         {
             var container = await queries.GetByIdAsync(request.ContainerId, cancellationToken);
 
-            container.CleanContainer(request.UserId);
+            if (container is null)
+            {
+                throw new KeyNotFoundException($"Container with Id {request.ContainerId} not found.");
+            }
 
-            await repositories.SaveChangeAsync(cancellationToken);
+            container.CleanContainer(request.UserId);
         }
     }
 }

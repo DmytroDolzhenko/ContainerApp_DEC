@@ -20,7 +20,7 @@ namespace Application.Entities.Containers.Commands
         public required int Amount { get; init; }
     }
     public class FillingContainerCommandHandler
-        (IContainerQueries queries, IContainerRepositories repositories)
+        (IContainerQueries queries)
         : IRequestHandler<FillingContainerCommand, Container>
     {
         public async Task<Container> Handle(FillingContainerCommand request, CancellationToken cancellationToken)
@@ -33,8 +33,6 @@ namespace Application.Entities.Containers.Commands
             }
 
             container.FillContainer(request.ProductId, request.UserId, request.Amount);
-           // await repositories.UpdateAsync(container, cancellationToken);
-            await repositories.SaveChangeAsync(cancellationToken);
             return container;
         }
     }

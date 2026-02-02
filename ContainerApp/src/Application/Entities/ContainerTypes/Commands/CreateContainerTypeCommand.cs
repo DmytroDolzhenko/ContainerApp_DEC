@@ -25,9 +25,7 @@ namespace Application.Entities.ContainerTypes.Commands
                  request.TypeName
              );
             repositories.AddAsync(containerType, cancellationToken);
-            repositories.SaveChangeAsync(cancellationToken);
             return Task.FromResult(containerType);
-            //return Task.FromResult(containerType);
         }
     }
 }

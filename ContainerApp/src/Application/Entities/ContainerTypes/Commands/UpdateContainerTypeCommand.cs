@@ -32,8 +32,6 @@ namespace Application.Entities.ContainerTypes.Commands
             containerType.UpdateDetails(request.Name);
 
             await repositories.UpdateAsync(containerType, cancellationToken);
-            await repositories.SaveChangeAsync(cancellationToken);
-
             return containerType;
         }
     }

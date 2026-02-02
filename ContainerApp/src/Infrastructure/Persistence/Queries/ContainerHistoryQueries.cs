@@ -1,0 +1,35 @@
+﻿using Application.Common.Interfaces.Queries;
+using Domain.ContainerHistories;
+using Domain.Containers;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Infrastructure.Persistence.Queries
+{
+    public class ContainerHistoryQueries : IContainerHistoryQueries
+    {
+        private readonly ApplicationDbContext _context;
+        public ContainerHistoryQueries(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<IReadOnlyList<ContainerHistory?>> GetByContainerIdAsync(ContainerId containerId, CancellationToken cancellationToken)
+        {
+            return await _context.ContainerHistory
+                .Where(ch => ch.ContainerId == containerId)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<ContainerHistory?> GetLatestByContainerIdAsync(ContainerId containerId, CancellationToken cancellationToken)
+        {
+            return await _context.ContainerHistory
+                .Where(ch => ch.ContainerId == containerId)
+                .OrderByDescending(ch => ch.FullingDate)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+    }
+}
