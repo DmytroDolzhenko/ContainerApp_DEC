@@ -23,9 +23,9 @@ namespace Domain.ContainerHistories
             FullingDate = fullingDate;
             CleaningDate = cleaningDate;
         }
-        public static ContainerHistory CreateNew(ContainerHistoryId id,ContainerId containerId, ProductId productId, DateTime fullingDate, DateTime cleaningDate)
+        public static ContainerHistory CreateNew(ContainerId containerId, ProductId productId, DateTime fullingDate, DateTime cleaningDate)
         {
-            return new ContainerHistory(id, containerId, productId, fullingDate, cleaningDate);
+            return new ContainerHistory(ContainerHistoryId.New(), containerId, productId, fullingDate, cleaningDate);
         }
     }
 }
