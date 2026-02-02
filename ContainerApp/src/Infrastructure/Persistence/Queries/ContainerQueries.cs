@@ -21,28 +21,43 @@ namespace Infrastructure.Persistence.Queries
         }
         public async Task<IReadOnlyList<Container>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-
+            return await _context.Containers.ToListAsync(cancellationToken);
         }
 
-        public Task<Container> GetByContainerType(ContainerTypeId containerTypeId, CancellationToken cancellationToken)
+        public async Task<Container?> GetByContainerType(ContainerTypeId containerTypeId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var containers = await _context.Containers
+                .Where(c => c.TypeId == containerTypeId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return containers;
         }
 
-        public Task<Container> GetByIdAsync(ContainerId id, CancellationToken cancellationToken)
+        public async Task<Container?> GetByIdAsync(ContainerId id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var container = await _context.Containers
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return container;
         }
 
-        public Task<IReadOnlyList<Container>> GetByProductAsync(ProductId productId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Container>> GetByProductAsync(ProductId productId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var containers = await _context.Containers
+                .Where(c => c.ProductId == productId)
+                .ToListAsync(cancellationToken);
+
+            return containers;
         }
 
-        public Task<IReadOnlyList<Container>> GetByProductTypeAsync(ProductTypeId productTypeId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Container>> GetByProductTypeAsync(ProductTypeId productTypeId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _context.Containers
+                .Include(c => c.ProductId)
+                .Where(c => _context.Products
+                .Any(p => p.Id == c.ProductId && p.TypeId == productTypeId))
+                .ToListAsync(cancellationToken);
         }
     }
 }

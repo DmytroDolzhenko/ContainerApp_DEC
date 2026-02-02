@@ -9,10 +9,8 @@ namespace Application.Common.Interfaces.Repositories
 {
     public interface IContainerHistoryRepositories
     {
-        Task AddAsync(ContainerHistory containerHistory, CancellationToken cancellationToken);
-        //Task UpdateAsync(ContainerHistory containerHistory, CancellationToken cancellationToken);
-        Task DeleteAsync(ContainerHistory containerHistory, CancellationToken cancellationToken);
-        Task<int> SaveChangeAsync(CancellationToken cancellationToken);
+        Task<ContainerHistory> AddAsync(ContainerHistory containerHistory, CancellationToken cancellationToken);
+        Task<ContainerHistory> DeleteAsync(ContainerHistory containerHistory, CancellationToken cancellationToken);
 
     }
 }

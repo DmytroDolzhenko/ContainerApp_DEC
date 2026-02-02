@@ -32,7 +32,6 @@ namespace Application.Entities.Containers.Commands
             
             container.UpdateDetails(request.Id, request.Name, request.Capacity, request.Description);
             await repositories.UpdateAsync(container, cancellationToken);
-            await repositories.SaveChangeAsync(cancellationToken);
             return container;
         }
     }

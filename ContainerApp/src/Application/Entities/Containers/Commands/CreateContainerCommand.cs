@@ -32,7 +32,6 @@ namespace Application.Entities.Containers.Commands
                 request.ContainerTypeId
             );
             await repositories.AddAsync(container, cancellationToken);
-            await repositories.SaveChangeAsync(cancellationToken);
             return container;
         }
     }

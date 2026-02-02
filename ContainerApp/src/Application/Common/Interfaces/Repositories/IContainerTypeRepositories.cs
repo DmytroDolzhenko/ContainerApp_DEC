@@ -9,10 +9,8 @@ namespace Application.Common.Interfaces.Repositories
 {
     public interface IContainerTypeRepositories
     {
-        Task AddAsync(ContainerType containerType, CancellationToken cancellationToken);
-        Task UpdateAsync(ContainerType containerType, CancellationToken cancellationToken);
-        Task DeleteAsync(ContainerType containerType, CancellationToken cancellationToken);
-        Task<int> SaveChangeAsync(CancellationToken cancellationToken);
-
+        Task<ContainerType> AddAsync(ContainerType containerType, CancellationToken cancellationToken);
+        Task<ContainerType> UpdateAsync(ContainerType containerType, CancellationToken cancellationToken);
+        Task<ContainerType> DeleteAsync(ContainerType containerType, CancellationToken cancellationToken);
     }
 }
