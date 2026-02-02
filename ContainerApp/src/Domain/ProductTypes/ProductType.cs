@@ -21,7 +21,7 @@ namespace Domain.ProductTypes
         {
             return new ProductType(id, name);
         }
-        public void UpdateProductType(string name)
+        public void Update(string name)
         {
             Name = name;
         }

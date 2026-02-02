@@ -53,7 +53,7 @@
                 identifier,
                 isApproved);
         }
-        public void UpdateUser(
+        public void Update(
             string name,
             string surname,
             string middlename,
