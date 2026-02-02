@@ -12,5 +12,7 @@ namespace Application.Common.Interfaces.Repositories
         Task AddAsync(ContainerType containerType, CancellationToken cancellationToken);
         Task UpdateAsync(ContainerType containerType, CancellationToken cancellationToken);
         Task DeleteAsync(ContainerType containerType, CancellationToken cancellationToken);
+        Task<int> SaveChangeAsync(CancellationToken cancellationToken);
+
     }
 }

@@ -15,9 +15,9 @@ namespace Domain.ContainerTypes
             Id = id;
             Name = name;
         }
-        public static ContainerType CreateNew(ContainerTypeId id,string name)
+        public static ContainerType CreateNew(string name)
         {
-            return new ContainerType(id, name);
+            return new ContainerType(ContainerTypeId.New(), name);
         }
         public void UpdateDetails(string name)
         {
