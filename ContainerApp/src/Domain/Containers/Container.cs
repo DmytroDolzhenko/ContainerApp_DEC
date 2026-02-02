@@ -48,9 +48,9 @@ namespace Domain.Containers
             {
                 throw new InvalidOperationException("Container is already filled.");
             }
-            if(amount > Capacity)
+            if (amount > Capacity)
             {
-               throw new InvalidOperationException("Amount exceeds container capacity.");
+                throw new InvalidOperationException("Amount exceeds container capacity.");
             }
 
             this.ProductId = productId;
