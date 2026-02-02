@@ -12,5 +12,6 @@ namespace Application.Common.Interfaces.Repositories
         Task<ProductType> AddAsync(ProductType entity, CancellationToken cancellationToken);
         Task<ProductType> UpdateAsync(ProductType entity, CancellationToken cancellationToken);
         Task<ProductType> DeleteAsync(ProductType entity, CancellationToken cancellationToken);
+        Task SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

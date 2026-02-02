@@ -48,7 +48,7 @@ namespace Domain.Products
                 description);
         }
 
-        public void UpdateProduct(
+        public void Update(
             string name,
             double capacity,
             DateTime expirationDate,

@@ -10,6 +10,6 @@ namespace Application.Common.Interfaces.Queries
     public interface IProductQueries
     {
         Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken);
-        Task<Product?> GetByIdAsync(Product id, CancellationToken cancellationToken);
+        Task<Product> GetByIdAsync(ProductId id, CancellationToken cancellationToken);
     }
 }
