@@ -3,7 +3,6 @@ using Domain.ContainerTypes;
 using Domain.Products;
 using Domain.ProductTypes;
 using Domain.Users;
-using LanguageExt.Pipes;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

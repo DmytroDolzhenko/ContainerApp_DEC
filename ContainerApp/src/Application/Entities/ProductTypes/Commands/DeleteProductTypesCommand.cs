@@ -35,7 +35,6 @@ namespace Application.Entities.ProductTypes.Commands
             }
 
             await repository.DeleteAsync(productType, cancellationToken);
-            await repository.SaveChangesAsync(cancellationToken);
         }
     }
 }

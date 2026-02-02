@@ -29,7 +29,6 @@ namespace Application.Products.Commands
             }
 
             await repository.DeleteAsync(product, cancellationToken);
-            await repository.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Application.Entities.Users.Commands
             user.ChangeRole(request.Role);
 
             await repository.UpdateAsync(user, cancellationToken);
-            await repository.SaveChangesAsync(cancellationToken);
+
 
             return user;
         }

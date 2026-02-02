@@ -34,7 +34,6 @@ namespace Application.Entities.Users.Commands
             }
 
             await repository.DeleteAsync(user, cancellationToken);
-            await repository.SaveChangesAsync(cancellationToken);
         }
     }
 }

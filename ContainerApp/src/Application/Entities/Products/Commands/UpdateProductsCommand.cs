@@ -37,7 +37,7 @@ public class UpdateProductsCommandHandler(
             request.Description ?? string.Empty);
 
         await repository.UpdateAsync(product, cancellationToken);
-        await repository.SaveChangesAsync(cancellationToken);
+
 
         return product;
     }

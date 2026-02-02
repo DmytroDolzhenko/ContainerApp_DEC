@@ -43,8 +43,8 @@ namespace Application.Entities.Users.Commands
                 request.Email,
                 request.Identifier
                 );
+
             await repository.UpdateAsync(user, cancellationToken);
-            await repository.SaveChangesAsync(cancellationToken);
 
             return user;
         }
