@@ -24,7 +24,7 @@ namespace Infrastructure.Persistence.Queries
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<User> GetByIdAsync(UserId id, CancellationToken cancellationToken)
+        public async Task<User?> GetByIdAsync(UserId id, CancellationToken cancellationToken)
         {
             var entity = await _context.Users
                 .AsNoTracking()

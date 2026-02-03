@@ -26,7 +26,7 @@ namespace Infrastructure.Persistence.Queries
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<Product> GetByIdAsync(ProductId id, CancellationToken cancellationToken)
+        public async Task<Product?> GetByIdAsync(ProductId id, CancellationToken cancellationToken)
         {
             var entity = await _context.Products
                 .AsNoTracking()

@@ -28,7 +28,7 @@ namespace Infrastructure.Persistence.Queries
         {
             var containers = await _context.Containers
                 .Where(c => c.TypeId == containerTypeId)
-                .FirstOrDefaultAsync(cancellationToken);
+                .SingleOrDefaultAsync(cancellationToken);
 
             return containers;
         }
@@ -37,7 +37,7 @@ namespace Infrastructure.Persistence.Queries
         {
             var container = await _context.Containers
                 .Where(c => c.Id == id)
-                .FirstOrDefaultAsync(cancellationToken);
+                .SingleOrDefaultAsync(cancellationToken);
 
             return container;
         }
