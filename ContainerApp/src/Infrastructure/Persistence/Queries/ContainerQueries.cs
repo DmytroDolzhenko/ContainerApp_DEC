@@ -53,13 +53,11 @@ namespace Infrastructure.Persistence.Queries
 
         public async Task<IReadOnlyList<Container>> GetByProductTypeAsync(int productTypeId, CancellationToken cancellationToken)
         {
-            /* var containers = await _context.Containers
-                 .Include(c => c.Product)
-                 .ThenInclude(p => p.Type)
-                 .Where(c => c.Product.Type.Id == productTypeId)
-                 .ToListAsync(cancellationToken);
-             return containers;*/
-             throw new NotImplementedException();
+            return await _context.Containers
+                .Include(c => c.ProductId)
+                .Where(c => _context.Products
+                .Any(p => p.Id == c.ProductId && p.TypeId == productTypeId))
+                .ToListAsync(cancellationToken);
         }
     }
 }

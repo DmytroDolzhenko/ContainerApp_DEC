@@ -3,6 +3,7 @@ using Domain.Products;
 using Domain.Users;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,16 +12,16 @@ namespace Domain.Containers
 {
     public class Container
     {
-        public int Id { get; } //change to int value
+        public int Id { get; }
         public int TypeId { get; }
-        public ProductId? ProductId { get; private set; }
+        public int? ProductId { get; private set; }
         public string Name { get; private set; }
         public double Capacity { get; private set; }
         public double CurrentCapacity { get; private set; }
         public string Description { get; private set; }
         public bool Status { get; private set; }
         public DateTime CreatedAt { get; }
-        public UserId? LastModifiedBy { get; private set; }
+        public int? LastModifiedBy { get; private set; }
         public DateTime? LastModifiedAt { get; private set; }
         public Container(int id, string name, double capacity, string description, int typeId, DateTime createdAt)
         {
@@ -42,7 +43,7 @@ namespace Domain.Containers
             Capacity = capacity;
             Description = description;
         }
-        public void FillContainer(ProductId productId, UserId userId, int amount)
+        public void FillContainer(int productId, int userId, int amount)
         {
             if (Status == true)
             {
@@ -53,13 +54,13 @@ namespace Domain.Containers
                 throw new InvalidOperationException("Amount exceeds container capacity.");
             }
 
-            this.ProductId = productId;
-            this.Status = true;
-            this.CurrentCapacity = amount;
-            this.LastModifiedBy = userId;
-            this.LastModifiedAt = DateTime.UtcNow;
+            ProductId = productId;
+            Status = true;
+            CurrentCapacity = amount;
+            LastModifiedBy = userId;
+            LastModifiedAt = DateTime.UtcNow;
         }
-        public void CleanContainer(UserId userId)
+        public void CleanContainer(int userId)
         {
             if (Status == false)
             {

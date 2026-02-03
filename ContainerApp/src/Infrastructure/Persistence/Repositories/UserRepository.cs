@@ -21,7 +21,6 @@ namespace Infrastructure.Persistence.Repositories
 
             return entity;
         }
-        //
         public async Task<User> UpdateAsync(User entity, CancellationToken cancellationToken)
         {
             _context.Users.Update(entity);
