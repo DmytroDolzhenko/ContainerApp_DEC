@@ -8,16 +8,16 @@ namespace Domain.ProductTypes
 {
     public class ProductType
     {
-        public ProductTypeId Id { get; }
+        public int Id { get; }
         public string Name { get; set; }
 
-        public ProductType(ProductTypeId id, string name)
+        public ProductType(int id, string name)
         {
             Id = id;
             Name = name;
         }
 
-        public static ProductType Create(ProductTypeId id, string name)
+        public static ProductType Create(int id, string name)
         {
             return new ProductType(id, name);
         }

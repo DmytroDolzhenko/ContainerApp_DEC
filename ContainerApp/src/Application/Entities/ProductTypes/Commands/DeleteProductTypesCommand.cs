@@ -13,7 +13,7 @@ namespace Application.Entities.ProductTypes.Commands
 {
     public record DeleteProductTypesCommand : IRequest
     {
-        public required ProductTypeId Id { get; init; }
+        public required int Id { get; init; }
     }
 
     public class DeleteProductTypesCommandHandler(

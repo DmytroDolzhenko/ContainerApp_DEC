@@ -24,7 +24,7 @@ namespace Application.Entities.ProductTypes.Commands
         {
 
             var productType = ProductType.Create(
-                ProductTypeId.New(),
+                0,
                 request.Name
             );
 

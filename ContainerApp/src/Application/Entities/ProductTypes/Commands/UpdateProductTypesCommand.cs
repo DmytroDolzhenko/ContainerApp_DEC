@@ -13,7 +13,7 @@ namespace Application.Entities.ProductTypes.Commands
 {
     public record UpdateProductTypesCommand : IRequest<ProductType>
     {
-        public required ProductTypeId Id { get; init; }
+        public required int Id { get; init; }
         public required string Name { get; init; }
     }
 

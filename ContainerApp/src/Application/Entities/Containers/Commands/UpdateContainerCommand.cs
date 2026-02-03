@@ -19,8 +19,8 @@ namespace Application.Entities.Containers.Commands
         public required string Name { get; init; }
         public required double Capacity { get; init; }
         public required string Description { get; init; }
-        public required UserId UserId { get; init; }
-        public ProductId? ProductId => null;
+        public required int UserId { get; init; }
+        public int? ProductId => null;
         public string ActionDescription => "Update Container";
     }
     public class UpdateContainerCommandHandler

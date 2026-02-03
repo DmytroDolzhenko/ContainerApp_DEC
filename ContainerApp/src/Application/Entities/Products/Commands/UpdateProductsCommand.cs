@@ -8,7 +8,7 @@ namespace Application.Products.Commands;
 
 public record UpdateProductsCommand : IRequest<Product>
 {
-    public required ProductId Id { get; init; }
+    public required int Id { get; init; }
     public required string Name { get; init; }
     public required Guid ProductTypeId { get; init; }
     public required double Capacity { get; init; }

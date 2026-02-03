@@ -13,7 +13,7 @@ namespace Application.Entities.Users.Commands
 {
     public record UpdateUsersCommand : IRequest<User>
     {
-        public required UserId Id { get; init; }
+        public required int Id { get; init; }
         public required string Name { get; init; }
         public required string Surname { get; init; }
         public required string Middlename { get; init; }

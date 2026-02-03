@@ -12,7 +12,7 @@ namespace Application.Entities.Users.Commands
 {
     public record DeleteUsersCommand : IRequest
     {
-        public required UserId Id { get; init; }
+        public required int Id { get; init; }
     }
 
     public class DeleteUsersCommandHandler(

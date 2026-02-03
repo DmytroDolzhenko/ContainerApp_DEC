@@ -42,7 +42,7 @@ namespace Infrastructure.Persistence.Queries
             return container;
         }
 
-        public async Task<IReadOnlyList<Container>> GetByProductAsync(ProductId productId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Container>> GetByProductAsync(int productId, CancellationToken cancellationToken)
         {
             var containers = await _context.Containers
                 .Where(c => c.ProductId == productId)
@@ -51,13 +51,15 @@ namespace Infrastructure.Persistence.Queries
             return containers;
         }
 
-        public async Task<IReadOnlyList<Container>> GetByProductTypeAsync(ProductTypeId productTypeId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Container>> GetByProductTypeAsync(int productTypeId, CancellationToken cancellationToken)
         {
-            return await _context.Containers
-                .Include(c => c.ProductId)
-                .Where(c => _context.Products
-                .Any(p => p.Id == c.ProductId && p.TypeId == productTypeId))
-                .ToListAsync(cancellationToken);
+            /* var containers = await _context.Containers
+                 .Include(c => c.Product)
+                 .ThenInclude(p => p.Type)
+                 .Where(c => c.Product.Type.Id == productTypeId)
+                 .ToListAsync(cancellationToken);
+             return containers;*/
+             throw new NotImplementedException();
         }
     }
 }
