@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Queries
 {
-    public class ProductrQueries : IProductQueries
+    public class ProductQueries : IProductQueries
     {
         private readonly ApplicationDbContext _context;
-        public ProductrQueries(ApplicationDbContext context)
+        public ProductQueries(ApplicationDbContext context)
         {
             _context = context;
         }

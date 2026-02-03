@@ -11,7 +11,7 @@ namespace Domain.Containers
 {
     public class Container
     {
-        public ContainerId Id { get; }
+        public ContainerId Id { get; } //change to int value
         public ContainerTypeId TypeId { get; }
         public ProductId? ProductId { get; private set; }
         public string Name { get; private set; }
