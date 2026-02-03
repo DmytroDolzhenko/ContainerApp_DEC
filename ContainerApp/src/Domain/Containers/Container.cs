@@ -11,8 +11,8 @@ namespace Domain.Containers
 {
     public class Container
     {
-        public ContainerId Id { get; } //change to int value
-        public ContainerTypeId TypeId { get; }
+        public int Id { get; } //change to int value
+        public int TypeId { get; }
         public ProductId? ProductId { get; private set; }
         public string Name { get; private set; }
         public double Capacity { get; private set; }
@@ -22,7 +22,7 @@ namespace Domain.Containers
         public DateTime CreatedAt { get; }
         public UserId? LastModifiedBy { get; private set; }
         public DateTime? LastModifiedAt { get; private set; }
-        public Container(ContainerId id, string name, double capacity, string description, ContainerTypeId typeId, DateTime createdAt)
+        public Container(int id, string name, double capacity, string description, int typeId, DateTime createdAt)
         {
             Id = id;
             TypeId = typeId;
@@ -32,11 +32,11 @@ namespace Domain.Containers
             Status = false;
             CreatedAt = createdAt;
         }
-        public static Container CreateNew(string name, double capacity, string description, ContainerTypeId typeId)
+        public static Container CreateNew(string name, double capacity, string description, int typeId)
         {
-            return new Container(ContainerId.New(), name, capacity, description, typeId, DateTime.UtcNow);
+            return new Container(0, name, capacity, description, typeId, DateTime.UtcNow);
         }
-        public void UpdateDetails(ContainerId id, string name, double capacity, string description)
+        public void UpdateDetails(int id, string name, double capacity, string description)
         {
             Name = name;
             Capacity = capacity;

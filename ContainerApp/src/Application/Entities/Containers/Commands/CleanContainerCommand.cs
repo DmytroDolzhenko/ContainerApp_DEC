@@ -15,7 +15,7 @@ namespace Application.Entities.Containers.Commands
 {
     public record CleanContainerCommand : IRequest, IAuditableContainerCommand
     {
-        public required ContainerId ContainerId { get; init; }
+        public required int ContainerId { get; init; }
         public required UserId UserId { get; init; }
         public string ActionDescription => "Cleaned the container";
         public ProductId? ProductId => null;

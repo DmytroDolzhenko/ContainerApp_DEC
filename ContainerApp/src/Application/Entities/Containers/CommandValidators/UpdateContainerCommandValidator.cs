@@ -12,7 +12,7 @@ namespace Application.Entities.Containers.CommandValidators
     {
         public UpdateContainerCommandValidator()
         {
-            RuleFor(x => x.Id)
+            RuleFor(x => x.ContainerId)
                 .NotEmpty().WithMessage("Container Id is required.");
             RuleFor(x => x.Capacity).NotEmpty();
             RuleFor(x => x.Description).NotEmpty().MaximumLength(150);

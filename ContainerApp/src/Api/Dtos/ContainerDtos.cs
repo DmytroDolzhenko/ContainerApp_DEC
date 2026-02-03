@@ -1,6 +1,5 @@
-﻿namespace Api.Dtos
+﻿using Domain.Containers;
+
+namespace Api.Dtos
 {
-    public class ContainerDtos
-    {
-    }
 }

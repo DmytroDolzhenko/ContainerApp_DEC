@@ -12,7 +12,7 @@ namespace Application.Entities.ContainerTypes.Commands
 {
     public record UpdateContainerTypeCommand : IRequest<ContainerType>
     {
-        public required ContainerTypeId Id;
+        public required int Id;
         public required string Name;
     }
 

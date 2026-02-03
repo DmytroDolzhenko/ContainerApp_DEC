@@ -24,7 +24,7 @@ namespace Infrastructure.Persistence.Queries
             return await _context.Containers.ToListAsync(cancellationToken);
         }
 
-        public async Task<Container?> GetByContainerType(ContainerTypeId containerTypeId, CancellationToken cancellationToken)
+        public async Task<Container?> GetByContainerType(int containerTypeId, CancellationToken cancellationToken)
         {
             var containers = await _context.Containers
                 .Where(c => c.TypeId == containerTypeId)
@@ -33,7 +33,7 @@ namespace Infrastructure.Persistence.Queries
             return containers;
         }
 
-        public async Task<Container?> GetByIdAsync(ContainerId id, CancellationToken cancellationToken)
+        public async Task<Container?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var container = await _context.Containers
                 .Where(c => c.Id == id)

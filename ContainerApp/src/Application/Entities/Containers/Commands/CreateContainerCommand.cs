@@ -16,7 +16,7 @@ namespace Application.Entities.Containers.Commands
         public required string Name { get; init; }
         public required double Capacity { get; init; }
         public required string Description { get; init; }
-        public required ContainerTypeId ContainerTypeId { get; init; }
+        public required int ContainerTypeId { get; init; }
     }
 
     public class CreateContainerCommandHandler

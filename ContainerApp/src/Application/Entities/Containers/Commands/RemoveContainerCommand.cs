@@ -12,7 +12,7 @@ namespace Application.Entities.Containers.Commands
 {
     public record RemoveContainerCommand : IRequest
     {
-        public required ContainerId Id { get; init; }
+        public required int Id { get; init; }
     }
     public class DeleteContainerCommandHandler
         (IContainerRepositories repositories, IContainerQueries queries)

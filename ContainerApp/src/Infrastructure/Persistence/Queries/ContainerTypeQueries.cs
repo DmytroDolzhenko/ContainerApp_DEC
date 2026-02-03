@@ -21,7 +21,7 @@ namespace Infrastructure.Persistence.Queries
             return await _context.ContainerTypes.ToListAsync(cancellationToken);
         }
 
-        public async Task<ContainerType?> GetByIdAsync(ContainerTypeId id, CancellationToken cancellationToken)
+        public async Task<ContainerType?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.ContainerTypes.SingleOrDefaultAsync(ct => ct.Id == id, cancellationToken);
         }

@@ -17,14 +17,14 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-        public async Task<IReadOnlyList<ContainerHistory?>> GetByContainerIdAsync(ContainerId containerId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<ContainerHistory?>> GetByContainerIdAsync(int containerId, CancellationToken cancellationToken)
         {
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)
                 .ToListAsync(cancellationToken);
         }
         //останній запис історії контейнера за датою оновлення
-        public async Task<ContainerHistory?> GetLatestByContainerIdAsync(ContainerId containerId, CancellationToken cancellationToken)
+        public async Task<ContainerHistory?> GetLatestByContainerIdAsync(int containerId, CancellationToken cancellationToken)
         {
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)

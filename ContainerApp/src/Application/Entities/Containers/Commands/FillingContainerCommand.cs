@@ -15,7 +15,7 @@ namespace Application.Entities.Containers.Commands
 {
     public record FillingContainerCommand : IRequest<Container>, IAuditableContainerCommand
     {
-        public required ContainerId ContainerId { get; init; }
+        public required int ContainerId { get; init; }
         public required ProductId ProductId { get; init; }
         public required UserId UserId { get; init; }
         public required int Amount { get; init; }
