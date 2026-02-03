@@ -16,8 +16,8 @@ namespace Application.Entities.Containers.Commands
     public record FillingContainerCommand : IRequest<Container>, IAuditableContainerCommand
     {
         public required ContainerId ContainerId { get; init; }
-        public required ProductId ProductId { get; init; }
-        public required UserId UserId { get; init; }
+        public required int? ProductId { get; init; }
+        public required int UserId { get; init; }
         public required int Amount { get; init; }
         public string ActionDescription => "Сontainer was filled";
     }
@@ -34,7 +34,7 @@ namespace Application.Entities.Containers.Commands
                 throw new KeyNotFoundException($"Container with Id {request.ContainerId} not found.");
             }
 
-            container.FillContainer(request.ProductId, request.UserId, request.Amount);
+            /*container.FillContainer(request.ProductId, request.UserId, request.Amount);*/
             return container;
         }
     }

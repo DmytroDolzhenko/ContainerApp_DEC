@@ -2,7 +2,7 @@
 {
     public class User
     {
-        public UserId Id { get; }
+        public int Id { get; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public string Middlename { get; private set; }
@@ -13,7 +13,7 @@
         public bool IsApproved { get; private set; }
 
         private User(
-            UserId id,
+            int id,
             string name,
             string surname,
             string middlename,
@@ -34,7 +34,6 @@
         }
 
         public static User Create(
-            UserId id,
             string name,
             string surname,
             string middlename,
@@ -44,7 +43,7 @@
             bool isApproved)
         {
             return new User(
-                id,
+                0,
                 name,
                 surname,
                 middlename,
@@ -53,6 +52,7 @@
                 identifier,
                 isApproved);
         }
+
         public void Update(
             string name,
             string surname,

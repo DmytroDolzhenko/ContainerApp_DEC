@@ -12,8 +12,8 @@ namespace Application.Common.Interfaces
     public interface IAuditableContainerCommand
     {
         ContainerId ContainerId { get; }
-        ProductId? ProductId { get; }
-        UserId UserId { get; }
+        int? ProductId { get; }
+        int UserId { get; }
         string ActionDescription { get; }
     }
 }

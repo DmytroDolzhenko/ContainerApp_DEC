@@ -23,14 +23,14 @@ namespace Application.Common.Behaviours
         {
             var responce = await next();
 
-            var history = ContainerHistory.CreateNew(
+           /* var history = ContainerHistory.CreateNew(
                 request.ContainerId,
                 request.ProductId ?? ProductId.Empty(),
                 request.ActionDescription,
                 request.UserId,
-                DateTime.UtcNow);
+                DateTime.UtcNow);*/
 
-            await historyRepositories.AddAsync(history, cancellationToken);
+           /* await historyRepositories.AddAsync(history, cancellationToken);*/
 
             return responce;
         }

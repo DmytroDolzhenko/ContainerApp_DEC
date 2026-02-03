@@ -7,7 +7,7 @@ namespace Application.Products.Commands
 {
     public record DeleteProductsCommand : IRequest
     {
-        public required ProductId Id { get; init; }
+        public required int Id { get; init; }
     }
 
     public class DeleteProductCommandHandler(

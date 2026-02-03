@@ -31,7 +31,6 @@ namespace Application.Entities.Users.Commands
         {
 
             var user = User.Create(
-                UserId.New(),
                 request.Name,
                 request.Surname,
                 request.Middlename,

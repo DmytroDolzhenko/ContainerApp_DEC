@@ -15,8 +15,8 @@ namespace Application.Common.Interfaces.Queries
         Task<IReadOnlyList<Container>> GetAllAsync(CancellationToken cancellationToken);
         Task<Container?> GetByIdAsync(ContainerId id, CancellationToken cancellationToken);
         Task<Container?> GetByContainerType(ContainerTypeId containerTypeId, CancellationToken cancellationToken);
-        Task<IReadOnlyList<Container>> GetByProductAsync(ProductId productId, CancellationToken cancellationToken);
-        Task<IReadOnlyList<Container>> GetByProductTypeAsync(ProductTypeId productTypeId, CancellationToken cancellationToken);
+        Task<IReadOnlyList<Container>> GetByProductAsync(int productId, CancellationToken cancellationToken);
+        Task<IReadOnlyList<Container>> GetByProductTypeAsync(int productTypeId, CancellationToken cancellationToken);
 
     }
 }

@@ -11,15 +11,15 @@ namespace Domain.Products
 {
     public class Product
     {
-        public ProductId Id { get; }
-        public ProductTypeId TypeId { get; }
+        public int Id { get; }
+        public int TypeId { get; }
         public string Name { get; private set; }
         public double Capacity { get; private set; }
         public DateTime ExpirationDate { get; private set; }
         public DateTime? FullingDate { get; private set; }
         public string Description { get; private set; }
 
-        private Product(ProductId id, ProductTypeId type_id, string name, double capacity , DateTime expirationDate, DateTime? fullingDate, string description)
+        private Product(int id, int type_id, string name, double capacity , DateTime expirationDate, DateTime? fullingDate, string description)
         {
             Id = id;
             TypeId = type_id;
@@ -31,8 +31,8 @@ namespace Domain.Products
         }
 
         public static Product Create(
-            ProductId id,
-            ProductTypeId typeId,
+            int id,
+            int typeId,
             string name,
             double capacity,
             DateTime expirationDate,

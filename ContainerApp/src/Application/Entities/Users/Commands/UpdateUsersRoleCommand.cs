@@ -12,7 +12,7 @@ namespace Application.Entities.Users.Commands
 {
     public record UpdateUserRolesCommand : IRequest<User>
     {
-        public required UserId Id { get; init; }
+        public required int Id { get; init; }
         public required UserRole Role { get; init; }
 
     }
