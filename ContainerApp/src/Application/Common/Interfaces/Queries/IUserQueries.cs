@@ -10,6 +10,6 @@ namespace Application.Common.Interfaces.Queries
     public interface IUserQueries
     {
         Task<IReadOnlyList<User>> GetAllAsync(CancellationToken cancellationToken);
-        Task<User> GetByIdAsync(UserId id, CancellationToken cancellationToken);
+        Task<User?> GetByIdAsync(UserId id, CancellationToken cancellationToken);
     }
 }

@@ -23,13 +23,13 @@ namespace Infrastructure.Persistence.Queries
                 .Where(ch => ch.ContainerId == containerId)
                 .ToListAsync(cancellationToken);
         }
-
+        //останній запис історії контейнера за датою оновлення
         public async Task<ContainerHistory?> GetLatestByContainerIdAsync(ContainerId containerId, CancellationToken cancellationToken)
         {
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)
-                .OrderByDescending(ch => ch.FullingDate)
-                .FirstOrDefaultAsync(cancellationToken);
+                .OrderByDescending(ch => ch.UpdatedAt)
+                .SingleOrDefaultAsync(cancellationToken);
         }
     }
 }

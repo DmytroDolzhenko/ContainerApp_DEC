@@ -10,18 +10,22 @@ namespace Domain.ContainerTypes
     {
         public ContainerTypeId Id { get; }
         public string Name { get; private set; }
-        public ContainerType(ContainerTypeId id, string name)
+        public DateTime CreatedAt { get; }
+        public DateTime UpdatedAt { get; private set; }
+        public ContainerType(ContainerTypeId id, string name, DateTime createdAt)
         {
             Id = id;
             Name = name;
+            CreatedAt = createdAt;
         }
         public static ContainerType CreateNew(string name)
         {
-            return new ContainerType(ContainerTypeId.New(), name);
+            return new ContainerType(ContainerTypeId.New(), name, DateTime.UtcNow);
         }
         public void UpdateDetails(string name)
         {
             Name = name;
+            UpdatedAt = DateTime.UtcNow;
         }
     }
 }
