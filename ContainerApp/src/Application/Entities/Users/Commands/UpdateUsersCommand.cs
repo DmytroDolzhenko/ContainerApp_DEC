@@ -19,7 +19,6 @@ namespace Application.Entities.Users.Commands
         public required string Middlename { get; init; }
         public required string Email { get; init; }
         public required string Identifier { get; init; }
-        public required DateTime RegistrationDate { get; init; }
 
     }
 

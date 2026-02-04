@@ -56,7 +56,7 @@ namespace Infrastructure.Persistence.Queries
             return await _context.Containers
                 .Include(c => c.ProductId)
                 .Where(c => _context.Products
-                .Any(p => p.Id == c.ProductId && p.TypeId == productTypeId))
+                .Any(p => p.Id == c.ProductId && p.ProductTypeId == productTypeId))
                 .ToListAsync(cancellationToken);
         }
     }

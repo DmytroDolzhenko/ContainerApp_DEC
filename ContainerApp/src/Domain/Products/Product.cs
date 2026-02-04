@@ -12,27 +12,27 @@ namespace Domain.Products
     public class Product
     {
         public int Id { get; }
-        public int TypeId { get; }
+        public int ProductTypeId { get; private set; }
         public string Name { get; private set; }
         public double Capacity { get; private set; }
         public DateTime ExpirationDate { get; private set; }
-        public DateTime? FullingDate { get; private set; }
+        public DateTime? ManufactureDate { get; private set; }
         public string Description { get; private set; }
 
-        private Product(int id, int type_id, string name, double capacity , DateTime expirationDate, DateTime? fullingDate, string description)
+        private Product(int id, int productTypeId, string name, double capacity , DateTime expirationDate, DateTime? manufactureDate, string description)
         {
             Id = id;
-            TypeId = type_id;
+            ProductTypeId = productTypeId;
             Name = name;
             Capacity = capacity;
             ExpirationDate = expirationDate;
-            FullingDate = fullingDate;
+            ManufactureDate = manufactureDate;
             Description = description;
         }
 
         public static Product Create(
             int id,
-            int typeId,
+            int productTypeId,
             string name,
             double capacity,
             DateTime expirationDate,
@@ -40,7 +40,7 @@ namespace Domain.Products
         {
             return new Product(
                 id,
-                typeId,
+                productTypeId,
                 name,
                 capacity,
                 expirationDate,
@@ -52,13 +52,13 @@ namespace Domain.Products
             string name,
             double capacity,
             DateTime expirationDate,
-            DateTime? fullingDate,
+            DateTime? manufactureDate,
             string description)
         {
             Name = name;
             Capacity = capacity;
             ExpirationDate = expirationDate;
-            FullingDate = fullingDate;
+            ManufactureDate = manufactureDate;
             Description = description;
         }
     }

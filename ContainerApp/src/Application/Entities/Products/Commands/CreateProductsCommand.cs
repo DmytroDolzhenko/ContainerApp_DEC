@@ -11,7 +11,7 @@ namespace Application.Products.Commands
     public record CreateProductsCommand : IRequest<Product>
     {
         public required string Name { get; init; }
-        public required int TypeId { get; init; }
+        public required int ProductTypeId { get; init; }
         public required double Capacity { get; init; }
         public required DateTime ExpirationDate { get; init; }
         public string? Description { get; init; }
@@ -28,7 +28,7 @@ namespace Application.Products.Commands
 
             var product = Product.Create(
                 0,
-                request.TypeId,
+                request.ProductTypeId,
                 request.Name,
                 request.Capacity,
                 request.ExpirationDate,

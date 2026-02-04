@@ -10,7 +10,7 @@ public record UpdateProductsCommand : IRequest<Product>
 {
     public required int Id { get; init; }
     public required string Name { get; init; }
-    public required Guid ProductTypeId { get; init; }
+    public int ProductTypeId { get; init; }
     public required double Capacity { get; init; }
     public required DateTime ExpirationDate { get; init; }
     public string? Description { get; init; }

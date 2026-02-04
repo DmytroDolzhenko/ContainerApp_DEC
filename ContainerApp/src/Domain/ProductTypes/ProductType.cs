@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Domain.Products; // Треба підключити, щоб бачити клас Product
 
 namespace Domain.ProductTypes
 {
     public class ProductType
     {
         public int Id { get; }
-        public string Name { get; set; }
+        public string Name { get; private set; }
+
+        private readonly List<Product> _products = new();
+        public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
         public ProductType(int id, string name)
         {
@@ -21,10 +21,10 @@ namespace Domain.ProductTypes
         {
             return new ProductType(id, name);
         }
+
         public void Update(string name)
         {
             Name = name;
         }
-
     }
 }
