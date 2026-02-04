@@ -12,6 +12,11 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly ApplicationDbContext _context;
 
+        public ProductTypeRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<ProductType> AddAsync(ProductType entity, CancellationToken cancellationToken)
         {
             await _context.ProductTypes.AddAsync(entity, cancellationToken);

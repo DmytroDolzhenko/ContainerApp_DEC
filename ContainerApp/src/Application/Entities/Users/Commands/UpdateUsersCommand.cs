@@ -35,6 +35,11 @@ namespace Application.Entities.Users.Commands
                 request.Id,
                 cancellationToken);
 
+            if (user == null)
+            {
+                throw new Exception($"User with id {request.Id} not found");
+            }
+
             user.Update(
                 request.Name,
                 request.Surname,

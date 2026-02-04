@@ -14,6 +14,11 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly ApplicationDbContext _context;
 
+        public UserRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<User> AddAsync(User entity, CancellationToken cancellationToken)
         {
             await _context.Users.AddAsync(entity, cancellationToken);

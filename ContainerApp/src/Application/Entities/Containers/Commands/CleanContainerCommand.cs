@@ -13,7 +13,7 @@ using Domain.Products;
 
 namespace Application.Entities.Containers.Commands
 {
-    public record CleanContainerCommand : IRequest, IAuditableContainerCommand
+    public record CleanContainerCommand : IRequest<Container>, IAuditableContainerCommand
     {
         public required int ContainerId { get; init; }
         public required int UserId { get; init; }
@@ -22,9 +22,9 @@ namespace Application.Entities.Containers.Commands
     }
     public class CleanContainerCommandHandler
         (IContainerQueries queries)
-        : IRequestHandler<CleanContainerCommand>
+        : IRequestHandler<CleanContainerCommand, Container>
     {
-        public async Task Handle(CleanContainerCommand request, CancellationToken cancellationToken)
+        public async Task<Container> Handle(CleanContainerCommand request, CancellationToken cancellationToken)
         {
             var container = await queries.GetByIdAsync(request.ContainerId, cancellationToken);
 
@@ -34,6 +34,7 @@ namespace Application.Entities.Containers.Commands
             }
 
             container.CleanContainer(request.UserId);
+            return container;
         }
     }
 }

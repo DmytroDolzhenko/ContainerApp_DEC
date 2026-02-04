@@ -14,7 +14,11 @@ namespace Domain.Containers
     {
         public int Id { get; }
         public int TypeId { get; }
+        public ContainerType Type { get; private set; }
+
         public int? ProductId { get; private set; }
+        public Product? Product { get; private set; }
+
         public string Name { get; private set; }
         public double Capacity { get; private set; }
         public double CurrentCapacity { get; private set; }
