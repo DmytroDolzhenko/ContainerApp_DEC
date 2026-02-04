@@ -23,7 +23,7 @@ namespace Application.Common.Behaviours
         {
             var responce = await next();
 
-            var history = ContainerHistory.CreateNew(
+            var history = ContainerHistory.CreateNew(-
                 request.ContainerId,
                 request.ProductId ?? 0,
                 request.ActionDescription,

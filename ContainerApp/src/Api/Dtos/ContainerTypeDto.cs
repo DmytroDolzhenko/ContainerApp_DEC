@@ -2,12 +2,12 @@
 
 namespace Api.Dtos
 {
-    public record ContainerTypeDtos(
+    public record ContainerTypeDto(
         int Id,
         string Name
         )
     {
-        public static ContainerTypeDtos FromDomain(ContainerType containerType)
+        public static ContainerTypeDto FromDomain(ContainerType containerType)
                 => new(containerType.Id,
                     containerType.Name);
     }

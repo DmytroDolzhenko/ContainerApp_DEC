@@ -13,7 +13,7 @@ namespace Application.Entities.ContainerTypes.Commands
     public record CreateContainerTypeCommand : IRequest<ContainerType>
     {
         public required string TypeName { get; init; }
-        public required string Description { get; init; }
+       // public required string Description { get; init; }
     }
     public class CreateContainerTypeCommandHandler
         (IContainerTypeRepositories repositories)

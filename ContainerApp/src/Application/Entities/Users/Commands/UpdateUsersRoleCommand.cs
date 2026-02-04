@@ -30,6 +30,11 @@ namespace Application.Entities.Users.Commands
                 request.Id,
                 cancellationToken);
 
+            if (user == null)
+            {
+                throw new InvalidOperationException($"User with id {request.Id} not found.");
+            }
+
             user.ChangeRole(request.Role);
 
             await repository.UpdateAsync(user, cancellationToken);

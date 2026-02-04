@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Infrastructure.Persistence;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +9,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    internal class ConfigureInfrastructureServices
+    public static class ConfigureInfrastructureServices
     {
+        public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddPersistenceServices(configuration);
+        }
     }
 }

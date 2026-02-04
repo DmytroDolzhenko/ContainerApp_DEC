@@ -30,9 +30,14 @@ namespace Application.Entities.ProductTypes.Commands
                 request.Id,
                 cancellationToken);
 
+            if (productType == null)
+            {
+                throw new Exception($"ProductType with id {request.Id} not found.");
+            }
+
             productType.Update(
-                request.Name
-                );
+            request.Name
+            );
             await repository.UpdateAsync(productType, cancellationToken);
 
             return productType;

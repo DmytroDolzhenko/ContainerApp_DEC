@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-        public async Task<IReadOnlyList<ContainerType?>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.ContainerTypes.ToListAsync(cancellationToken);
         }

@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces.Queries
 {
     public interface IContainerTypeQueries
     {
-        Task<IReadOnlyList<ContainerType?>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken);
         Task<ContainerType?> GetByIdAsync(int id, CancellationToken cancellationToken);
     }
 }
