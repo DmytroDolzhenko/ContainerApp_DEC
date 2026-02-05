@@ -5,13 +5,15 @@ namespace Api.Dtos
     public record ContainerDto(
         int Id,
         string Name,
-        int ContainerTypeId
+        int ContainerTypeId,
+        int? ProductId
         )
     {
         public static ContainerDto FromDomain(Container container)
                 => new(container.Id,
                     container.Name,
-                    container.TypeId);
+                    container.TypeId,
+                    container.ProductId);
     }
 
     public record CreateContainerDto(

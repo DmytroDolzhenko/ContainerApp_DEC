@@ -3,7 +3,7 @@ using Domain.Products; // Треба підключити, щоб бачити �
 
 namespace Domain.ProductTypes
 {
-    public class ProductType
+    public class ProductType : IEntity
     {
         public int Id { get; }
         public string Name { get; private set; }

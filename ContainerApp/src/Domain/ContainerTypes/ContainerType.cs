@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Domain.ContainerTypes
 {
-    public class ContainerType
+    public class ContainerType : IEntity
     {
         public int Id { get; }
         public string Name { get; private set; }
         public DateTime CreatedAt { get; }
-        public DateTime UpdatedAt { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
         public ContainerType(int id, string name, DateTime createdAt)
         {
             Id = id;

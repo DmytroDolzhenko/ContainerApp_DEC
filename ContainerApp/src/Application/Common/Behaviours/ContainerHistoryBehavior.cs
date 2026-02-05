@@ -25,13 +25,12 @@ namespace Application.Common.Behaviours
 
             var history = ContainerHistory.CreateNew(
                 request.ContainerId,
-                request.ProductId ?? 0,
+                request.ProductId,
                 request.ActionDescription,
                 request.UserId,
                 DateTime.UtcNow);
 
             await historyRepositories.AddAsync(history, cancellationToken);
-
             return responce;
         }
     }

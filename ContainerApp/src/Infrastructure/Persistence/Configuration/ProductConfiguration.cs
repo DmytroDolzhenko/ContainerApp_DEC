@@ -13,7 +13,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-        builder.HasOne<ProductType>()
+        builder.HasOne(x => x.ProductType)
                .WithMany(t => t.Products)
                .HasForeignKey(x => x.ProductTypeId)
                .IsRequired()

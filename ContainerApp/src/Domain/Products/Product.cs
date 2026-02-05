@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Products
 {
-    public class Product
+    public class Product : IEntity
     {
         public int Id { get; }
+
         public int ProductTypeId { get; private set; }
+        public ProductType ProductType { get; private set; }
+
         public string Name { get; private set; }
         public double Capacity { get; private set; }
         public DateTime ExpirationDate { get; private set; }

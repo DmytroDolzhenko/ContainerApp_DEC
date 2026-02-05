@@ -14,7 +14,7 @@ namespace Application.Entities.Users.CommandsValidators
         public CreateUserCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MinimumLength(3).MaximumLength(255);
-            RuleFor(x => x.Surname).NotEmpty().EmailAddress().MaximumLength(255);
+            RuleFor(x => x.Surname).NotEmpty().MaximumLength(255);
             RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(255);
             RuleFor(x => x.Role).NotEmpty();
             RuleFor(x => x.Identifier).NotEmpty();

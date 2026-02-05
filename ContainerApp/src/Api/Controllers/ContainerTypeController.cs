@@ -2,12 +2,15 @@
 using Application.Common.Interfaces.Queries;
 using Application.Entities.Containers.Commands;
 using Application.Entities.ContainerTypes.Commands;
+using Application.Entities.ProductTypes.Commands;
 using Domain.ContainerTypes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Route("container-type")]
+    [ApiController]
     public class ContainerTypeController(IGetQueries<ContainerType> queries, ISender sender) : ControllerBase
     {
         [HttpGet]
@@ -28,6 +31,23 @@ namespace Api.Controllers
             }
 
             return ContainerTypeDto.FromDomain(result);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ContainerTypeDto>> UpdateContainerType(
+           [FromRoute] int id,
+           [FromBody] UpdateContainerTypeDto request,
+           CancellationToken cancellationToken)
+        {
+            var command = new UpdateContainerTypeCommand
+            {
+                Id = id,
+                Name = request.Name
+            };
+
+            var updatedType = await sender.Send(command, cancellationToken);
+
+            return ContainerTypeDto.FromDomain(updatedType);
         }
 
         [HttpPost]

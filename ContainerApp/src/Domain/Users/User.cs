@@ -1,6 +1,6 @@
 ﻿namespace Domain.Users
 {
-    public class User
+    public class User : IEntity
     {
         public int Id { get; }
         public string Name { get; private set; }

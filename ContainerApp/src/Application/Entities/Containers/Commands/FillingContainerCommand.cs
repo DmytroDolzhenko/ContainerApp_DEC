@@ -22,7 +22,7 @@ namespace Application.Entities.Containers.Commands
         public string ActionDescription => "Сontainer was filled";
     }
     public class FillingContainerCommandHandler
-        (IGetQueries<Container> getQueries)
+        (IGetQueries<Container> getQueries , IEntityRepository<Container> repository)
         : IRequestHandler<FillingContainerCommand, Container>
     {
         public async Task<Container> Handle(FillingContainerCommand request, CancellationToken cancellationToken)
@@ -35,6 +35,7 @@ namespace Application.Entities.Containers.Commands
             }
 
             container.FillContainer(request.ProductId!.Value, request.UserId, request.Amount);
+            await repository.UpdateAsync(container, cancellationToken);
             return container;
         }
     }

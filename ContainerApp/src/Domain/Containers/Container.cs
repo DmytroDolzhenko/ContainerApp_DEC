@@ -70,11 +70,11 @@ namespace Domain.Containers
             {
                 throw new InvalidOperationException("Container is already empty.");
             }
-            this.ProductId = null;
-            this.Status = false;
-            this.CurrentCapacity = 0;
-            this.LastModifiedBy = userId;
-            this.LastModifiedAt = DateTime.UtcNow;
+            ProductId = null;
+            Status = false;
+            CurrentCapacity = 0;
+            LastModifiedBy = userId;
+            LastModifiedAt = DateTime.UtcNow;
         }
     }
 }
