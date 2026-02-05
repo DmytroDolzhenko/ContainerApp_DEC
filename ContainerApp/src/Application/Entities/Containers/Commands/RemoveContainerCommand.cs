@@ -15,12 +15,12 @@ namespace Application.Entities.Containers.Commands
         public required int Id { get; init; }
     }
     public class DeleteContainerCommandHandler
-        (IContainerRepositories repositories, IContainerQueries queries)
+        (IEntityRepository<Container> repositories, IGetQueries<Container> getQueries)
         : IRequestHandler<RemoveContainerCommand>
     {
         public async Task Handle(RemoveContainerCommand request, CancellationToken cancellationToken)
         {
-            var container = await queries.GetByIdAsync(request.Id, cancellationToken);
+            var container = await getQueries.GetByIdAsync(request.Id, cancellationToken);
 
             if (container is null)
             {

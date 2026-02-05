@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Domain.Products;
 using Domain.ProductTypes;
 using MediatR;
 using System;
@@ -15,7 +16,7 @@ namespace Application.Entities.ProductTypes.Commands
     }
 
     public class CreateProductTypesCommandHandler(
-        IProductTypeRepository repository
+        IEntityRepository<ProductType> repository
     ) : IRequestHandler<CreateProductTypesCommand, ProductType>
     {
         public async Task<ProductType> Handle(
@@ -28,7 +29,8 @@ namespace Application.Entities.ProductTypes.Commands
                 request.Name
             );
 
-            return await repository.AddAsync(productType, cancellationToken);
+            await repository.AddAsync(productType, cancellationToken);
+            return productType;
         }
     }
 

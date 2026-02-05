@@ -18,7 +18,7 @@ namespace Application.Products.Commands
     }
 
     public class CreateProductsCommandHandler(
-        IProductRepository productRepository
+        IEntityRepository<Product> productRepository
     ) : IRequestHandler<CreateProductsCommand, Product>
     {
         public async Task<Product> Handle(
@@ -35,7 +35,9 @@ namespace Application.Products.Commands
                 request.Description ?? string.Empty
             );
 
-            return await productRepository.AddAsync(product, cancellationToken);
+            await productRepository.AddAsync(product, cancellationToken);
+
+            return product;
         }
     }
 }

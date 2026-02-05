@@ -1,15 +1,17 @@
 ﻿using Api.Dtos;
 using Application.Common.Interfaces.Queries;
 using Application.Entities.Users.Commands;
+using Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace Api.Controllers
 {
     [Route("users")]
     [ApiController]
     public class UsersController(
-        IUserQueries userQueries,
+        IGetQueries<User> userQueries,
         ISender sender) : ControllerBase
     {
         [HttpGet]

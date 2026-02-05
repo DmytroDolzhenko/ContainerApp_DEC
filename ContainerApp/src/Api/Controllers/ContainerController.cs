@@ -1,6 +1,7 @@
 ﻿using Api.Dtos;
 using Application.Common.Interfaces.Queries;
 using Application.Entities.Containers.Commands;
+using Domain.Containers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,19 +9,20 @@ namespace Api.Controllers
 {
     [Route("/containers")]
     [ApiController]
-    public class ContainerController(IContainerQueries containerQueries, ISender sender) : ControllerBase
+    //тут зв'язок до домейн моделі, не знаю чи правильно
+    public class ContainerController(IGetQueries<Container> getQueries, ISender sender) : ControllerBase
     {
         [HttpGet]
         public async Task<IReadOnlyList<ContainerDto>> GetAllContainers(CancellationToken cancellationToken)
         {
-            var containers = await containerQueries.GetAllAsync(cancellationToken);
+            var containers = await getQueries.GetAllAsync(cancellationToken);
             return containers.Select(ContainerDto.FromDomain).ToList();
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ContainerDto>> GetContainerId(int id, CancellationToken cancellationToken)
         {
-            var result = await containerQueries.GetByIdAsync(id, cancellationToken);
+            var result = await getQueries.GetByIdAsync(id, cancellationToken);
 
             if (result is null)
             {

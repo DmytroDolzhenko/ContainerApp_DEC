@@ -3,13 +3,14 @@ using Application.Common.Interfaces.Queries;
 using MediatR;
 using Application.Products.Commands;
 using Api.Dtos;
+using Domain.Products;
 
 namespace Api.Controllers
 {
     [Route("products")]
     [ApiController]
     public class ProductsController(
-        IProductQueries productQueries,
+        IGetQueries<Product> productQueries,
         ISender sender) : ControllerBase
     {
         [HttpGet]

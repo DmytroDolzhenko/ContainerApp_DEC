@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.Containers.Commands
 {
-    public record UpdateContainerCommand : IRequest<Container>, IAuditableContainerCommand
+    public record UpdateContainerCommand : IRequest<Container>, IContainerHistoryWritter
     {
         public required int ContainerId { get; init; }
         public required string Name { get; init; }
@@ -24,7 +24,7 @@ namespace Application.Entities.Containers.Commands
         public string ActionDescription => "Update Container";
     }
     public class UpdateContainerCommandHandler
-        (IContainerQueries queries, IContainerRepositories repositories)
+        (IGetQueries<Container> queries, IEntityRepository<Container> repositories)
         : IRequestHandler<UpdateContainerCommand, Container>
     {
         public async Task<Container> Handle(UpdateContainerCommand request, CancellationToken cancellationToken)

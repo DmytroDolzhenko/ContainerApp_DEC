@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Domain.Products;
 using Domain.Users;
 using MediatR;
 using System;
@@ -22,7 +23,7 @@ namespace Application.Entities.Users.Commands
     }
 
     public class CreateUserCommandHandler(
-        IUserRepository repository
+        IEntityRepository<User> repository
     ) : IRequestHandler<CreateUsersCommand, User>
     {
         public async Task<User> Handle(
@@ -40,7 +41,9 @@ namespace Application.Entities.Users.Commands
                 request.IsApproved
             );
 
-            return await repository.AddAsync(user, cancellationToken);
+            await repository.AddAsync(user, cancellationToken);
+
+            return user;
         }
     }
 }

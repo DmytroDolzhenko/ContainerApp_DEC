@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Containers
 {
-    public class Container
+    public class Container : IEntity
     {
         public int Id { get; }
         public int TypeId { get; }

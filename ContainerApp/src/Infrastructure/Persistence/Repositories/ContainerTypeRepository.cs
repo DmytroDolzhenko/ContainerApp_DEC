@@ -15,7 +15,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<ContainerType> AddAsync(ContainerType containerType, CancellationToken cancellationToken)
+        /*public async Task<ContainerType> AddAsync(ContainerType containerType, CancellationToken cancellationToken)
         {
             await _context.ContainerTypes.AddAsync(containerType, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -34,6 +34,6 @@ namespace Infrastructure.Persistence.Repositories
             _context.ContainerTypes.Update(containerType);
             await _context.SaveChangesAsync(cancellationToken);
             return containerType;
-        }
+        }*/
     }
 }

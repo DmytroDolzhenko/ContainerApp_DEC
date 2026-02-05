@@ -20,7 +20,7 @@ namespace Application.Entities.Containers.Commands
     }
 
     public class CreateContainerCommandHandler
-        (IContainerRepositories repositories)
+        (IEntityRepository<Container> repositories)
         : IRequestHandler<CreateContainerCommand, Container>
     {
       public async Task<Container> Handle(CreateContainerCommand request, CancellationToken cancellationToken)

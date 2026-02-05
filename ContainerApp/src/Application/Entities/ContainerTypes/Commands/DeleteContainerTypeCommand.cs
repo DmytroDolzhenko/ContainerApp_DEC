@@ -16,7 +16,7 @@ namespace Application.Entities.ContainerTypes.Commands
     }
 
     public class DeleteContainerTypeCommandHandler
-        (IContainerTypeRepositories repositories, IContainerTypeQueries queries)
+        (IEntityRepository<ContainerType> repositories, IGetQueries<ContainerType> queries)
         : IRequestHandler<DeleteContainerTypeCommand>
     {
         public async Task Handle(DeleteContainerTypeCommand request, CancellationToken cancellationToken)

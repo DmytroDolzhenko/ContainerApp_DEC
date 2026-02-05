@@ -1,6 +1,8 @@
 ﻿using Api.Dtos;
 using Application.Common.Interfaces.Queries;
 using Application.Entities.ProductTypes.Commands;
+using Domain.ProductTypes;
+using Infrastructure.Persistence.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +11,7 @@ namespace Api.Controllers
     [Route("product-types")]
     [ApiController]
     public class ProductTypesController(
-         IProductTypeQueries productTypeQueries,
+         IGetQueries<ProductType> productTypeQueries,
          ISender sender) : ControllerBase
     {
         [HttpGet]
@@ -18,6 +20,9 @@ namespace Api.Controllers
             var types = await productTypeQueries.GetAllAsync(cancellationToken);
 
             return types.Select(ProductTypeDtos.FromDomain).ToList();
+
+/*            var containers = await getQueries.GetAllAsync(cancellationToken);
+            return containers.Select(ContainerDto.FromDomain).ToList();*/
         }
 
         [HttpPost]

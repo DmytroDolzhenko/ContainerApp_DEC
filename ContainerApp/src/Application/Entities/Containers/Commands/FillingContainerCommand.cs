@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.Containers.Commands
 {
-    public record FillingContainerCommand : IRequest<Container>, IAuditableContainerCommand
+    public record FillingContainerCommand : IRequest<Container>, IContainerHistoryWritter
     {
         public required int ContainerId { get; init; }
         public required int? ProductId { get; init; }
@@ -22,12 +22,12 @@ namespace Application.Entities.Containers.Commands
         public string ActionDescription => "Сontainer was filled";
     }
     public class FillingContainerCommandHandler
-        (IContainerQueries queries)
+        (IGetQueries<Container> getQueries)
         : IRequestHandler<FillingContainerCommand, Container>
     {
         public async Task<Container> Handle(FillingContainerCommand request, CancellationToken cancellationToken)
         {
-            var container = await queries.GetByIdAsync(request.ContainerId, cancellationToken);
+            var container = await getQueries.GetByIdAsync(request.ContainerId, cancellationToken);
 
             if (container is null)
             {

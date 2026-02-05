@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<User> AddAsync(User entity, CancellationToken cancellationToken)
+        /*public async Task<User> AddAsync(User entity, CancellationToken cancellationToken)
         {
             await _context.Users.AddAsync(entity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
@@ -40,7 +40,7 @@ namespace Infrastructure.Persistence.Repositories
             await _context.SaveChangesAsync(cancellationToken);
 
             return entity;
-        }
+        }*/
 
     }
 }

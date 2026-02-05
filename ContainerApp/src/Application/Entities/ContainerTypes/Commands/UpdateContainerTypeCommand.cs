@@ -17,7 +17,7 @@ namespace Application.Entities.ContainerTypes.Commands
     }
 
     public class UpdateContainerTypeCommandHandler
-        (IContainerTypeRepositories repositories, IContainerTypeQueries queries)
+        (IEntityRepository<ContainerType> repositories, IGetQueries<ContainerType> queries)
         : IRequestHandler<UpdateContainerTypeCommand, ContainerType>
     {
         public async Task<ContainerType> Handle(UpdateContainerTypeCommand request, CancellationToken cancellationToken)

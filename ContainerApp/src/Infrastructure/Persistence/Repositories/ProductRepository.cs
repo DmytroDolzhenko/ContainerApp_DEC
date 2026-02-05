@@ -15,7 +15,7 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<Product> AddAsync(Product entity, CancellationToken cancellationToken)
+    /*public async Task<Product> AddAsync(Product entity, CancellationToken cancellationToken)
     {
         await _context.Products.AddAsync(entity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -37,6 +37,6 @@ public class ProductRepository : IProductRepository
         await _context.SaveChangesAsync(cancellationToken);
 
         return entity;
-    }
+    }*/
 
 }

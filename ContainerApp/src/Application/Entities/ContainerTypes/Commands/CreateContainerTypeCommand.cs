@@ -16,7 +16,7 @@ namespace Application.Entities.ContainerTypes.Commands
        // public required string Description { get; init; }
     }
     public class CreateContainerTypeCommandHandler
-        (IContainerTypeRepositories repositories)
+        (IEntityRepository<ContainerType> repositories)
         : IRequestHandler<CreateContainerTypeCommand, ContainerType>
     {
         public Task<ContainerType> Handle(CreateContainerTypeCommand request, CancellationToken cancellationToken)

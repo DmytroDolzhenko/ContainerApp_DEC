@@ -16,7 +16,7 @@ namespace Application.Entities.Users.Commands
     }
 
     public class DeleteUsersCommandHandler(
-        IUserRepository repository, IUserQueries queries)
+        IEntityRepository<User> repository, IGetQueries<User> queries)
         : IRequestHandler<DeleteUsersCommand>
     {
         public async Task Handle(

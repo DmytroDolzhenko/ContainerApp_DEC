@@ -18,8 +18,8 @@ namespace Application.Entities.ProductTypes.Commands
     }
 
     public class UpdateProductTypesCommandHandler(
-        IProductTypeRepository repository,
-        IProductTypeQueries queries)
+        IEntityRepository<ProductType> repository,
+        IGetQueries<ProductType> queries)
         : IRequestHandler<UpdateProductTypesCommand, ProductType>
     {
         public async Task<ProductType> Handle(

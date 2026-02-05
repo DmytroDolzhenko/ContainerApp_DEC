@@ -18,8 +18,8 @@ namespace Application.Entities.Users.Commands
     }
 
     public class UpdateUsersRolesCommand(
-        IUserRepository repository,
-        IUserQueries queries)
+        IEntityRepository<User> repository,
+        IGetQueries<User> queries)
         : IRequestHandler<UpdateUserRolesCommand, User>
     {
         public async Task<User> Handle(

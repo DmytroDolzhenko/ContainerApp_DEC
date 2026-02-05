@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    public class ContainerTypeController(IContainerTypeQueries queries, ISender sender) : ControllerBase
+    public class ContainerTypeController(IGetQueries<ContainerType> queries, ISender sender) : ControllerBase
     {
         [HttpGet]
         public async Task<IReadOnlyList<ContainerTypeDto>> GetContainerTypes(CancellationToken cancellationToken)

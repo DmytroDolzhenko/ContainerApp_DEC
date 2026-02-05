@@ -17,8 +17,8 @@ public record UpdateProductsCommand : IRequest<Product>
 }
 
 public class UpdateProductsCommandHandler(
-    IProductRepository repository,
-    IProductQueries queries)
+    IEntityRepository<Product> repository,
+    IGetQueries<Product> queries)
     : IRequestHandler<UpdateProductsCommand, Product>
 {
     public async Task<Product> Handle(

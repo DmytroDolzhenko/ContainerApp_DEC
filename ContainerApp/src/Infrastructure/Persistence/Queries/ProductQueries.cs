@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-        public async Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken)
+/*        public async Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Products
                 .AsNoTracking()
@@ -33,6 +33,6 @@ namespace Infrastructure.Persistence.Queries
                 .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
             return entity;
-        }
+        }*/
     }
 }

@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace Application.Common.Behaviours
 {
     public class ContainerHistoryBehavior<TRequest, TResponce>
-        (IContainerHistoryRepositories historyRepositories)
+        (IEntityRepository<ContainerHistory> historyRepositories)
         : IPipelineBehavior<TRequest, TResponce>
-        where TRequest : IAuditableContainerCommand
+        where TRequest : IContainerHistoryWritter
     {
         public async Task<TResponce> Handle
             (TRequest request,
@@ -23,7 +23,7 @@ namespace Application.Common.Behaviours
         {
             var responce = await next();
 
-            var history = ContainerHistory.CreateNew(-
+            var history = ContainerHistory.CreateNew(
                 request.ContainerId,
                 request.ProductId ?? 0,
                 request.ActionDescription,

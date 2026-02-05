@@ -13,7 +13,11 @@ using Domain.Products;
 
 namespace Application.Entities.Containers.Commands
 {
-    public record CleanContainerCommand : IRequest<Container>, IAuditableContainerCommand
+  /*  public interface IContainerHistoryWriter
+    {
+        Task AddHistory(Container container, CancellationToken cancellationToken);
+    }*/
+    public record CleanContainerCommand : IRequest<Container>, IContainerHistoryWritter
     {
         public required int ContainerId { get; init; }
         public required int UserId { get; init; }
@@ -21,12 +25,12 @@ namespace Application.Entities.Containers.Commands
         public int? ProductId => null;
     }
     public class CleanContainerCommandHandler
-        (IContainerQueries queries)
+        (IGetQueries<Container> getQueries)
         : IRequestHandler<CleanContainerCommand, Container>
     {
         public async Task<Container> Handle(CleanContainerCommand request, CancellationToken cancellationToken)
         {
-            var container = await queries.GetByIdAsync(request.ContainerId, cancellationToken);
+            var container = await getQueries.GetByIdAsync(request.ContainerId, cancellationToken);
 
             if (container is null)
             {

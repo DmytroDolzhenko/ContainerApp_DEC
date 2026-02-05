@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces
 {
-    public interface IAuditableContainerCommand
+    public interface IContainerHistoryWritter
     {
         int ContainerId { get; }
         int? ProductId { get; }

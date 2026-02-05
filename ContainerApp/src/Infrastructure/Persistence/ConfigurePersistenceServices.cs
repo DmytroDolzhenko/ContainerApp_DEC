@@ -63,8 +63,12 @@ namespace Infrastructure.Persistence
 
             services.AddScoped<ContainerHistoryRepository>();
             services.AddScoped<ContainerHistoryQueries>();
+
             //services.AddScoped<IContainerHistoryRepository>(provider => provider.GetRequiredService<ContainerHistoryRepository>());
             //services.AddScoped<IContainerHistoryQueries>(provider => provider.GetRequiredService<ContainerHistoryQueries>());
+
+            //реєструємо EntityRepository та GetQueries для всіх сутностей
+
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-        public async Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken)
+/*        public async Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.ContainerTypes.ToListAsync(cancellationToken);
         }
@@ -24,6 +24,6 @@ namespace Infrastructure.Persistence.Queries
         public async Task<ContainerType?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             return await _context.ContainerTypes.SingleOrDefaultAsync(ct => ct.Id == id, cancellationToken);
-        }
+        }*/
     }
 }

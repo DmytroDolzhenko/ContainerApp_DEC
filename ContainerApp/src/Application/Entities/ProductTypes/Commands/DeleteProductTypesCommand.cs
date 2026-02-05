@@ -17,7 +17,7 @@ namespace Application.Entities.ProductTypes.Commands
     }
 
     public class DeleteProductTypesCommandHandler(
-        IProductTypeRepository repository, IProductTypeQueries queries)
+        IEntityRepository<ProductType> repository, IGetQueries<ProductType> queries)
         : IRequestHandler<DeleteProductTypesCommand>
     {
         public async Task Handle(
