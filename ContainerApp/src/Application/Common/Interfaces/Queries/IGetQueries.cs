@@ -10,6 +10,6 @@ namespace Application.Common.Interfaces.Queries
     {
         public Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken);
 
-        public Task<T> GetByIdAsync(int id, CancellationToken cancellationToken);
+        public Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken);
     }
 }

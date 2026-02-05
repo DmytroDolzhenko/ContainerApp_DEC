@@ -68,6 +68,8 @@ namespace Infrastructure.Persistence
             //services.AddScoped<IContainerHistoryQueries>(provider => provider.GetRequiredService<ContainerHistoryQueries>());
 
             //реєструємо EntityRepository та GetQueries для всіх сутностей
+            services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+            services.AddScoped(typeof(IGetQueries<>), typeof(GetQueries<>));
 
         }
     }

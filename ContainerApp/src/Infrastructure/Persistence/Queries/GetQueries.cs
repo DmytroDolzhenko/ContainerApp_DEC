@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Queries
 {
-    public class GetQueries<T> where T : class, IEntity, IGetQueries<T>
+    public class GetQueries<T> : IGetQueries<T> where T : class, IEntity
     {
         private readonly ApplicationDbContext _context;
         public GetQueries(ApplicationDbContext context)

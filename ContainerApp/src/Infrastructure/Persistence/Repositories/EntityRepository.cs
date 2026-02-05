@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class EntityRepository<T> where T : class, IEntityRepository<T>, IEntity
+    public class EntityRepository<T> : IEntityRepository<T> where T : class, IEntity
     {
         private readonly ApplicationDbContext _context;
         public EntityRepository(ApplicationDbContext context)
@@ -25,7 +25,7 @@ namespace Infrastructure.Persistence.Repositories
             _context.Set<T>().Update(entity);
             await _context.SaveChangesAsync(cancellationToken);
         }
-        public async Task DeleteAsync(T entity, CancellationToken cancellationToken)
+        public async Task DeleteAsync(T entity, CancellationToken cancellationToken)    
         {
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync(cancellationToken);
