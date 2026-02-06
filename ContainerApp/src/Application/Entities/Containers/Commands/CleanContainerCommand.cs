@@ -1,15 +1,16 @@
-﻿using Application.Common.Interfaces.Queries;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Queries;
+using Application.Common.Interfaces.Repositories;
+using Domain.ContainerHistories;
+using Domain.Containers;
+using Domain.Products;
+using Domain.Users;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Containers;
-using Domain.Users;
-using Application.Common.Interfaces.Repositories;
-using Application.Common.Interfaces;
-using Domain.Products;
 
 namespace Application.Entities.Containers.Commands
 {
@@ -17,7 +18,7 @@ namespace Application.Entities.Containers.Commands
     {
         Task AddHistory(Container container, CancellationToken cancellationToken);
     }*/
-    public record CleanContainerCommand : IRequest<Container>, IContainerHistoryWritter
+    public record CleanContainerCommand : IRequest<Container>
     {
         public required int ContainerId { get; init; }
         public required int UserId { get; init; }
@@ -25,7 +26,9 @@ namespace Application.Entities.Containers.Commands
         public int? ProductId => null;
     }
     public class CleanContainerCommandHandler
-        (IGetQueries<Container> getQueries)
+        (IGetQueries<Container> getQueries,
+        IEntityRepository<Container> repository,
+        IEntityRepository<ContainerHistory> historyRepository)
         : IRequestHandler<CleanContainerCommand, Container>
     {
         public async Task<Container> Handle(CleanContainerCommand request, CancellationToken cancellationToken)
@@ -38,6 +41,18 @@ namespace Application.Entities.Containers.Commands
             }
 
             container.CleanContainer(request.UserId);
+
+            var history = ContainerHistory.CreateNew(
+                 containerId: container.Id,
+                 productId: request.ProductId,
+                 action: request.ActionDescription,
+                 userId: request.UserId,
+                 dateTime: DateTime.UtcNow
+            );
+            await historyRepository.AddAsync(history, cancellationToken);
+
+            await repository.UpdateAsync(container, cancellationToken);
+
             return container;
         }
     }

@@ -50,6 +50,7 @@ namespace Api.Controllers
             {
                 Id = id,
                 Name = request.Name,
+                ProductTypeId = request.TypeId,
                 Capacity = request.Capacity,
                 ExpirationDate = request.ExpirationDate,
                 Description = request.Description

@@ -17,7 +17,6 @@ namespace Application.Entities.Products.CommandsValidators
             RuleFor(x => x.Description).NotEmpty().MinimumLength(3).MaximumLength(500);
             RuleFor(x => x.Capacity).NotEmpty();
             RuleFor(x => x.ExpirationDate).NotEmpty();
-            RuleFor(x => x.ProductTypeId).NotEmpty();
         }
     }
 }

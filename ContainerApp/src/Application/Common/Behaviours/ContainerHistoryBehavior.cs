@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Behaviours
 {
-    public class ContainerHistoryBehavior<TRequest, TResponce>
+/*    public class ContainerHistoryBehavior<TRequest, TResponce>
         (IEntityRepository<ContainerHistory> historyRepositories)
         : IPipelineBehavior<TRequest, TResponce>
         where TRequest : IContainerHistoryWritter
@@ -33,5 +33,5 @@ namespace Application.Common.Behaviours
             await historyRepositories.AddAsync(history, cancellationToken);
             return responce;
         }
-    }
+    }*/
 }

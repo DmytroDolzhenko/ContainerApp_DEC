@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces
 {
-    public interface IContainerHistoryWritter
+    /*public interface IContainerHistoryWritter
     {
         int ContainerId { get; }
         int? ProductId { get; }
         int UserId { get; }
         string ActionDescription { get; }
-    }
+    }*/
 }

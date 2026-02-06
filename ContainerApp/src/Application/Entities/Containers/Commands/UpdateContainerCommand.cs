@@ -13,15 +13,13 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.Containers.Commands
 {
-    public record UpdateContainerCommand : IRequest<Container>, IContainerHistoryWritter
+    public record UpdateContainerCommand : IRequest<Container>
     {
         public required int ContainerId { get; init; }
         public required string Name { get; init; }
         public required double Capacity { get; init; }
         public required string Description { get; init; }
         public required int UserId { get; init; }
-        public int? ProductId => null;
-        public string ActionDescription => "Update Container";
     }
     public class UpdateContainerCommandHandler
         (IGetQueries<Container> queries, IEntityRepository<Container> repositories)

@@ -12,11 +12,11 @@ namespace Domain.ContainerHistories
     public class ContainerHistory : IEntity
     {
         public int Id { get; }
-        public int ContainerId { get; }
-        public int? ProductId { get; }
-        public string Action { get; }
-        public DateTime UpdatedAt { get; }
-        public int UserId { get; }
+        public int ContainerId { get; private set; }
+        public int? ProductId { get; private set; }
+        public string Action { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
+        public int UserId { get; private set; }
 
         private ContainerHistory(int id, int containerId, int? productId, string action, int userId, DateTime updatedAt)
         {
@@ -29,7 +29,7 @@ namespace Domain.ContainerHistories
         }
         public static ContainerHistory CreateNew(int containerId, int? productId, string action, int userId, DateTime dateTime)
         {
-            return new ContainerHistory(1, containerId, productId, action, userId, DateTime.UtcNow);
+            return new ContainerHistory(0, containerId, productId, action, userId, DateTime.UtcNow);
         }
     }
 }

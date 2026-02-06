@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
+using Domain.ContainerHistories;
 using Domain.Containers;
 using Domain.Products;
 using Domain.Users;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.Containers.Commands
 {
-    public record FillingContainerCommand : IRequest<Container>, IContainerHistoryWritter
+    public record FillingContainerCommand : IRequest<Container>
     {
         public required int ContainerId { get; init; }
         public required int? ProductId { get; init; }
@@ -22,7 +23,7 @@ namespace Application.Entities.Containers.Commands
         public string ActionDescription => "Сontainer was filled";
     }
     public class FillingContainerCommandHandler
-        (IGetQueries<Container> getQueries , IEntityRepository<Container> repository)
+        (IGetQueries<Container> getQueries, IEntityRepository<ContainerHistory> historyRepository , IEntityRepository<Container> repository)
         : IRequestHandler<FillingContainerCommand, Container>
     {
         public async Task<Container> Handle(FillingContainerCommand request, CancellationToken cancellationToken)
@@ -35,6 +36,16 @@ namespace Application.Entities.Containers.Commands
             }
 
             container.FillContainer(request.ProductId!.Value, request.UserId, request.Amount);
+
+            var history = ContainerHistory.CreateNew(
+                 containerId: container.Id,
+                 productId: request.ProductId,
+                 action: request.ActionDescription,
+                 userId: request.UserId,
+                 dateTime: DateTime.UtcNow
+            );
+            await historyRepository.AddAsync(history, cancellationToken);
+
             await repository.UpdateAsync(container, cancellationToken);
             return container;
         }
