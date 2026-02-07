@@ -50,7 +50,6 @@ namespace Api.Controllers
             {
                 Id = id,
                 Name = request.Name,
-                ProductTypeId = request.TypeId,
                 Capacity = request.Capacity,
                 ExpirationDate = request.ExpirationDate,
                 Description = request.Description
@@ -58,7 +57,7 @@ namespace Api.Controllers
 
             var updatedProduct = await sender.Send(input, cancellationToken);
 
-            return Ok(ProductDto.FromDomain(updatedProduct));
+            return ProductDto.FromDomain(updatedProduct);
         }
 
         [HttpDelete("{productId:int}")]
