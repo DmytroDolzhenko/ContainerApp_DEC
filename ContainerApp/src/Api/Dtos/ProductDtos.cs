@@ -35,8 +35,6 @@ namespace Api.Dtos
         string Name,
         double Capacity,
         DateTime ExpirationDate,
-        int TypeId,
-        DateTime? ManufactureDate,
         string Description
     );
 }

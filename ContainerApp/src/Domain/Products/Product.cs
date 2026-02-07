@@ -47,7 +47,7 @@ namespace Domain.Products
                 name,
                 capacity,
                 expirationDate,
-                null,
+                DateTime.UtcNow,
                 description);
         }
 
@@ -55,13 +55,11 @@ namespace Domain.Products
             string name,
             double capacity,
             DateTime expirationDate,
-            DateTime? manufactureDate,
             string description)
         {
             Name = name;
             Capacity = capacity;
             ExpirationDate = expirationDate;
-            ManufactureDate = manufactureDate;
             Description = description;
         }
     }
