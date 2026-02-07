@@ -1,4 +1,5 @@
 ﻿using Api.Dtos;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Queries;
 using Application.Entities.Containers.Commands;
 using Domain.Containers;
@@ -10,7 +11,7 @@ namespace Api.Controllers
     [Route("/containers")]
     [ApiController]
     //тут зв'язок до домейн моделі, не знаю чи правильно
-    public class ContainerController(IGetQueries<Container> getQueries, ISender sender) : ControllerBase
+    public class ContainerController(IGetQueries<Container> getQueries, ISender sender, IQrCodeService qr) : ControllerBase
     {
         [HttpGet]
         public async Task<IReadOnlyList<ContainerDto>> GetAllContainers(CancellationToken cancellationToken)
@@ -99,6 +100,14 @@ namespace Api.Controllers
             var result = await sender.Send(input, cancellationToken);
 
             return Ok(ContainerDto.FromDomain(result));
+        }
+
+        [HttpGet("{id:int}/qr")]
+        public IActionResult GetContainerQrCode(int id, CancellationToken cancellationToken)
+        {
+            var svg = qr.GenerateQrCode(id);
+
+            return Content(svg, "image/svg+xml");
         }
     }
 }

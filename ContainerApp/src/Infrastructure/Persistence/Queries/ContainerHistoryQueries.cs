@@ -17,7 +17,7 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-        public async Task<IReadOnlyList<ContainerHistory?>> GetByContainerIdAsync(int containerId, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<ContainerHistory>> GetByContainerIdAsync(int containerId, CancellationToken cancellationToken)
         {
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)
@@ -29,7 +29,7 @@ namespace Infrastructure.Persistence.Queries
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)
                 .OrderByDescending(ch => ch.UpdatedAt)
-                .SingleOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

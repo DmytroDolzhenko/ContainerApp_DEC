@@ -12,5 +12,6 @@ namespace Application.Common.Interfaces.Queries
     {
       //  Task<IReadOnlyList<ContainerHistory?>> GetByContainerIdAsync(int containerId, CancellationToken cancellationToken);
         Task<ContainerHistory?> GetLatestByContainerIdAsync(int containerId, CancellationToken cancellationToken);
+        Task<IReadOnlyList<ContainerHistory>> GetByContainerIdAsync(int containerId, CancellationToken cancellationToken);
     }
 }

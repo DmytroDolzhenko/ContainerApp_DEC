@@ -1,5 +1,7 @@
-﻿using Application.Common.Interfaces.Queries;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
+using Application.Common.Services;
 using Infrastructure.Persistence.Queries;
 using Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +65,8 @@ namespace Infrastructure.Persistence
 
             services.AddScoped<ContainerHistoryRepository>();
             services.AddScoped<ContainerHistoryQueries>();
+            services.AddScoped<IContainerHistoryQueries>(provider => provider.GetRequiredService<ContainerHistoryQueries>());
+            services.AddScoped<IContainerHistoryRepositories>(provider => provider.GetRequiredService<ContainerHistoryRepository>());
 
             //services.AddScoped<IContainerHistoryRepository>(provider => provider.GetRequiredService<ContainerHistoryRepository>());
             //services.AddScoped<IContainerHistoryQueries>(provider => provider.GetRequiredService<ContainerHistoryQueries>());
@@ -71,6 +75,7 @@ namespace Infrastructure.Persistence
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
             services.AddScoped(typeof(IGetQueries<>), typeof(GetQueries<>));
 
+            services.AddScoped<IQrCodeService, QrCodeService>();
         }
     }
 }
