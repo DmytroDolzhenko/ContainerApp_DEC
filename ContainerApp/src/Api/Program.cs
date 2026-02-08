@@ -8,12 +8,20 @@ builder.Services.SetupServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
-builder.Services.AddControllers();
-
 
 var app = builder.Build();
 
@@ -27,7 +35,7 @@ await app.InitialiseDatabaseAsync();
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors("AllowReactApp");
 
 app.UseAuthorization();
 

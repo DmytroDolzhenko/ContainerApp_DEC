@@ -7,7 +7,7 @@ using Domain.Products;
 
 namespace Api.Controllers
 {
-    [Route("products")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductsController(
         IGetQueries<Product> productQueries,
