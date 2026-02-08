@@ -16,18 +16,30 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.HasOne<Container>()
+            builder.HasOne(x => x.Container)
                 .WithMany()
                 .HasForeignKey(x => x.ContainerId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-            builder.HasOne<Product>()
+            builder.HasOne(x => x.Product)
                 .WithMany()
                 .HasForeignKey(x => x.ProductId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            /*            builder.HasOne<Container>()
+                            .WithMany()
+                            .HasForeignKey(x => x.ContainerId)
+                            .IsRequired()
+                            .OnDelete(DeleteBehavior.Cascade);
+
+
+                        builder.HasOne<Product>()
+                            .WithMany()
+                            .HasForeignKey(x => x.ProductId)
+                            .IsRequired(false)
+                            .OnDelete(DeleteBehavior.Restrict);*/
 
             builder.HasOne<User>()
                 .WithMany()

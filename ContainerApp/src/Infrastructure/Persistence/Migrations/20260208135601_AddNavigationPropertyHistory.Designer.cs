@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260208135601_AddNavigationPropertyHistory")]
+    partial class AddNavigationPropertyHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,9 +44,17 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("container_id");
 
+                    b.Property<int>("ContainerId1")
+                        .HasColumnType("integer")
+                        .HasColumnName("container_id1");
+
                     b.Property<int?>("ProductId")
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
+
+                    b.Property<int?>("ProductId1")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id1");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -59,8 +70,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("ContainerId")
                         .HasDatabaseName("ix_container_histories_container_id");
 
+                    b.HasIndex("ContainerId1")
+                        .HasDatabaseName("ix_container_histories_container_id1");
+
                     b.HasIndex("ProductId")
                         .HasDatabaseName("ix_container_histories_product_id");
+
+                    b.HasIndex("ProductId1")
+                        .HasDatabaseName("ix_container_histories_product_id1");
 
                     b.HasIndex("UpdatedAt")
                         .HasDatabaseName("ix_container_histories_updated_at");
@@ -307,18 +324,30 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.ContainerHistories.ContainerHistory", b =>
                 {
-                    b.HasOne("Domain.Containers.Container", "Container")
+                    b.HasOne("Domain.Containers.Container", null)
                         .WithMany()
                         .HasForeignKey("ContainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_container_histories_containers_container_id");
 
-                    b.HasOne("Domain.Products.Product", "Product")
+                    b.HasOne("Domain.Containers.Container", "Container")
+                        .WithMany()
+                        .HasForeignKey("ContainerId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_container_histories_containers_container_id1");
+
+                    b.HasOne("Domain.Products.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_container_histories_products_product_id");
+
+                    b.HasOne("Domain.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId1")
+                        .HasConstraintName("fk_container_histories_products_product_id1");
 
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()

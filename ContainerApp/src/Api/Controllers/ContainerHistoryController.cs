@@ -15,7 +15,7 @@ namespace Api.Controllers
             var history = await queries.GetByContainerIdAsync(id, cancellationToken);
 
             var result = history.Select(h => new ContainerHistoryDto(
-                    h.Id, h.ContainerId, h.ProductId, h.Action, h.UpdatedAt, h.UserId));
+                    h.Id, h.ContainerId, h.Container.Name, h.ProductId, h.Product?.Name, h.Action, h.UpdatedAt, h.UserId));
 
             return Ok(result);
         }
@@ -33,7 +33,9 @@ namespace Api.Controllers
             return Ok(new ContainerHistoryDto(
                 latest.Id,
                 latest.ContainerId,
+                latest.Container.Name,
                 latest.ProductId,
+                latest.Product?.Name,
                 latest.Action,
                 latest.UpdatedAt,
                 latest.UserId)

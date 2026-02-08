@@ -8,22 +8,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("/containers")]
+    [Route("api/containers")]
     [ApiController]
     //тут зв'язок до домейн моделі, не знаю чи правильно
-    public class ContainerController(IGetQueries<Container> getQueries, ISender sender, IQrCodeService qr) : ControllerBase
+    public class ContainerController(
+        IGetQueries<Container> getQueries,
+        ISender sender,
+        IQrCodeService qr,
+        IContainerQueries containerQueries)
+        : ControllerBase
     {
         [HttpGet]
         public async Task<IReadOnlyList<ContainerDto>> GetAllContainers(CancellationToken cancellationToken)
         {
-            var containers = await getQueries.GetAllAsync(cancellationToken);
+            var containers = await containerQueries.GetAllAsync(cancellationToken);
             return containers.Select(ContainerDto.FromDomain).ToList();
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ContainerDto>> GetContainerId(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<ContainerDto>> GetByContainerId(int id, CancellationToken cancellationToken)
         {
-            var result = await getQueries.GetByIdAsync(id, cancellationToken);
+            var result = await containerQueries.GetByIdAsync(id, cancellationToken);
 
             if (result is null)
             {
@@ -81,7 +86,7 @@ namespace Api.Controllers
                 ContainerId = id,
                 ProductId = dto.ProductId,
                 Amount = dto.Amount,
-                UserId = 1
+                UserId = 3
             };
 
             var result = await sender.Send(input, cancellationToken);
@@ -94,7 +99,7 @@ namespace Api.Controllers
             var input = new CleanContainerCommand
             {
                 ContainerId = id,
-                UserId = 1
+                UserId = 3
             };
 
             var result = await sender.Send(input, cancellationToken);
