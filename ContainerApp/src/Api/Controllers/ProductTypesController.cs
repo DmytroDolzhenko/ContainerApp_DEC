@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("product-types")]
+    [Route("api/product-types")]
     [ApiController]
     public class ProductTypesController(
          IGetQueries<ProductType> productTypeQueries,

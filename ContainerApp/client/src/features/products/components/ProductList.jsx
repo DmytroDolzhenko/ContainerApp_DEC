@@ -8,11 +8,12 @@ export const ProductList = () => {
 
   return (
     <div className="product-grid">
-      {products.map((product) => (
-        <div key={product.id} className="card">
-          <h3>{product.name}</h3>
-          <p>{product.description}</p>
-          <strong>{product.capacity} L</strong>
+      {products.map((productItem) => (
+        <div key={productItem.id} className="card">
+          <h3>{productItem.name}</h3>
+          <p>{productItem.productTypeId}</p>
+          <p>{productItem.capacity} L</p>
+          <p>{productItem.description}</p>
         </div>
       ))}
     </div>

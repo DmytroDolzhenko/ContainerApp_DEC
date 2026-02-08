@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("/containers")]
+    [Route("api/containers")]
     [ApiController]
     public class ContainerHistoryController(IContainerHistoryQueries queries) : ControllerBase
     {

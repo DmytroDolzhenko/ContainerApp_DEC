@@ -8,7 +8,7 @@ using System.ComponentModel;
 
 namespace Api.Controllers
 {
-    [Route("users")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController(
         IGetQueries<User> userQueries,

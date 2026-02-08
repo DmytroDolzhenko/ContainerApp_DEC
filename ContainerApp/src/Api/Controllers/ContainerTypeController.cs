@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("container-type")]
+    [Route("api/container-type")]
     [ApiController]
     public class ContainerTypeController(IGetQueries<ContainerType> queries, ISender sender) : ControllerBase
     {
