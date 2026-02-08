@@ -21,6 +21,8 @@ namespace Infrastructure.Persistence.Queries
         {
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)
+                .Include(ch => ch.Container)
+                .Include(ch => ch.Product)
                 .ToListAsync(cancellationToken);
         }
         //останній запис історії контейнера за датою оновлення
@@ -28,6 +30,8 @@ namespace Infrastructure.Persistence.Queries
         {
             return await _context.ContainerHistory
                 .Where(ch => ch.ContainerId == containerId)
+                .Include(ch => ch.Container)
+                .Include(ch => ch.Product)
                 .OrderByDescending(ch => ch.UpdatedAt)
                 .FirstOrDefaultAsync(cancellationToken);
         }

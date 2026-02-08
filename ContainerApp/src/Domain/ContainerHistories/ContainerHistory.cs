@@ -13,7 +13,11 @@ namespace Domain.ContainerHistories
     {
         public int Id { get; }
         public int ContainerId { get; private set; }
+        public Container Container { get; private set; } = default!;
+
         public int? ProductId { get; private set; }
+        public Product? Product { get; private set; }
+
         public string Action { get; private set; }
         public DateTime UpdatedAt { get; private set; }
         public int UserId { get; private set; }

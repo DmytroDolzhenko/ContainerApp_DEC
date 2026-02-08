@@ -19,10 +19,13 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-      /*  public async Task<IReadOnlyList<Container>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Container>> GetAllAsync(CancellationToken ct)
         {
-            return await _context.Containers.ToListAsync(cancellationToken);
-        }*/
+            return await _context.Containers
+                .Include(c => c.Product)
+                .Include(c => c.Type)
+                .ToListAsync(ct);
+        }
 
         public async Task<Container?> GetByContainerType(int containerTypeId, CancellationToken cancellationToken)
         {
@@ -33,19 +36,23 @@ namespace Infrastructure.Persistence.Queries
             return containers;
         }
 
-       /* public async Task<Container?> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Container?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var container = await _context.Containers
                 .Where(c => c.Id == id)
+                .Include(c => c.Product)
+                .Include(c => c.Type)
                 .SingleOrDefaultAsync(cancellationToken);
 
             return container;
-        }*/
+        }
 
         public async Task<IReadOnlyList<Container>> GetByProductAsync(int productId, CancellationToken cancellationToken)
         {
             var containers = await _context.Containers
                 .Where(c => c.ProductId == productId)
+                .Include(c => c.Product)
+                .Include(c => c.Type)
                 .ToListAsync(cancellationToken);
 
             return containers;
