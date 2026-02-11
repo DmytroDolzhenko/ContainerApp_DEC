@@ -48,9 +48,18 @@ namespace Api.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 return Unauthorized("Invalid email or password");
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var generatedToken = _jwtTokenGenerator.GenerateToken(user);
 
-            return Ok(new AuthResponse(token, user.Email!));
+            return Ok(new
+            {
+                token = generatedToken,
+                user = new
+                {
+                    id = user.Id,
+                    fullName = user.Name,
+                    role = user.Role.ToString()
+                }
+            });
         }
     }
 }

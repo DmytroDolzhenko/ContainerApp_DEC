@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Paper, Typography, TextField, Button, Alert } from "@mui/material";
 import { useAuth } from "../../auth/hooks/useAuth";
+import { authApi } from "../../auth/api/loginApi";
 
 export const LoginList = () => {
   const [email, setEmail] = useState("");
@@ -9,28 +10,19 @@ export const LoginList = () => {
 
   const { login } = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (email === "admin@gmail.com" && password === "admin") {
-      login({
-        id: 1,
-        fullName: "Super Admin",
-        email: "admin@gmail.com",
-        role: "Admin",
-        avatar: "/static/images/avatar/1.jpg"
-      });
-    } else if (email === "operator@gmail.com" && password === "operator") {
-      login({
-        id: 2,
-        fullName: "John Operator",
-        email: "operator@gmail.com",
-        role: "Operator",
-        avatar: ""
-      });
-    } else {
-      setError("Невірний логін або пароль");
+    try {
+      const data = await authApi.login({email, password});
+      localStorage.setItem("token", data.token)
+
+      login(data.user);
+
+    } catch (err){
+      setError(err.response?.data?.message || "Помилка авторизації");
     }
+
   };
 
   return (

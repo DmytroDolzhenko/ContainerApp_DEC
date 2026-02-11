@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../api/authApi";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
@@ -23,11 +24,15 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
+const logout = () => {
+  authApi.logout();
+
+  localStorage.removeItem("user");
+
+  setUser(null);
+
+  navigate('/login');
+};
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

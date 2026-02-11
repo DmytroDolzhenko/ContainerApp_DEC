@@ -1,6 +1,7 @@
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography, Box, Divider } from '@mui/material';
 import { Inventory, ShoppingBasket, History, People, Login } from '@mui/icons-material';
 import { useLocation, Link } from 'react-router-dom';
+//import { useAuth } from '../../features/auth/hooks/useAuth';
 
 const sidebarWidth = 240;
 
@@ -12,6 +13,7 @@ const themeConfig = {
 };
 
 export const Sidebar = () => {
+ /* const { logout } = useAuth(); */
   const location = useLocation();
 
   const menuItems = [
@@ -37,9 +39,9 @@ export const Sidebar = () => {
       }}
     >
       <Box sx={{ p: 3, mb: 1 }}>
-        <Typography variant="h6" sx={{ 
-            fontWeight: 'bold', 
-            fontStyle: 'italic', 
+        <Typography variant="h6" sx={{
+            fontWeight: 'bold',
+            fontStyle: 'italic',
             background: `linear-gradient(45deg, #fff 30%, ${themeConfig.activeColor} 90%)`,
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent"
@@ -91,10 +93,10 @@ export const Sidebar = () => {
               />
 
               {isActive && (
-                 <Box sx={{ 
-                     width: '4px', 
-                     height: '60%', 
-                     bgcolor: themeConfig.activeColor, 
+                 <Box sx={{
+                     width: '4px',
+                     height: '60%',
+                     bgcolor: themeConfig.activeColor,
                      borderRadius: '4px',
                      position: 'absolute',
                      right: '8px'

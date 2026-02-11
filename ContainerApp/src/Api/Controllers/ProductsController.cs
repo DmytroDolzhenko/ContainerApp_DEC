@@ -14,7 +14,8 @@ namespace Api.Controllers
         IGetQueries<Product> productQueries,
         ISender sender) : ControllerBase
     {
-        [Authorize]
+        // [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(CancellationToken cancellationToken)
         {
