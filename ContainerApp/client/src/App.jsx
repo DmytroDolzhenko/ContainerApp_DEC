@@ -1,27 +1,21 @@
-import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
-import { HomePage } from "./pages/HomePage.jsx";
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { BrowserRouter } from 'react-router-dom';
+import { darkTheme } from './theme';
+import { AppRoutes } from './routes/AppRoutes';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#bb86fc',
-    },
-    background: {
-      default: '#121019',
-      paper: '#1e1b26',
-    },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-});
+import { AuthProvider } from './features/auth/context/AuthContext';
 
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <HomePage />
+
+      <BrowserRouter>
+        <AuthProvider>
+           <AppRoutes />
+        </AuthProvider>
+      </BrowserRouter>
+
     </ThemeProvider>
   );
 }
