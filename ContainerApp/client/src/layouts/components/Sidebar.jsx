@@ -1,14 +1,23 @@
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography, Box } from '@mui/material';
-import { Inventory, ShoppingBasket, History, People } from '@mui/icons-material';
+import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography, Box, Divider } from '@mui/material';
+import { Inventory, ShoppingBasket, History, People, Login } from '@mui/icons-material';
+import { useLocation, Link } from 'react-router-dom';
 
 const sidebarWidth = 240;
 
+const themeConfig = {
+  activeColor: '#bb86fc',
+  inactiveColor: '#e0e0e0',
+  hoverBg: 'rgba(187, 134, 252, 0.08)',
+  gradient: 'linear-gradient(180deg, #231e2e 0%, #050505 100%)',
+};
+
 export const Sidebar = () => {
+  const location = useLocation();
+
   const menuItems = [
-    { text: 'Containers', icon: <Inventory />, active: true },
-    { text: 'Products', icon: <ShoppingBasket /> },
-    { text: 'History', icon: <History /> },
-    { text: 'Users', icon: <People /> },
+    { text: 'Containers', icon: <Inventory />, path: '/containers' },
+    { text: 'Products', icon: <ShoppingBasket />, path: '/products' },
+    { text: 'Users', icon: <People />, path: '/users' },
   ];
 
   return (
@@ -16,32 +25,108 @@ export const Sidebar = () => {
       variant="permanent"
       sx={{
         width: sidebarWidth,
-        '& .MuiDrawer-paper': { width: sidebarWidth, backgroundColor: '#1e1b26', borderRight: '1px solid #322d3d' },
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+            width: sidebarWidth,
+            background: themeConfig.gradient,
+            borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+            color: 'white',
+            display: 'flex',
+            flexDirection: 'column'
+        },
       }}
     >
-      <Box sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold', fontStyle: 'italic' }}>
+      <Box sx={{ p: 3, mb: 1 }}>
+        <Typography variant="h6" sx={{ 
+            fontWeight: 'bold', 
+            fontStyle: 'italic', 
+            background: `linear-gradient(45deg, #fff 30%, ${themeConfig.activeColor} 90%)`,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+        }}>
           ContainerApp
         </Typography>
       </Box>
-      <List>
-        {menuItems.map((item) => (
-          <ListItemButton
-            key={item.text}
-            sx={{
-              m: 1,
-              borderRadius: 2,
-              backgroundColor: item.active ? 'rgba(187, 134, 252, 0.15)' : 'transparent',
-              color: item.active ? '#bb86fc' : 'inherit'
-            }}
-          >
-            <ListItemIcon sx={{ color: item.active ? '#bb86fc' : 'inherit' }}>
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItemButton>
-        ))}
+
+      <List sx={{ flexGrow: 1 }}>
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+
+          return (
+            <ListItemButton
+              key={item.text}
+              component={Link}
+              to={item.path}
+              sx={{
+                m: 1,
+                mb: 0.5,
+                borderRadius: '12px',
+
+                background: isActive
+                    ? `linear-gradient(90deg, rgba(187, 134, 252, 0.15) 0%, rgba(187, 134, 252, 0.05) 100%)` 
+                    : 'transparent',
+                color: isActive ? themeConfig.activeColor : themeConfig.inactiveColor,
+
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                    backgroundColor: themeConfig.hoverBg,
+                    color: '#fff',
+                    transform: 'translateX(5px)'
+                }
+              }}
+            >
+              <ListItemIcon sx={{
+                  color: isActive ? themeConfig.activeColor : themeConfig.inactiveColor,
+                  minWidth: '40px'
+              }}>
+                {item.icon}
+              </ListItemIcon>
+
+              <ListItemText
+                primary={item.text}
+                primaryTypographyProps={{
+                    fontSize: '0.95rem',
+                    fontWeight: isActive ? 600 : 400
+                }}
+              />
+
+              {isActive && (
+                 <Box sx={{ 
+                     width: '4px', 
+                     height: '60%', 
+                     bgcolor: themeConfig.activeColor, 
+                     borderRadius: '4px',
+                     position: 'absolute',
+                     right: '8px'
+                 }} />
+              )}
+            </ListItemButton>
+          );
+        })}
       </List>
+
+      <Box sx={{ p: 2 }}>
+        <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', mb: 2, mx: 1 }} />
+
+        <ListItemButton
+          component={Link}
+          to="/login"
+          sx={{
+            borderRadius: '12px',
+            color: themeConfig.inactiveColor,
+            '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: '#fff'
+            }
+          }}
+        >
+          <ListItemIcon sx={{ color: themeConfig.inactiveColor, minWidth: '40px' }}>
+            <Login />
+          </ListItemIcon>
+          <ListItemText primary="Увійти" />
+        </ListItemButton>
+      </Box>
+
     </Drawer>
   );
 };

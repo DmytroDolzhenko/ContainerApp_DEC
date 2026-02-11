@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { containerApi } from "../api/containerApi";
 
 export const useContainers = () => {
@@ -6,22 +6,21 @@ export const useContainers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        const data = await containerApi.getAll();
-        setContainers(data);
-      } catch (err) {
-        console.error(err);
-        setError("Не вдалося завантажити контейнери");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
+  const fetchContainers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await containerApi.getAll();
+      setContainers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { containers, loading, error };
+  useEffect(() => {
+    fetchContainers();
+  }, [fetchContainers]);
+
+  return { containers, loading, error, refetch: fetchContainers };
 };
