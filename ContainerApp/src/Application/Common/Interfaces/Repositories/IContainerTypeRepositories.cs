@@ -9,8 +9,9 @@ namespace Application.Common.Interfaces.Repositories
 {
     public interface IContainerTypeRepositories
     {
-       /* Task<ContainerType> AddAsync(ContainerType containerType, CancellationToken cancellationToken);
-        Task<ContainerType> UpdateAsync(ContainerType containerType, CancellationToken cancellationToken);
-        Task<ContainerType> DeleteAsync(ContainerType containerType, CancellationToken cancellationToken);*/
+        Task<bool> IsCompatibleWithProductAsync(int containerTypeId, int productTypeId, CancellationToken cancellationToken);
+        /* Task<ContainerType> AddAsync(ContainerType containerType, CancellationToken cancellationToken);
+         Task<ContainerType> UpdateAsync(ContainerType containerType, CancellationToken cancellationToken);
+         Task<ContainerType> DeleteAsync(ContainerType containerType, CancellationToken cancellationToken);*/
     }
 }

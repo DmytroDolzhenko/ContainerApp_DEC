@@ -1,14 +1,16 @@
-﻿namespace Domain.Users
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Domain.Users
 {
-    public class User : IEntity
+    public class User : IdentityUser<int>, IEntity
     {
-        public int Id { get; }
+       // public int Id { get; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public string Middlename { get; private set; }
-        public string Email { get; private set; }
+        //public string Email { get; private set; }
         public UserRole Role { get; private set; }
-        public string Identifier {get ; private set; }
+       // public string Identifier {get ; private set; }
         public DateTime? RegistrationDate { get; private set; }
         public bool IsApproved { get; private set; }
 
@@ -19,7 +21,7 @@
             string middlename,
             string email,
             UserRole role,
-            string identifier,
+           // string identifier,
             bool isApproved)
         {
             Id = id;
@@ -28,7 +30,7 @@
             Middlename = middlename;
             Email = email;
             Role = role;
-            Identifier = identifier;
+            //Identifier = identifier;
             RegistrationDate = DateTime.UtcNow;
             IsApproved = isApproved;
         }
@@ -39,7 +41,7 @@
             string middlename,
             string email,
             UserRole role,
-            string identifier,
+           // string identifier,
             bool isApproved)
         {
             return new User(
@@ -49,7 +51,7 @@
                 middlename,
                 email,
                 role,
-                identifier,
+               // identifier,
                 isApproved);
         }
 
@@ -57,14 +59,14 @@
             string name,
             string surname,
             string middlename,
-            string email,
-            string identifier)
+            string email)
+       //     string identifier)
         {
             Name = name;
             Surname = surname;
             Middlename = middlename;
             Email = email;
-            Identifier = identifier;
+           // Identifier = identifier;
         }
 
         public void ChangeRole(UserRole newRole)

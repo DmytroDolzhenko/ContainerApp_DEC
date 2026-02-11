@@ -27,8 +27,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMaxLength(1000)
             .IsRequired();
 
-        builder.Property(x => x.Capacity)
-            .IsRequired();
+/*        builder.Property(x => x.Capacity)
+            .IsRequired();*/
 
 
         builder.Property(x => x.ExpirationDate)

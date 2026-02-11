@@ -12,7 +12,7 @@ namespace Application.Products.Commands
     {
         public required string Name { get; init; }
         public required int ProductTypeId { get; init; }
-        public required double Capacity { get; init; }
+      //  public required double Capacity { get; init; }
         public required DateTime ExpirationDate { get; init; }
         public string? Description { get; init; }
     }
@@ -30,7 +30,7 @@ namespace Application.Products.Commands
                 0,
                 request.ProductTypeId,
                 request.Name,
-                request.Capacity,
+              //  request.Capacity,
                 request.ExpirationDate,
                 request.Description ?? string.Empty
             );

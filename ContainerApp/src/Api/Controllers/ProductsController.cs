@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Dtos;
 using Application.Common.Interfaces.Queries;
-using MediatR;
 using Application.Products.Commands;
-using Api.Dtos;
 using Domain.Products;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
@@ -13,6 +14,7 @@ namespace Api.Controllers
         IGetQueries<Product> productQueries,
         ISender sender) : ControllerBase
     {
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(CancellationToken cancellationToken)
         {
@@ -30,7 +32,7 @@ namespace Api.Controllers
             {
                 Name = request.Name,
                 ProductTypeId = request.TypeId,
-                Capacity = request.Capacity,
+              //  Capacity = request.Capacity,
                 ExpirationDate = request.ExpirationDate,
                 Description = request.Description
             };
@@ -50,7 +52,7 @@ namespace Api.Controllers
             {
                 Id = id,
                 Name = request.Name,
-                Capacity = request.Capacity,
+              //  Capacity = request.Capacity,
                 ExpirationDate = request.ExpirationDate,
                 Description = request.Description
             };

@@ -4,6 +4,7 @@ using Application.Entities.ProductTypes.Commands;
 using Domain.ProductTypes;
 using Infrastructure.Persistence.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -14,15 +15,13 @@ namespace Api.Controllers
          IGetQueries<ProductType> productTypeQueries,
          ISender sender) : ControllerBase
     {
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProductTypeDtos>>> GetProductTypes(CancellationToken cancellationToken)
         {
             var types = await productTypeQueries.GetAllAsync(cancellationToken);
 
             return types.Select(ProductTypeDtos.FromDomain).ToList();
-
-/*            var containers = await getQueries.GetAllAsync(cancellationToken);
-            return containers.Select(ContainerDto.FromDomain).ToList();*/
         }
 
         [HttpPost]

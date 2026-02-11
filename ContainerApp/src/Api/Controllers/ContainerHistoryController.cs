@@ -1,10 +1,12 @@
 ﻿using Api.Dtos;
 using Application.Common.Interfaces.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/containers")]
     [ApiController]
     public class ContainerHistoryController(IContainerHistoryQueries queries) : ControllerBase

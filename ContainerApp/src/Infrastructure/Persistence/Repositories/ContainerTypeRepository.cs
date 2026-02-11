@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces.Repositories;
 using Domain.ContainerTypes;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,25 +16,31 @@ namespace Infrastructure.Persistence.Repositories
         {
             _context = context;
         }
+
+        public async Task<bool> IsCompatibleWithProductAsync(int containerTypeId, int productTypeId, CancellationToken cancellationToken)
+        {
+            return await _context.ContainerTypeProductType.AnyAsync
+                (ctpt => ctpt.ContainerTypeId == containerTypeId && ctpt.ProductTypeId == productTypeId, cancellationToken);
+        }
         /*public async Task<ContainerType> AddAsync(ContainerType containerType, CancellationToken cancellationToken)
-        {
-            await _context.ContainerTypes.AddAsync(containerType, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-            return containerType;
-        }
+{
+   await _context.ContainerTypes.AddAsync(containerType, cancellationToken);
+   await _context.SaveChangesAsync(cancellationToken);
+   return containerType;
+}
 
-        public async Task<ContainerType> DeleteAsync(ContainerType containerType, CancellationToken cancellationToken)
-        {
-            _context.ContainerTypes.Remove(containerType);
-            await _context.SaveChangesAsync(cancellationToken);
-            return containerType;
-        }
+public async Task<ContainerType> DeleteAsync(ContainerType containerType, CancellationToken cancellationToken)
+{
+   _context.ContainerTypes.Remove(containerType);
+   await _context.SaveChangesAsync(cancellationToken);
+   return containerType;
+}
 
-        public async Task<ContainerType> UpdateAsync(ContainerType containerType, CancellationToken cancellationToken)
-        {
-            _context.ContainerTypes.Update(containerType);
-            await _context.SaveChangesAsync(cancellationToken);
-            return containerType;
-        }*/
+public async Task<ContainerType> UpdateAsync(ContainerType containerType, CancellationToken cancellationToken)
+{
+   _context.ContainerTypes.Update(containerType);
+   await _context.SaveChangesAsync(cancellationToken);
+   return containerType;
+}*/
     }
 }

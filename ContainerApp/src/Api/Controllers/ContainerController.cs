@@ -4,15 +4,16 @@ using Application.Common.Interfaces.Queries;
 using Application.Entities.Containers.Commands;
 using Domain.Containers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/containers")]
     [ApiController]
     //тут зв'язок до домейн моделі, не знаю чи правильно
     public class ContainerController(
-        IGetQueries<Container> getQueries,
         ISender sender,
         IQrCodeService qr,
         IContainerQueries containerQueries)
@@ -81,7 +82,7 @@ namespace Api.Controllers
         [HttpPut("{id:int}/fill")]
         public async Task<IActionResult> FillContainer(int id, [FromBody] FillContainerDto dto, CancellationToken cancellationToken)
         {
-            var input = new FillingContainerCommand
+             var input = new FillingContainerCommand
             {
                 ContainerId = id,
                 ProductId = dto.ProductId,

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209195649_upd")]
+    partial class upd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,36 +72,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasDatabaseName("ix_container_histories_user_id");
 
                     b.ToTable("ContainerHistories", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.ContainerTypeProductTypes.ContainerTypeProductType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ContainerTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("container_type_id");
-
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("product_type_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_container_type_product_types");
-
-                    b.HasIndex("ProductTypeId")
-                        .HasDatabaseName("ix_container_type_product_types_product_type_id");
-
-                    b.HasIndex("ContainerTypeId", "ProductTypeId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_container_type_product_types_container_type_id_product_type_id");
-
-                    b.ToTable("ContainerTypeProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.ContainerTypes.ContainerType", b =>
@@ -573,27 +546,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Container");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Domain.ContainerTypeProductTypes.ContainerTypeProductType", b =>
-                {
-                    b.HasOne("Domain.ContainerTypes.ContainerType", "ContainerType")
-                        .WithMany()
-                        .HasForeignKey("ContainerTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_container_type_product_types_container_types_container_type_id");
-
-                    b.HasOne("Domain.ProductTypes.ProductType", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_container_type_product_types_product_types_product_type_id");
-
-                    b.Navigation("ContainerType");
-
-                    b.Navigation("ProductType");
                 });
 
             modelBuilder.Entity("Domain.Containers.Container", b =>

@@ -4,6 +4,7 @@ using Application.Common.Interfaces.Repositories;
 using Application.Common.Services;
 using Infrastructure.Persistence.Queries;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -71,11 +72,15 @@ namespace Infrastructure.Persistence
             //services.AddScoped<IContainerHistoryRepository>(provider => provider.GetRequiredService<ContainerHistoryRepository>());
             //services.AddScoped<IContainerHistoryQueries>(provider => provider.GetRequiredService<ContainerHistoryQueries>());
 
-            //реєструємо EntityRepository та GetQueries для всіх сутностей
             services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
             services.AddScoped(typeof(IGetQueries<>), typeof(GetQueries<>));
 
             services.AddScoped<IQrCodeService, QrCodeService>();
+
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IProductContainerCompliance, ProductContainerCompliance>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
         }
     }
 }

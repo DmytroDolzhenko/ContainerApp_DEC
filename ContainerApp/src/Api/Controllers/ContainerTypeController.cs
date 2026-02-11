@@ -5,10 +5,12 @@ using Application.Entities.ContainerTypes.Commands;
 using Application.Entities.ProductTypes.Commands;
 using Domain.ContainerTypes;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/container-type")]
     [ApiController]
     public class ContainerTypeController(IGetQueries<ContainerType> queries, ISender sender) : ControllerBase

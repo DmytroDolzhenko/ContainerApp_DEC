@@ -2,7 +2,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.ComponentModel.DataAnnotations;
 
 namespace Api.Filters
 {
@@ -12,14 +11,35 @@ namespace Api.Filters
         {
             public override void OnException(ExceptionContext context)
             {
-                if (context.Exception is NotFoundException notFoundException)
+                switch (context.Exception)
                 {
-                    HandleNotFoundException(context, notFoundException);
+                    case ValidationException validationException:
+                        HandleValidationException(context, validationException);
+                        break;
+                    case NotFoundException notFoundException:
+                        HandleNotFoundException(context, notFoundException);
+                        break;
+                    default:
+                        base.OnException(context);
+                        break;
                 }
-                else
+            }
+
+            private void HandleValidationException(ExceptionContext context, ValidationException exception)
+            {
+                var errors = exception.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+
+                var details = new ValidationProblemDetails(errors)
                 {
-                    base.OnException(context);
-                }
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                    Title = "Validation Error",
+                    Detail = "One or more validation errors occurred."
+                };
+
+                context.Result = new BadRequestObjectResult(details);
+                context.ExceptionHandled = true;
             }
 
             private void HandleNotFoundException(ExceptionContext context, NotFoundException exception)

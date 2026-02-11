@@ -1,5 +1,6 @@
 ﻿using Api.Filters;
 using Application.Common.Settings;
+using Application.Entities.Containers.Commands;
 using FluentValidation;
 using static Api.Filters.ValidationFilter;
 
@@ -31,6 +32,7 @@ namespace Api.Modules
         private static void AddRequestValidators(this IServiceCollection services)
         {
             services.AddValidatorsFromAssemblyContaining<Program>();
+            services.AddValidatorsFromAssembly(typeof(FillingContainerCommand).Assembly);
         }
 
         private static void AddApplicationSettings(this IServiceCollection services, IConfiguration configuration)

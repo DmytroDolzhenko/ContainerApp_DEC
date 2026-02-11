@@ -1,7 +1,9 @@
-﻿using Application.Common.Interfaces.Queries;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Entities.Users.Commands
 {
-    public record UpdateUserRolesCommand : IRequest<User>
+    public record UpdateUserRolesCommand : IRequest<bool>
     {
         public required int Id { get; init; }
         public required UserRole Role { get; init; }
@@ -18,14 +20,22 @@ namespace Application.Entities.Users.Commands
     }
 
     public class UpdateUsersRolesCommand(
-        IEntityRepository<User> repository,
-        IGetQueries<User> queries)
-        : IRequestHandler<UpdateUserRolesCommand, User>
+        IGetQueries<User> queries,
+        UserManager<User> userManager,
+        ICurrentUserService userContext)
+        : IRequestHandler<UpdateUserRolesCommand, bool>
     {
-        public async Task<User> Handle(
-            UpdateUserRolesCommand request,
+        public async Task<bool> Handle
+            (UpdateUserRolesCommand request,
             CancellationToken cancellationToken)
         {
+            var currentUserId = userContext.UserId;
+
+            if (currentUserId.HasValue && request.Id == currentUserId.Value)
+            {
+                throw new InvalidOperationException("Ви не можете змінити роль самому собі.");
+            }
+
             var user = await queries.GetByIdAsync(
                 request.Id,
                 cancellationToken);
@@ -37,10 +47,9 @@ namespace Application.Entities.Users.Commands
 
             user.ChangeRole(request.Role);
 
-            await repository.UpdateAsync(user, cancellationToken);
+            var result = await userManager.UpdateAsync(user);
 
-
-            return user;
+            return result.Succeeded;
         }
     }
 }

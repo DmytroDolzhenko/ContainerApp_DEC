@@ -17,25 +17,43 @@ namespace Application.Entities.Containers.Commands
     public record FillingContainerCommand : IRequest<Container>
     {
         public required int ContainerId { get; init; }
-        public required int? ProductId { get; init; }
+        public required int ProductId { get; init; }
         public required int UserId { get; init; }
         public required int Amount { get; init; }
         public string ActionDescription => "Сontainer was filled";
     }
     public class FillingContainerCommandHandler
-        (IGetQueries<Container> getQueries, IEntityRepository<ContainerHistory> historyRepository , IEntityRepository<Container> repository)
+        (IGetQueries<Container> getQueries,
+        IGetQueries<Product> getProductQueries,
+        IEntityRepository<ContainerHistory> historyRepository,
+        IEntityRepository<Container> repository,
+        IProductContainerCompliance containerCompliance)
         : IRequestHandler<FillingContainerCommand, Container>
     {
         public async Task<Container> Handle(FillingContainerCommand request, CancellationToken cancellationToken)
         {
             var container = await getQueries.GetByIdAsync(request.ContainerId, cancellationToken);
+            var product = await getProductQueries.GetByIdAsync(request.ProductId, cancellationToken);
+
+            if (product is null)
+            {
+                throw new KeyNotFoundException($"Product with Id {request.ProductId} not found.");
+            }
 
             if (container is null)
             {
                 throw new KeyNotFoundException($"Container with Id {request.ContainerId} not found.");
             }
 
-            container.FillContainer(request.ProductId!.Value, request.UserId, request.Amount);
+          /*  var compliantResult = await containerCompliance.IsProductCompliantWithContainer
+            (container.TypeId, product.ProductTypeId, cancellationToken);*/
+           
+           /* if (!compliantResult)
+            {
+                throw new InvalidOperationException($"Product with Id {request.ProductId} is not compliant with Container Type Id {container.TypeId}");
+            }*/
+
+            container.FillContainer(request.ProductId, request.UserId, request.Amount);
 
             var history = ContainerHistory.CreateNew(
                  containerId: container.Id,

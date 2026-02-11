@@ -7,7 +7,7 @@ namespace Api.Dtos
         string FullName,
         string Email,
         UserRole Role,
-        string Identifier,
+       // string Identifier,
         bool IsApproved,
         DateTime? RegistrationDate
     )
@@ -18,7 +18,7 @@ namespace Api.Dtos
                 $"{user.Name} {user.Middlename} {user.Surname}",
                 user.Email,
                 user.Role,
-                user.Identifier,
+               // user.Identifier,
                 user.IsApproved,
                 user.RegistrationDate
             );
@@ -30,7 +30,7 @@ namespace Api.Dtos
         string Surname,
         string Email,
         UserRole Role,
-        string Identifier,
+    //    string Identifier,
         bool IsApproved
     );
 
@@ -38,8 +38,8 @@ namespace Api.Dtos
         string Name,
         string Surname,
         string Middlename,
-        string Email,
-        string Identifier
+        string Email
+      //  string Identifier
     );
 
     public record ChangeUserRoleDto(

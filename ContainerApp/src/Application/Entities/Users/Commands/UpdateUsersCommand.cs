@@ -18,8 +18,7 @@ namespace Application.Entities.Users.Commands
         public required string Surname { get; init; }
         public required string Middlename { get; init; }
         public required string Email { get; init; }
-        public required string Identifier { get; init; }
-
+        //  public required string Identifier { get; init; }
     }
 
     public class UpdateUserCommandHandler(
@@ -44,8 +43,8 @@ namespace Application.Entities.Users.Commands
                 request.Name,
                 request.Surname,
                 request.Middlename,
-                request.Email,
-                request.Identifier
+                request.Email
+             //   request.Identifier
                 );
 
             await repository.UpdateAsync(user, cancellationToken);

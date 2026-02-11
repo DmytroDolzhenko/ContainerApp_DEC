@@ -17,7 +17,7 @@ namespace Application.Entities.Users.CommandsValidators
             RuleFor(x => x.Surname).NotEmpty().MaximumLength(255);
             RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(255);
             RuleFor(x => x.Role).NotEmpty();
-            RuleFor(x => x.Identifier).NotEmpty();
+           // RuleFor(x => x.Identifier).NotEmpty();
         }
     }
 }

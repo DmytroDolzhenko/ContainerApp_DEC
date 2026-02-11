@@ -3,11 +3,13 @@ using Application.Common.Interfaces.Queries;
 using Application.Entities.Users.Commands;
 using Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UsersController(
@@ -34,7 +36,7 @@ namespace Api.Controllers
                 Middlename = request.Middlename,
                 Email = request.Email,
                 Role = request.Role,
-                Identifier = request.Identifier,
+             //   Identifier = request.Identifier,
                 IsApproved = request.IsApproved
             };
 
@@ -55,8 +57,8 @@ namespace Api.Controllers
                 Name = request.Name,
                 Surname = request.Surname,
                 Middlename = request.Middlename,
-                Email = request.Email,
-                Identifier = request.Identifier
+                Email = request.Email
+               // Identifier = request.Identifier
             };
 
             var updatedUser = await sender.Send(command, cancellationToken);

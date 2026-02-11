@@ -31,12 +31,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.Email)
             .IsUnique();
 
-        builder.Property(x => x.Identifier)
+      /*  builder.Property(x => x.Identifier)
             .HasMaxLength(50)
             .IsRequired();
 
         builder.HasIndex(x => x.Identifier)
-            .IsUnique();
+            .IsUnique();*/
 
         builder.Property(x => x.Role)
             .IsRequired();

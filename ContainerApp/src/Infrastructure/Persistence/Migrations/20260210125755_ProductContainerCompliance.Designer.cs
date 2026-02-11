@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260210125755_ProductContainerCompliance")]
+    partial class ProductContainerCompliance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,30 +76,19 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.ContainerTypeProductTypes.ContainerTypeProductType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ProductTypeId")
                         .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnName("product_type_id");
 
                     b.Property<int>("ContainerTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("container_type_id");
 
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("product_type_id");
-
-                    b.HasKey("Id")
+                    b.HasKey("ProductTypeId", "ContainerTypeId")
                         .HasName("pk_container_type_product_types");
 
-                    b.HasIndex("ProductTypeId")
-                        .HasDatabaseName("ix_container_type_product_types_product_type_id");
-
-                    b.HasIndex("ContainerTypeId", "ProductTypeId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_container_type_product_types_container_type_id_product_type_id");
+                    b.HasIndex("ContainerTypeId")
+                        .HasDatabaseName("ix_container_type_product_types_container_type_id");
 
                     b.ToTable("ContainerTypeProductTypes", (string)null);
                 });

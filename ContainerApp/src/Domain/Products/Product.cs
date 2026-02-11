@@ -17,17 +17,17 @@ namespace Domain.Products
         public ProductType ProductType { get; private set; }
 
         public string Name { get; private set; }
-        public double Capacity { get; private set; }
+      //  public double Capacity { get; private set; }
         public DateTime ExpirationDate { get; private set; }
         public DateTime? ManufactureDate { get; private set; }
         public string Description { get; private set; }
 
-        private Product(int id, int productTypeId, string name, double capacity , DateTime expirationDate, DateTime? manufactureDate, string description)
+        private Product(int id, int productTypeId, string name, DateTime expirationDate, DateTime? manufactureDate, string description)
         {
             Id = id;
             ProductTypeId = productTypeId;
             Name = name;
-            Capacity = capacity;
+           // Capacity = capacity;
             ExpirationDate = expirationDate;
             ManufactureDate = manufactureDate;
             Description = description;
@@ -37,7 +37,7 @@ namespace Domain.Products
             int id,
             int productTypeId,
             string name,
-            double capacity,
+          //  double capacity,
             DateTime expirationDate,
             string description)
         {
@@ -45,7 +45,7 @@ namespace Domain.Products
                 id,
                 productTypeId,
                 name,
-                capacity,
+             //   capacity,
                 expirationDate,
                 DateTime.UtcNow,
                 description);
@@ -53,12 +53,12 @@ namespace Domain.Products
 
         public void Update(
             string name,
-            double capacity,
+           // double capacity,
             DateTime expirationDate,
             string description)
         {
             Name = name;
-            Capacity = capacity;
+         //   Capacity = capacity;
             ExpirationDate = expirationDate;
             Description = description;
         }
