@@ -1,7 +1,7 @@
-import { Menu, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Menu, MenuItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
 import { Edit, Delete, Visibility } from '@mui/icons-material';
 
-export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetails }) => {
+export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetails, children }) => {
   return (
     <Menu
       anchorEl={anchorEl}
@@ -12,7 +12,7 @@ export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetail
           bgcolor: '#1e1b26',
           color: '#fff',
           border: '1px solid #322d3d',
-          minWidth: '160px',
+          minWidth: '180px',
           borderRadius: '12px',
           boxShadow: '0px 4px 20px rgba(0,0,0,0.5)'
         }
@@ -27,6 +27,10 @@ export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetail
         <ListItemIcon><Visibility fontSize="small" sx={{ color: '#a0a0a0' }} /></ListItemIcon>
         <ListItemText>Деталі</ListItemText>
       </MenuItem>
+
+      {children}
+
+      <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', my: 1 }} />
 
       <MenuItem onClick={onDelete} sx={{ '&:hover': { bgcolor: 'rgba(255,0,0,0.1)' }, color: '#ff5252' }}>
         <ListItemIcon><Delete fontSize="small" sx={{ color: '#ff5252' }} /></ListItemIcon>
