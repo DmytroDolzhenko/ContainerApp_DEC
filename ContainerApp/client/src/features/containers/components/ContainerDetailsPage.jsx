@@ -10,7 +10,7 @@ import { containerApi } from '../api/containerApi';
 export const ContainerDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const [container, setContainer] = useState(null);
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,12 +21,14 @@ export const ContainerDetailsPage = () => {
       const data = await containerApi.getById(id);
       setContainer(data);
 
+      if (data.uniqCode) {
       try {
-        const qrData = await containerApi.getQr(id);
-        setQrCode(qrData); 
+        const qrData = await containerApi.getQr(data.uniqCode);
+        setQrCode(qrData);
       } catch {
-        console.log("QR code not found");
+        console.log("QR code not found for this uniqCode");
       }
+    }
 
     } catch (error) {
       console.error("Failed to fetch container", error);
@@ -175,33 +177,39 @@ export const ContainerDetailsPage = () => {
           </Grid>
 
           <Grid item xs={12} md={3} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'flex-start' }}>
-             {qrCode ? (
-                 <Box sx={{ 
-                     p: 2, 
-                     bgcolor: '#fff', 
-                     borderRadius: '12px',
-                     boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                     maxWidth: '180px'
-                 }}>
-                     <img src={qrCode} alt="QR Code" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                 </Box>
-             ) : (
-                 <Box sx={{
-                     p: 3, 
-                     border: '2px dashed #322d3d', 
-                     borderRadius: '12px',
-                     display: 'flex',
-                     flexDirection: 'column',
-                     alignItems: 'center',
-                     justifyContent: 'center',
-                     width: '100%',
-                     maxWidth: '180px',
-                     aspectRatio: '1/1'
-                 }}>
-                    <QrCode sx={{ fontSize: 40, color: '#322d3d', mb: 1 }} />
-                    <Typography variant="caption" sx={{ color: '#a0a0a0' }}>No QR</Typography>
-                 </Box>
-             )}
+            {qrCode ? (
+              <Box sx={{
+                p: 2,
+                bgcolor: '#fff',
+                borderRadius: '12px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                maxWidth: '180px',
+                width: '100%',
+                '& svg': {
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block'
+                }
+              }}
+              dangerouslySetInnerHTML={{ __html: qrCode }}
+              />
+            ) : (
+              <Box sx={{
+                p: 3,
+                border: '2px dashed #322d3d',
+                borderRadius: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                maxWidth: '180px',
+                aspectRatio: '1/1'
+              }}>
+                <QrCode sx={{ fontSize: 40, color: '#322d3d', mb: 1 }} />
+                <Typography variant="caption" sx={{ color: '#a0a0a0' }}>No QR</Typography>
+              </Box>
+            )}
           </Grid>
 
         </Grid>

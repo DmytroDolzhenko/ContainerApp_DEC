@@ -36,8 +36,8 @@ export const containerApi = {
     return response.data;
   },
 
-  getQr: async (id) => {
-    const response = await axiosClient.get(`/containers/${id}/qr`);
+  getQr: async (uniqCode) => {
+    const response = await axiosClient.get(`/containers/${uniqCode}/qr`);
     return response.data;
   }
 };
