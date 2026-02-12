@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authApi } from "../api/authApi";
+import { authApi } from "../authApi";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, InputBase, IconButton, Avatar, Typography, Paper, Badge, Menu, MenuItem, ListItemIcon, ListItemText, Divider, Button } from '@mui/material';
-import { Search, Notifications, ErrorOutline, CheckCircleOutline, InfoOutlined, Circle, Logout } from '@mui/icons-material';
+import { Search, Notifications, ErrorOutline, CheckCircleOutline, InfoOutlined, Circle } from '@mui/icons-material';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 
 const initialNotifications = [
@@ -160,12 +160,6 @@ export const Header = () => {
               )}
             </MenuItem>
           ))}
-
-          <Box sx={{ p: 1, display: 'flex', justifyContent: 'center' }}>
-            <Button size="small" sx={{ color: '#bb86fc', textTransform: 'none' }}>
-              View All Notifications
-            </Button>
-          </Box>
         </Menu>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
