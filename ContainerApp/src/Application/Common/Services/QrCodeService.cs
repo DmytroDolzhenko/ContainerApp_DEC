@@ -11,10 +11,11 @@ namespace Application.Common.Services
 {
     public class QrCodeService : IQrCodeService
     {
-        private const string BaseUrl = "https://example.com/containers/";
-        public string GenerateQrCode(int containerId)
+        private const string BaseUrl = "https://localhost:7217/api/containers/";
+        public string GenerateQrCode(string uniqCode)
         {
-            string fullURL = $"{BaseUrl}{containerId}";
+
+            string fullURL = $"{BaseUrl}{uniqCode}/uniqCode";
 
             var qr = QrCode.EncodeText(fullURL, QrCode.Ecc.Medium);
 

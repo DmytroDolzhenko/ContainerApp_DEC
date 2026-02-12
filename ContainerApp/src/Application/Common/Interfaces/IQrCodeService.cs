@@ -8,6 +8,6 @@ namespace Application.Common.Interfaces
 {
     public interface IQrCodeService
     {
-        string GenerateQrCode(int containerId);
+        string GenerateQrCode(string uniqCode);
     }
 }

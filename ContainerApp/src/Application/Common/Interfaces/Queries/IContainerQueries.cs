@@ -17,6 +17,7 @@ namespace Application.Common.Interfaces.Queries
         Task<Container?> GetByContainerType(int containerTypeId, CancellationToken cancellationToken);
         Task<IReadOnlyList<Container>> GetByProductAsync(int productId, CancellationToken cancellationToken);
         Task<IReadOnlyList<Container>> GetByProductTypeAsync(int productTypeId, CancellationToken cancellationToken);
-
+        Task<Container?> GetContainerByUniqCode(string uniqCode, CancellationToken cancellationToken);
+        Task<IReadOnlyList<Container?>> GetExpiringContainersAsync(CancellationToken cancellationToken);
     }
 }

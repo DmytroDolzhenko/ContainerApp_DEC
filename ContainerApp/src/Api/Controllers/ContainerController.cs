@@ -12,7 +12,6 @@ namespace Api.Controllers
     [Authorize]
     [Route("api/containers")]
     [ApiController]
-    //тут зв'язок до домейн моделі, не знаю чи правильно
     public class ContainerController(
         ISender sender,
         IQrCodeService qr,
@@ -26,6 +25,17 @@ namespace Api.Controllers
             return containers.Select(ContainerDto.FromDomain).ToList();
         }
 
+        [HttpGet("{uniqCode}/uniqCode")]
+        public async Task<ActionResult<ContainerDto>> GetByUniqCode(string uniqCode, CancellationToken cancellationToken)
+        {
+            var result = await containerQueries.GetContainerByUniqCode(uniqCode, cancellationToken);
+            if (result is null)
+            {
+                return NotFound();
+            }
+            return ContainerDto.FromDomain(result);
+        }
+
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ContainerDto>> GetByContainerId(int id, CancellationToken cancellationToken)
         {
@@ -36,6 +46,21 @@ namespace Api.Controllers
                 return NotFound();
             }
             return ContainerDto.FromDomain(result);
+        }
+
+        [HttpGet("{uniqCode}/qr")]
+        public IActionResult GetContainerQrCode(string uniqCode, CancellationToken cancellationToken)
+        {
+            var svg = qr.GenerateQrCode(uniqCode);
+
+            return Content(svg, "image/svg+xml");
+        }
+
+        [HttpGet("/expirationDate")]
+        public async Task<IReadOnlyList<ContainerDto>> GetExpirationDate(CancellationToken cancellationToken)
+        {
+            var result = await containerQueries.GetExpiringContainersAsync(cancellationToken);
+            return result.Select(ContainerDto.FromDomain).ToList();
         }
 
         [HttpPost]
@@ -51,6 +76,16 @@ namespace Api.Controllers
             var result = await sender.Send(input, cancellationToken);
 
             return ContainerDto.FromDomain(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteContainer(int id, CancellationToken cancellationToken)
+        {
+            var input = new RemoveContainerCommand { Id = id };
+
+            await sender.Send(input, cancellationToken);
+
+            return NoContent();
         }
 
         [HttpPut("{id:int}")]
@@ -69,20 +104,10 @@ namespace Api.Controllers
             return Ok(ContainerDto.FromDomain(result));
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteContainer(int id, CancellationToken cancellationToken)
-        {
-            var input = new RemoveContainerCommand { Id = id };
-
-            await sender.Send(input, cancellationToken);
-
-            return NoContent();
-        }
-
         [HttpPut("{id:int}/fill")]
         public async Task<IActionResult> FillContainer(int id, [FromBody] FillContainerDto dto, CancellationToken cancellationToken)
         {
-             var input = new FillingContainerCommand
+            var input = new FillingContainerCommand
             {
                 ContainerId = id,
                 ProductId = dto.ProductId,
@@ -106,14 +131,6 @@ namespace Api.Controllers
             var result = await sender.Send(input, cancellationToken);
 
             return Ok(ContainerDto.FromDomain(result));
-        }
-
-        [HttpGet("{id:int}/qr")]
-        public IActionResult GetContainerQrCode(int id, CancellationToken cancellationToken)
-        {
-            var svg = qr.GenerateQrCode(id);
-
-            return Content(svg, "image/svg+xml");
         }
     }
 }

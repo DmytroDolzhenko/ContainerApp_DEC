@@ -14,7 +14,7 @@ namespace Domain.Containers
     {
         public int Id { get; }
         public int TypeId { get; }
-        public ContainerType Type { get; private set; }
+        public ContainerType? Type { get; private set; }
 
         public int? ProductId { get; private set; }
         public Product? Product { get; private set; }
@@ -23,23 +23,25 @@ namespace Domain.Containers
         public double Capacity { get; private set; }
         public double CurrentCapacity { get; private set; }
         public string Description { get; private set; }
+        public string UniqCode { get; private set; }
         public bool Status { get; private set; }
         public DateTime CreatedAt { get; }
         public int? LastModifiedBy { get; private set; }
         public DateTime? LastModifiedAt { get; private set; }
-        public Container(int id, string name, double capacity, string description, int typeId, DateTime createdAt)
+        public Container(int id, string name, double capacity, string description, string uniqCode, int typeId, DateTime createdAt)
         {
             Id = id;
             TypeId = typeId;
             Name = name;
             Capacity = capacity;
             Description = description;
+            UniqCode = uniqCode;
             Status = false;
             CreatedAt = createdAt;
         }
-        public static Container CreateNew(string name, double capacity, string description, int typeId)
+        public static Container CreateNew(string name, double capacity, string description, string uniqCode, int typeId)
         {
-            return new Container(0, name, capacity, description, typeId, DateTime.UtcNow);
+            return new Container(0, name, capacity, description, uniqCode, typeId, DateTime.UtcNow);
         }
         public void UpdateDetails(int id, string name, double capacity, string description)
         {

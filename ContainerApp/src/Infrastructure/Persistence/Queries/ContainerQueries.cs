@@ -66,5 +66,25 @@ namespace Infrastructure.Persistence.Queries
                 .Any(p => p.Id == c.ProductId && p.ProductTypeId == productTypeId))
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<Container?> GetContainerByUniqCode(string uniqCode, CancellationToken cancellationToken)
+        {
+            return await _context.Containers
+                .Where(c => c.UniqCode == uniqCode)
+                .Include(c => c.Product)
+                .Include(c => c.Type)
+                .SingleOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<Container?>> GetExpiringContainersAsync(CancellationToken cancellationToken)
+        {
+            var warningDate = DateTime.UtcNow.AddDays(5);
+
+            return await _context.Containers
+                .Include(c => c.Product)
+                .Include(c => c.Type)
+                .Where(c => c.ProductId != null && c.Product.ExpirationDate <= warningDate)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

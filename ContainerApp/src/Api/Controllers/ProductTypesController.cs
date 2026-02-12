@@ -56,7 +56,6 @@ namespace Api.Controllers
             return Ok(ProductTypeDtos.FromDomain(updatedType));
         }
 
-        // 4. Видалити тип
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteProductType(
             [FromRoute] int id,
