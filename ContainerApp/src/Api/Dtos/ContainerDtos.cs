@@ -37,7 +37,8 @@ namespace Api.Dtos
     public record UpdateContainerDto(
         string Name,
         double Capacity,
-        string Description
+        string Description,
+        string ContainerTypeName
         );
 
     public record FillContainerDto(

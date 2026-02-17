@@ -13,7 +13,7 @@ namespace Domain.Containers
     public class Container : IEntity
     {
         public int Id { get; }
-        public int TypeId { get; }
+        public int TypeId { get; private set; }
         public ContainerType? Type { get; private set; }
 
         public int? ProductId { get; private set; }
@@ -43,11 +43,12 @@ namespace Domain.Containers
         {
             return new Container(0, name, capacity, description, uniqCode, typeId, DateTime.UtcNow);
         }
-        public void UpdateDetails(int id, string name, double capacity, string description)
+        public void UpdateDetails(int id, string name, double capacity, string description, int typeId)
         {
             Name = name;
             Capacity = capacity;
             Description = description;
+            TypeId = typeId;
         }
         public void FillContainer(int productId, int userId, int amount)
         {

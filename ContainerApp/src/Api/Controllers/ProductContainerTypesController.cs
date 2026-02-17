@@ -1,4 +1,6 @@
-﻿using Application.Entities.ContainerProductTypes;
+﻿using Application.Common.Interfaces.Queries;
+using Application.Entities.ContainerProductTypes;
+using Domain.ContainerTypeProductTypes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@ namespace Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/product-container-compliance")]
-    public class ProductContainerTypesController(ISender sender) : ControllerBase
+    public class ProductContainerTypesController(ISender sender, IGetQueries<ContainerTypeProductType> queries) : ControllerBase
     {
         [HttpPost]
         public async Task<IActionResult> Create(
@@ -17,6 +19,13 @@ namespace Api.Controllers
         {
             await sender.Send(command, cancellationToken);
             return Ok(new { Message = "Compliance created successfully" });
+        }
+
+        [HttpGet]
+        public async Task<IReadOnlyList<ContainerTypeProductType>> GetAll(CancellationToken cancellationToken)
+        {
+            var compliances = await queries.GetAllAsync(cancellationToken);
+            return compliances;
         }
 
         [HttpDelete]

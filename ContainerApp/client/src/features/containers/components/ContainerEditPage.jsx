@@ -4,39 +4,49 @@ import { Box, Paper, Typography, TextField, Button, Grid, CircularProgress, Aler
 import { Save, Cancel } from '@mui/icons-material';
 import { containerApi } from '../api/containerApi';
 import { commonInputStyles } from '../../../assets/styles/inputStyles';
+import { MenuItem } from '@mui/material';
 
 export const ContainerEditPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [containerTypes, setContainerTypes] = useState([]);
 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     capacity: 0,
-    containerTypeId: 1
+    containerTypeName: ''
   });
 
-  useEffect(() => {
-    const fetchContainer = async () => {
-      try {
-        setLoading(true);
-        const data = await containerApi.getById(id);
-        setFormData({
-            name: data.name,
-            description: data.description || '',
-            capacity: data.capacity,
-            containerTypeId: data.containerTypeId
-        });
-      } catch {
-        setError("Не вдалося завантажити дані");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchContainer();
-  }, [id]);
+useEffect(() => {
+  const loadData = async () => {
+    try {
+      setLoading(true);
+
+      const [containerData, typesData] = await Promise.all([
+        containerApi.getById(id),
+        containerApi.getTypes()
+      ]);
+
+      setContainerTypes(typesData);
+
+      setFormData({
+        name: containerData.name,
+        description: containerData.description || '',
+        capacity: containerData.capacity,
+        containerTypeName: containerData.containerTypeName
+      });
+    } catch (err) {
+      console.error(err);
+      setError("Не вдалося завантажити дані");
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadData();
+}, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,16 +121,22 @@ export const ContainerEditPage = () => {
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-                 <TextField
-                    fullWidth
-                    label="Type ID"
-                    name="containerTypeId"
-                    type="number"
-                    value={formData.containerTypeId}
-                    onChange={handleChange}
-                    variant="outlined"
-                    sx={commonInputStyles}
-                />
+            <TextField
+                select
+                fullWidth
+                label="TypeName"
+                name="containerTypeName"
+                value={formData.containerTypeName}
+                onChange={handleChange}
+                variant="outlined"
+                sx={commonInputStyles}
+            >
+                {containerTypes.map((option) => (
+                <MenuItem key={option.id} value={option.name}>
+                    {option.name}
+                </MenuItem>
+                ))}
+            </TextField>
             </Grid>
 
             <Grid size={{ xs: 12 }}>

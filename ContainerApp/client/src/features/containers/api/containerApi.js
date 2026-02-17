@@ -31,7 +31,7 @@ export const containerApi = {
     return response.data;
   },
 
-  getExpiring: async () => {
+  getExpired: async () => {
   const response = await axiosClient.get("/containers/expirationDate");
   return response.data;
   },
@@ -44,5 +44,11 @@ export const containerApi = {
   getQr: async (uniqCode) => {
     const response = await axiosClient.get(`/containers/${uniqCode}/qr`);
     return response.data;
+  },
+
+  getTypes: async () => {
+    const responce = await axiosClient.get(`/container-type`);
+    return responce.data;
   }
+
 };

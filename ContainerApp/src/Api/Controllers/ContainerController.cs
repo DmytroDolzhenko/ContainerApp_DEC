@@ -15,6 +15,7 @@ namespace Api.Controllers
     public class ContainerController(
         ISender sender,
         IQrCodeService qr,
+        ICurrentUserService currentUserService,
         IContainerQueries containerQueries)
         : ControllerBase
     {
@@ -97,6 +98,7 @@ namespace Api.Controllers
                 Name = dto.Name,
                 Capacity = dto.Capacity,
                 Description = dto.Description,
+                ContainerTypeName = dto.ContainerTypeName,
                 UserId = 1
             };
             var result = await sender.Send(input, cancellationToken);
@@ -107,12 +109,14 @@ namespace Api.Controllers
         [HttpPut("{id:int}/fill")]
         public async Task<IActionResult> FillContainer(int id, [FromBody] FillContainerDto dto, CancellationToken cancellationToken)
         {
+            var userId = currentUserService.UserId ?? throw new UnauthorizedAccessException();
+
             var input = new FillingContainerCommand
             {
                 ContainerId = id,
                 ProductId = dto.ProductId,
                 Amount = dto.Amount,
-                UserId = 3
+                UserId = userId
             };
 
             var result = await sender.Send(input, cancellationToken);
@@ -122,10 +126,11 @@ namespace Api.Controllers
         [HttpPut("{id:int}/clean")]
         public async Task<IActionResult> CleanContainer(int id, CancellationToken cancellationToken)
         {
+            var userId = currentUserService.UserId ?? throw new UnauthorizedAccessException();
             var input = new CleanContainerCommand
             {
                 ContainerId = id,
-                UserId = 3
+                UserId = userId
             };
 
             var result = await sender.Send(input, cancellationToken);

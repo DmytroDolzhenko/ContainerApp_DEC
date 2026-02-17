@@ -19,6 +19,8 @@ import { UserDetailsPage } from "../features/users/components/UserDetailsPage";
 import { UserEditPage } from "../features/users/components/UserEditPage";
 import { UserCreatePage } from "../features/users/components/UserCreatePage";
 
+import { CompliancePage } from "../features/products/components/CompliancePage";
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -43,6 +45,8 @@ export const AppRoutes = () => {
         <Route path="users/create" element={<UserCreatePage />} />
 
         <Route path="users" element={<UserList />} />
+
+        <Route path="product-container-compliance" element={<CompliancePage />} />
       </Route>
     </Routes>
   );

@@ -24,5 +24,21 @@ export const productApi = {
   delete: async (id) => {
     const response = await axiosClient.delete(`/products/${id}`);
     return response.data;
-  }
+  },
+
+  createCompliance: async (data) => {
+    const response = await axiosClient.post(`/product-container-compliance`, data);
+    return response.data;
+  },
+  deleteCompliance: async (productTypeId, containerTypeId) => {
+    const response = await axiosClient.delete(`/product-container-compliance`, {
+      params: { productTypeId, containerTypeId }
+    });
+    return response.data;
+  },
+  
+  getCompliances: async () => {
+    const response = await axiosClient.get("/product-container-compliance");
+    return response.data;
+},
 };
