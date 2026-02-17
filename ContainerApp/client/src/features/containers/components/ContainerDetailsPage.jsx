@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  Box, Paper, Typography, Button, Grid, Chip, LinearProgress, 
-  CircularProgress, Divider, IconButton, Tooltip 
+import {
+  Box, Paper, Typography, Button, Grid, Chip, LinearProgress,
+  CircularProgress, Divider, IconButton, Tooltip
 } from '@mui/material';
 import { ArrowBack, Edit, QrCode, CleaningServices, WaterDrop } from '@mui/icons-material';
 import { containerApi } from '../api/containerApi';
@@ -15,31 +15,30 @@ export const ContainerDetailsPage = () => {
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const data = await containerApi.getById(id);
       setContainer(data);
 
       if (data.uniqCode) {
-      try {
-        const qrData = await containerApi.getQr(data.uniqCode);
-        setQrCode(qrData);
-      } catch {
-        console.log("QR code not found for this uniqCode");
+        try {
+          const qrData = await containerApi.getQr(data.uniqCode);
+          setQrCode(qrData);
+        } catch {
+          console.log("QR code not found for this uniqCode");
+        }
       }
-    }
-
     } catch (error) {
       console.error("Failed to fetch container", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     loadData();
-  }, [id]);
+  }, [loadData]);
 
   const handleClean = async () => {
     if (window.confirm("Очистити контейнер?")) {
@@ -53,43 +52,45 @@ export const ContainerDetailsPage = () => {
   };
 
   const handleFill = async () => {
-     try {
-        await containerApi.fill(id, { amount: container.capacity }); 
-        loadData();
-     } catch {
-        alert("Помилка заповнення");
-     }
+    try {
+      await containerApi.fill(id, {
+        productId: container.productId,
+        amount: container.capacity
+      });
+      loadData();
+    } catch {
+      alert("Помилка заповнення");
+    }
   };
 
   if (loading) return <Box sx={{ p: 5, textAlign: 'center' }}><CircularProgress /></Box>;
   if (!container) return <Typography sx={{ color: 'white', p: 5 }}>Контейнер не знайдено</Typography>;
 
-  const fillPercentage = container.capacity > 0 
-    ? Math.min((container.currentCapacity / container.capacity) * 100, 100) 
+  const fillPercentage = container.capacity > 0
+    ? Math.min((container.currentCapacity / container.capacity) * 100, 100)
     : 0;
 
   return (
     <Box sx={{ p: 3, maxWidth: '1200px', mx: 'auto' }}>
-
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Button 
-          startIcon={<ArrowBack />} 
+        <Button
+          startIcon={<ArrowBack />}
           onClick={() => navigate('/containers')}
           sx={{ color: '#a0a0a0', '&:hover': { color: '#fff' } }}
         >
           Назад
         </Button>
         <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button 
-                variant="outlined" 
+            <Button
+                variant="outlined"
                 color="warning"
                 startIcon={<CleaningServices />}
                 onClick={handleClean}
             >
                 Очистити
             </Button>
-            <Button 
-                variant="contained" 
+            <Button
+                variant="contained"
                 startIcon={<Edit />}
                 onClick={() => navigate(`/containers/edit/${id}`)}
                 sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', '&:hover': { bgcolor: '#9a67ea' } }}
@@ -107,15 +108,14 @@ export const ContainerDetailsPage = () => {
           color: '#fff'
       }}>
         <Grid container spacing={4}>
-
-          <Grid item xs={12} md={5}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <Box sx={{ mb: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
                     {container.name}
                 </Typography>
-                <Chip 
-                    label={`Type ID: ${container.containerTypeId}`} 
-                    sx={{ bgcolor: 'rgba(187, 134, 252, 0.1)', color: '#bb86fc' }} 
+                <Chip
+                    label={`Type ID: ${container.containerTypeId}`}
+                    sx={{ bgcolor: 'rgba(187, 134, 252, 0.1)', color: '#bb86fc' }}
                 />
             </Box>
 
@@ -127,48 +127,48 @@ export const ContainerDetailsPage = () => {
             <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', mb: 3 }} />
 
             <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid size={{ xs: 6 }}>
                     <Typography variant="body2" sx={{ color: '#a0a0a0' }}>Продукт</Typography>
                     <Typography variant="h6">{container.productName || "—"}</Typography>
                 </Grid>
-                <Grid item xs={6}>
-                    <Typography variant="body2" sx={{ color: '#a0a0a0' }}>Data</Typography>
+                <Grid size={{ xs: 6 }}>
+                    <Typography variant="body2" sx={{ color: '#a0a0a0' }}>Дата створення</Typography>
                     <Typography variant="body1">
-                    {container.createdAt 
-                        ? new Date(container.created_At).toLocaleDateString() 
-                        : 'Невідомо'}
+                    {container.registrationDate
+                        ? new Date(container.registrationDate).toLocaleDateString()
+                        : '—'}
                     </Typography>
                 </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
              <Paper sx={{ p: 3, bgcolor: 'rgba(0,0,0,0.2)', borderRadius: '12px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Typography variant="h6">Заповненість</Typography>
-                    <Tooltip title="Test Fill">
+                    <Tooltip title="Заповнити повністю">
                         <IconButton size="small" onClick={handleFill} sx={{ color: '#29b6f6' }}>
                             <WaterDrop />
                         </IconButton>
                     </Tooltip>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                     <Typography variant="body2" sx={{ color: '#a0a0a0' }}>{container.currentCapacity} L</Typography>
                     <Typography variant="body2" sx={{ color: '#a0a0a0' }}>{container.capacity} L</Typography>
                 </Box>
-                
-                <LinearProgress 
-                    variant="determinate" 
-                    value={fillPercentage} 
-                    sx={{ 
-                        height: 10, 
+
+                <LinearProgress
+                    variant="determinate"
+                    value={fillPercentage}
+                    sx={{
+                        height: 10,
                         borderRadius: 5,
                         bgcolor: 'rgba(255,255,255,0.1)',
                         '& .MuiLinearProgress-bar': {
                             bgcolor: fillPercentage > 90 ? '#ff5252' : '#bb86fc'
                         }
-                    }} 
+                    }}
                 />
                 <Typography sx={{ mt: 1, textAlign: 'right', color: '#bb86fc', fontWeight: 'bold' }}>
                     {fillPercentage.toFixed(1)}%
@@ -176,7 +176,7 @@ export const ContainerDetailsPage = () => {
              </Paper>
           </Grid>
 
-          <Grid item xs={12} md={3} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'flex-start' }}>
+          <Grid size={{ xs: 12, md: 3 }} sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'flex-start' }}>
             {qrCode ? (
               <Box sx={{
                 p: 2,
@@ -185,11 +185,7 @@ export const ContainerDetailsPage = () => {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
                 maxWidth: '180px',
                 width: '100%',
-                '& svg': {
-                  width: '100%',
-                  height: 'auto',
-                  display: 'block'
-                }
+                '& svg': { width: '100%', height: 'auto', display: 'block' }
               }}
               dangerouslySetInnerHTML={{ __html: qrCode }}
               />
@@ -211,7 +207,6 @@ export const ContainerDetailsPage = () => {
               </Box>
             )}
           </Grid>
-
         </Grid>
       </Paper>
     </Box>

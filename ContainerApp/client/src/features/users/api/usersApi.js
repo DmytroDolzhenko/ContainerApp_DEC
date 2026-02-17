@@ -21,6 +21,10 @@ export const userApi = {
     return response.data;
   },
 
+  changeRole: async (id, data) => {
+    return await axiosClient.patch(`/users/${id}/role`, data);
+  },
+
   delete: async (id) => {
     const response = await axiosClient.delete(`/users/${id}`);
     return response.data;

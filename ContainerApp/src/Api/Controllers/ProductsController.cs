@@ -14,7 +14,7 @@ namespace Api.Controllers
         IGetQueries<Product> productQueries,
         ISender sender) : ControllerBase
     {
-        // [Authorize]
+
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(CancellationToken cancellationToken)
@@ -23,24 +23,41 @@ namespace Api.Controllers
 
             return products.Select(ProductDto.FromDomain).ToList();
         }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ProductDto>> GetProductById(
+            [FromRoute] int id,
+            CancellationToken cancellationToken)
+        {
+
+            var product = await productQueries.GetByIdAsync(id, cancellationToken);
+
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            return ProductDto.FromDomain(product);
+        }
 
         [HttpPost]
         public async Task<ActionResult<ProductDto>> CreateProduct(
             [FromBody] CreateProductDto request,
             CancellationToken cancellationToken)
         {
+            var expirationDateUtc = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+
             var input = new CreateProductsCommand
             {
                 Name = request.Name,
                 ProductTypeId = request.TypeId,
-              //  Capacity = request.Capacity,
-                ExpirationDate = request.ExpirationDate,
+                // Capacity = request.Capacity,
+                ExpirationDate = expirationDateUtc,
                 Description = request.Description
             };
 
             var newProduct = await sender.Send(input, cancellationToken);
 
-            return Ok(newProduct);
+            return Ok(ProductDto.FromDomain(newProduct));
         }
 
         [HttpPut("{id:int}")]
@@ -49,12 +66,14 @@ namespace Api.Controllers
             [FromBody] UpdateProductDto request,
             CancellationToken cancellationToken)
         {
+            var expirationDateUtc = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+
             var input = new UpdateProductsCommand
             {
                 Id = id,
                 Name = request.Name,
-              //  Capacity = request.Capacity,
-                ExpirationDate = request.ExpirationDate,
+                // Capacity = request.Capacity,
+                ExpirationDate = expirationDateUtc,
                 Description = request.Description
             };
 
@@ -77,6 +96,5 @@ namespace Api.Controllers
 
             return NoContent();
         }
-
     }
 }
