@@ -1,4 +1,5 @@
 ﻿using Api.Dtos;
+using Application.Entities.ReferalLinks.Commands;
 using Application.Entities.Users.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,6 +48,17 @@ namespace Api.Controllers
             var updatedUser = await sender.Send(command, cancellationToken);
 
             return updatedUser ? Ok() : BadRequest();
+        }
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateReferalLink()
+        {
+            var adminId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value ?? "0");
+            var command = new CreateReferalLinkCommand
+            {
+                AdminId = adminId
+            };
+            var referalLink = await sender.Send(command);
+            return Ok(referalLink);
         }
     }
 }
