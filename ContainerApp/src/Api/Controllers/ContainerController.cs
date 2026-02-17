@@ -56,7 +56,7 @@ namespace Api.Controllers
             return Content(svg, "image/svg+xml");
         }
 
-        [HttpGet("/expirationDate")]
+        [HttpGet("expirationDate")]
         public async Task<IReadOnlyList<ContainerDto>> GetExpirationDate(CancellationToken cancellationToken)
         {
             var result = await containerQueries.GetExpiringContainersAsync(cancellationToken);

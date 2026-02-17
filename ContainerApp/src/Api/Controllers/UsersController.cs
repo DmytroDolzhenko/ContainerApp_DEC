@@ -24,6 +24,21 @@ namespace Api.Controllers
             return users.Select(UserDto.FromDomain).ToList();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<UserDto>> GetUserById(
+            [FromRoute] int id,
+            CancellationToken cancellationToken)
+        {
+            var user = await userQueries.GetByIdAsync(id, cancellationToken);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(UserDto.FromDomain(user));
+        }
+
         [HttpPost]
         public async Task<ActionResult<int>> CreateUser(
             [FromBody] CreateUserDto request,
@@ -36,7 +51,7 @@ namespace Api.Controllers
                 Middlename = request.Middlename,
                 Email = request.Email,
                 Role = request.Role,
-             //   Identifier = request.Identifier,
+                // Identifier = request.Identifier,
                 IsApproved = request.IsApproved
             };
 
@@ -58,7 +73,7 @@ namespace Api.Controllers
                 Surname = request.Surname,
                 Middlename = request.Middlename,
                 Email = request.Email
-               // Identifier = request.Identifier
+                // Identifier = request.Identifier
             };
 
             var updatedUser = await sender.Send(command, cancellationToken);

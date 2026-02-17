@@ -31,6 +31,11 @@ export const containerApi = {
     return response.data;
   },
 
+  getExpiring: async () => {
+  const response = await axiosClient.get("/containers/expirationDate");
+  return response.data;
+  },
+
   clean: async (id, updatedData) => {
     const response = await axiosClient.put(`/containers/${id}/clean`, updatedData);
     return response.data;

@@ -2,58 +2,83 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Paper, Typography, TextField, Button, Grid, CircularProgress, Alert } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
-import { containerApi } from '../api/containerApi';
-import { commonInputStyles } from '../../../assets/styles/inputStyles';
+import { productApi } from '../api/productApi';
 
-export const ContainerEditPage = () => {
+export const ProductEditPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    capacity: 0,
-    containerTypeId: 1
+    productTypeId: 1,
+    expirationDate: '',
+    manufactureDate: '' 
   });
 
+  const formatDateForInput = (isoDate) => {
+    if (!isoDate) return '';
+    return isoDate.split('T')[0];
+  };
+
   useEffect(() => {
-    const fetchContainer = async () => {
+    const fetchProduct = async () => {
       try {
-        setLoading(true);
-        const data = await containerApi.getById(id);
+        const data = await productApi.getById(id);
         setFormData({
             name: data.name,
             description: data.description || '',
-            capacity: data.capacity,
-            containerTypeId: data.containerTypeId
+            productTypeId: data.productTypeId,
+            // Форматуємо обидві дати
+            expirationDate: formatDateForInput(data.expirationDate),
+            manufactureDate: formatDateForInput(data.manufactureDate)
         });
       } catch {
-        setError("Не вдалося завантажити дані");
+        setError("Не вдалося завантажити дані продукту");
       } finally {
         setLoading(false);
       }
     };
-    fetchContainer();
+    fetchProduct();
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
         ...prev,
-        [name]: name === 'capacity' || name === 'containerTypeId' ? Number(value) : value
+        [name]: value
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        await containerApi.update(id, formData);
-        navigate(`/containers/${id}`);
+        await productApi.update(id, formData);
+        navigate(`/products/${id}`);
     } catch (err) {
         console.error(err);
         setError("Помилка при збереженні. Перевірте дані.");
+    }
+  };
+
+  const inputStyles = {
+    "& .MuiOutlinedInput-root": {
+        color: "#fff",
+        "& fieldset": { borderColor: "#322d3d" },
+        "&:hover fieldset": { borderColor: "#bb86fc" },
+        "&.Mui-disabled fieldset": { borderColor: "rgba(255, 255, 255, 0.1)" },
+        "&.Mui-disabled input": { 
+            color: "rgba(255, 255, 255, 0.5)", 
+            WebkitTextFillColor: "rgba(255, 255, 255, 0.5)" 
+        },
+    },
+    "& .MuiInputLabel-root": { color: "#a0a0a0" },
+    "& .MuiInputLabel-root.Mui-focused": { color: "#bb86fc" },
+    "& input::-webkit-calendar-picker-indicator": {
+        filter: "invert(1)",
+        cursor: "pointer"
     }
   };
 
@@ -69,21 +94,21 @@ export const ContainerEditPage = () => {
         alignItems: 'center'
     }}>
       <Paper component="form" onSubmit={handleSubmit} sx={{
-          p: 5,
+          p: 5, 
           width: '100%',
           maxWidth: '900px',
-          borderRadius: '16px',
-          bgcolor: '#1e1b26',
-          border: '1px solid #322d3d'
+          borderRadius: '16px', 
+          bgcolor: '#1e1b26', 
+          border: '1px solid #322d3d' 
       }}>
         <Typography variant="h4" sx={{ color: '#fff', mb: 4, fontWeight: 'bold', textAlign: 'center' }}>
-          Редагування контейнера
+          Редагування продукту
         </Typography>
 
         {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
         <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid item xs={12} md={6}>
                 <TextField
                     fullWidth
                     label="Назва"
@@ -91,39 +116,53 @@ export const ContainerEditPage = () => {
                     value={formData.name}
                     onChange={handleChange}
                     variant="outlined"
-                    sx={commonInputStyles}
+                    sx={inputStyles}
                     required
                 />
             </Grid>
 
-            <Grid size={{ xs: 12, md: 4 }}>
-                <TextField
-                    fullWidth
-                    label="Ємність (L)"
-                    name="capacity"
-                    type="number"
-                    value={formData.capacity}
-                    onChange={handleChange}
-                    variant="outlined"
-                    sx={commonInputStyles}
-                    required
-                />
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 4 }}>
+            <Grid item xs={12} md={6}>
                  <TextField
                     fullWidth
                     label="Type ID"
-                    name="containerTypeId"
+                    name="productTypeId"
                     type="number"
-                    value={formData.containerTypeId}
+                    value={formData.productTypeId}
                     onChange={handleChange}
                     variant="outlined"
-                    sx={commonInputStyles}
+                    sx={inputStyles}
                 />
             </Grid>
 
-            <Grid size={{ xs: 12 }}>
+            <Grid item xs={12} md={6}>
+                <TextField
+                    fullWidth
+                    label="Дата виготовлення (Auto)"
+                    name="manufactureDate"
+                    type="date"
+                    value={formData.manufactureDate}
+                    variant="outlined"
+                    disabled
+                    sx={inputStyles}
+                />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+                <TextField
+                    fullWidth
+                    label="Термін придатності"
+                    name="expirationDate"
+                    type="date"
+                    value={formData.expirationDate}
+                    onChange={handleChange}
+                    variant="outlined"
+                    InputLabelProps={{ shrink: true }}
+                    sx={inputStyles}
+                    required
+                />
+            </Grid>
+
+            <Grid item xs={12}>
                 <TextField
                     fullWidth
                     label="Опис"
@@ -133,7 +172,7 @@ export const ContainerEditPage = () => {
                     variant="outlined"
                     multiline
                     rows={3}
-                    sx={commonInputStyles}
+                    sx={inputStyles}
                 />
             </Grid>
         </Grid>
@@ -142,7 +181,7 @@ export const ContainerEditPage = () => {
             <Button
                 variant="outlined"
                 startIcon={<Cancel />}
-                onClick={() => navigate('/containers')}
+                onClick={() => navigate('/products')}
                 sx={{
                     color: '#a0a0a0',
                     borderColor: '#322d3d',
