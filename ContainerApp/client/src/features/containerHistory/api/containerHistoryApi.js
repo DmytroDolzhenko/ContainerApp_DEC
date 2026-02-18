@@ -1,8 +1,8 @@
 import axiosClient from "../../../api/axiosClient";
 
 export const containerHistoryApi = {
-  getContainerHistory: async () => {
-    const response = await axiosClient.get(`/containers/1/history`);
+  getContainerHistory: async (id) => {
+    const response = await axiosClient.get(`/containers/${id}/history`);
     return response.data;
   },
 
@@ -10,5 +10,4 @@ export const containerHistoryApi = {
     const response = await axiosClient.get(`/containers/${id}/history/latest`);
     return response.data;
   },
-
 };

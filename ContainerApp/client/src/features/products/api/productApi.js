@@ -36,7 +36,17 @@ export const productApi = {
     });
     return response.data;
   },
-  
+
+  getTypes: async () => {
+    const response = await axiosClient.get("/product-types");
+    return response.data;
+  },
+
+  createType: async (name) => {
+    const response = await axiosClient.post("/product-types", { name });
+    return response.data;
+  },
+
   getCompliances: async () => {
     const response = await axiosClient.get("/product-container-compliance");
     return response.data;

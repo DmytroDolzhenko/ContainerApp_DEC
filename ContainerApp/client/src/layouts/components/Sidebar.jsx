@@ -9,13 +9,12 @@ export const Sidebar = ({ mobileOpen, onMobileClose }) => {
   const { logout } = useAuth();
   const location = useLocation();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md')); // Перевірка чи це мобільний/планшет
-
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const menuItems = [
-    { text: 'Containers', icon: <Inventory />, path: '/containers' },
-    { text: 'Products', icon: <ShoppingBasket />, path: '/products' },
-    { text: 'Users', icon: <People />, path: '/users' },
-    { text: 'Compliance', icon: <AssignmentTurnedIn />, path: '/product-container-compliance' },
+    { text: 'Контейнери', icon: <Inventory />, path: '/containers' },
+    { text: 'Продукти', icon: <ShoppingBasket />, path: '/products' },
+    { text: 'Користувачі', icon: <People />, path: '/users' },
+    { text: 'Відповідності', icon: <AssignmentTurnedIn />, path: '/product-container-compliance' },
   ];
 
   const drawerContent = (
@@ -55,7 +54,6 @@ export const Sidebar = ({ mobileOpen, onMobileClose }) => {
 
   return (
     <>
-      {/* Мобільний варіант (висувний) */}
       <Drawer
         variant="temporary"
         open={mobileOpen}
@@ -69,7 +67,6 @@ export const Sidebar = ({ mobileOpen, onMobileClose }) => {
         {drawerContent}
       </Drawer>
 
-      {/* Десктопний варіант (завжди зліва) */}
       <Drawer
         variant="permanent"
         sx={{

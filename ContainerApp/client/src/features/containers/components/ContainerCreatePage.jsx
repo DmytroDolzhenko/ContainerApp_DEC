@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Paper, Typography, TextField, Button, Grid, Alert, CircularProgress } from '@mui/material';
+import { Box, Paper, Typography, TextField, Button, Grid, Alert, CircularProgress, MenuItem } from '@mui/material';
 import { Save } from '@mui/icons-material';
 import { containerApi } from '../api/containerApi';
 import { commonInputStyles } from '../../../assets/styles/inputStyles';
@@ -8,14 +8,30 @@ import { commonInputStyles } from '../../../assets/styles/inputStyles';
 export const ContainerCreatePage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [typesLoading, setTypesLoading] = useState(true);
   const [error, setError] = useState('');
+  const [containerTypes, setContainerTypes] = useState([]);
+  
   const [formData, setFormData] = useState({
     name: '',
     uniqCode: '',
-    containerTypeId: 1,
+    containerTypeId: '',
     capacity: '',
     description: ''
   });
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        setTypesLoading(true);
+        const data = await containerApi.getTypes();
+        setContainerTypes(data);
+      } finally {
+        setTypesLoading(false);
+      }
+    };
+    fetchTypes();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,7 +61,7 @@ export const ContainerCreatePage = () => {
   return (
     <Box sx={{ p: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
       <Paper component="form" onSubmit={handleSubmit} sx={{
-        p: 5, width: '100%', maxWidth: '800px', borderRadius: '16px',
+        p: 5, width: '100%', maxWidth: '600px', borderRadius: '16px',
         bgcolor: '#1e1b26', border: '1px solid #322d3d'
       }}>
         <Typography variant="h4" sx={{ color: '#fff', mb: 4, fontWeight: 'bold', textAlign: 'center' }}>
@@ -54,20 +70,47 @@ export const ContainerCreatePage = () => {
 
         {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
+        <Grid container direction="column" spacing={3}>
+          <Grid item>
             <TextField fullWidth label="Назва" name="name" value={formData.name} onChange={handleChange} sx={commonInputStyles} required />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          
+          <Grid item>
             <TextField fullWidth label="Унікальний код" name="uniqCode" value={formData.uniqCode} onChange={handleChange} sx={commonInputStyles} required />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField fullWidth label="Тип (ID)" name="containerTypeId" type="number" value={formData.containerTypeId} onChange={handleChange} sx={commonInputStyles} required />
+          
+          <Grid item>
+            <TextField
+              select
+              fullWidth
+              label="Тип контейнера"
+              name="containerTypeId"
+              value={formData.containerTypeId}
+              onChange={handleChange}
+              sx={{
+                ...commonInputStyles,
+                '& .MuiSelect-select': { py: 2 } // Розширення поля по вертикалі
+              }}
+              required
+              disabled={typesLoading}
+            >
+              {typesLoading ? (
+                <MenuItem disabled>Завантаження типів...</MenuItem>
+              ) : (
+                containerTypes.map((type) => (
+                  <MenuItem key={type.id || type.Id} value={type.id || type.Id}>
+                    {type.name || type.Name}
+                  </MenuItem>
+                ))
+              )}
+            </TextField>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
+          
+          <Grid item>
             <TextField fullWidth label="Місткість (L)" name="capacity" type="number" value={formData.capacity} onChange={handleChange} sx={commonInputStyles} required />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          
+          <Grid item>
             <TextField fullWidth label="Опис" name="description" multiline rows={3} value={formData.description} onChange={handleChange} sx={commonInputStyles} />
           </Grid>
         </Grid>
@@ -76,7 +119,7 @@ export const ContainerCreatePage = () => {
           <Button 
             variant="outlined" 
             onClick={() => navigate('/containers')} 
-            sx={{ color: '#a0a0a0', borderColor: '#322d3d', px: 4 }}
+            sx={{ color: '#a0a0a0', borderColor: '#322d3d', px: 4, borderRadius: '10px' }}
             disabled={loading}
           >
             Скасувати
@@ -84,9 +127,9 @@ export const ContainerCreatePage = () => {
           <Button 
             type="submit" 
             variant="contained" 
-            disabled={loading} 
+            disabled={loading || typesLoading} 
             startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />} 
-            sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', px: 4, '&:hover': { bgcolor: '#9a67ea' } }}
+            sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', px: 4, borderRadius: '10px', '&:hover': { bgcolor: '#9a67ea' } }}
           >
             Зберегти
           </Button>

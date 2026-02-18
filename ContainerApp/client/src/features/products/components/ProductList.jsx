@@ -28,7 +28,7 @@ export const ProductList = () => {
   const filterOpen = Boolean(filterAnchorEl);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [filterType, setFilterType] = useState('');
   const [filterManufactureDate, setFilterManufactureDate] = useState('');
@@ -55,8 +55,8 @@ export const ProductList = () => {
         String(product.id).includes(searchLower)
       );
 
-      const matchesType = filterType === '' || product.productTypeId === Number(filterType);
-      
+      const matchesType = filterType === '' || product.productTypeName === filterType;
+
       const matchesManufacture = !filterManufactureDate || product.manufactureDate?.startsWith(filterManufactureDate);
 
       const matchesExpiration = !filterExpirationDate || (
@@ -74,7 +74,7 @@ export const ProductList = () => {
   }, [filteredProducts, page, rowsPerPage]);
 
   const productTypes = useMemo(() => {
-    const types = products?.map(p => p.productTypeId) || [];
+    const types = products?.map(p => p.productTypeName).filter(Boolean) || [];
     return [...new Set(types)];
   }, [products]);
 
@@ -173,7 +173,7 @@ export const ProductList = () => {
               sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' } }}
             >
               <MenuItem value="">Всі типи</MenuItem>
-              {productTypes.map(type => <MenuItem key={type} value={type}>Тип {type}</MenuItem>)}
+              {productTypes.map(type => <MenuItem key={type} value={type}>{type}</MenuItem>)}
             </Select>
           </FormControl>
 
@@ -216,7 +216,7 @@ export const ProductList = () => {
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
                   <Box sx={{ bgcolor: 'rgba(187, 134, 252, 0.1)', color: '#bb86fc', px: 1, py: 0.3, borderRadius: '4px', fontSize: '0.65rem', fontWeight: 'bold' }}>ID: {row.id}</Box>
-                  <Box sx={{ bgcolor: '#322d3d', color: '#a0a0a0', px: 1, py: 0.3, borderRadius: '4px', fontSize: '0.65rem' }}>Тип: {row.productTypeId}</Box>
+                  <Box sx={{ bgcolor: '#322d3d', color: '#a0a0a0', px: 1, py: 0.3, borderRadius: '4px', fontSize: '0.65rem' }}>{row.productTypeName || 'Без типу'}</Box>
                 </Box>
                 <Divider sx={{ bgcolor: 'rgba(255,255,255,0.05)', mb: 1.5 }} />
                 <Grid container spacing={1}>
@@ -252,7 +252,7 @@ export const ProductList = () => {
                 <TableRow key={row.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.08)' } }}>
                   <TableCell sx={{ color: '#fff' }}>{row.id}</TableCell>
                   <TableCell sx={{ fontWeight: 'bold', color: '#fff' }}>{row.name}</TableCell>
-                  <TableCell sx={{ color: '#bb86fc', fontWeight: 'bold' }}>{row.productTypeId}</TableCell>
+                  <TableCell sx={{ color: '#bb86fc', fontWeight: 'bold' }}>{row.productTypeName || '—'}</TableCell>
                   <TableCell sx={{ color: '#fff' }}>{formatDate(row.manufactureDate)}</TableCell>
                   <TableCell sx={{ color: '#fff' }}>{formatDate(row.expirationDate)}</TableCell>
                   <TableCell sx={{ color: '#a0a0a0', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.description || '—'}</TableCell>

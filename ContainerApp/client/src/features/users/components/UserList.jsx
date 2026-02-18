@@ -33,6 +33,11 @@ export const UserList = () => {
   const [filterRole, setFilterRole] = useState('');
   const [filterRegDate, setFilterRegDate] = useState('');
 
+  const roleMap = {
+    1: 'Адмін',
+    2: 'Оператор'
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     return new Date(dateString).toLocaleDateString('uk-UA');
@@ -86,7 +91,7 @@ export const UserList = () => {
         String(user.id).includes(searchLower)
       );
 
-      const matchesRole = filterRole === '' || user.role === filterRole;
+      const matchesRole = filterRole === '' || user.role === Number(filterRole);
       
       const matchesDate = !filterRegDate || (
         user.registrationDate && 
@@ -103,7 +108,7 @@ export const UserList = () => {
   }, [filteredUsers, page, rowsPerPage]);
 
   const roles = useMemo(() => {
-    const uniqueRoles = users?.map(u => u.role).filter(Boolean) || [];
+    const uniqueRoles = users?.map(u => u.role).filter(r => r !== undefined && r !== null) || [];
     return [...new Set(uniqueRoles)];
   }, [users]);
 
@@ -190,7 +195,9 @@ export const UserList = () => {
               sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' } }}
             >
               <MenuItem value="">Всі ролі</MenuItem>
-              {roles.map(role => <MenuItem key={role} value={role}>{role}</MenuItem>)}
+              {roles.map(role => (
+                <MenuItem key={role} value={role}>{roleMap[role] || role}</MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -223,7 +230,12 @@ export const UserList = () => {
                 <Typography variant="body2" sx={{ color: '#a0a0a0', mb: 1.5 }}>{row.email}</Typography>
                 
                 <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
-                  <Chip label={row.role} size="small" variant="outlined" sx={{ color: '#bb86fc', borderColor: '#bb86fc', height: '20px', fontSize: '0.65rem' }} />
+                  <Chip 
+                    label={roleMap[row.role] || row.role} 
+                    size="small" 
+                    variant="outlined" 
+                    sx={{ color: '#bb86fc', borderColor: '#bb86fc', height: '20px', fontSize: '0.65rem' }} 
+                  />
                   <Box sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)', color: '#777', px: 1, py: 0.3, borderRadius: '4px', fontSize: '0.65rem' }}>ID: {row.id}</Box>
                 </Box>
 
@@ -256,7 +268,12 @@ export const UserList = () => {
                   <TableCell sx={{ fontWeight: 'bold', color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.fullName}</TableCell>
                   <TableCell sx={{ color: '#a0a0a0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.email}</TableCell>
                   <TableCell>
-                    <Chip label={row.role} size="small" variant="outlined" sx={{ color: '#bb86fc', borderColor: '#bb86fc' }} />
+                    <Chip 
+                      label={roleMap[row.role] || row.role} 
+                      size="small" 
+                      variant="outlined" 
+                      sx={{ color: '#bb86fc', borderColor: '#bb86fc' }} 
+                    />
                   </TableCell>
                   <TableCell sx={{ color: '#fff' }}>{formatDate(row.registrationDate)}</TableCell>
                   <TableCell align="right" sx={{ pr: 4 }}>

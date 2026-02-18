@@ -4,6 +4,7 @@ namespace Api.Dtos
     public record ProductDto(
         int Id,
         int ProductTypeId,
+        string ProductTypeName,
         string Name,
       //  double Capacity,
         DateTime ExpirationDate,
@@ -15,6 +16,7 @@ namespace Api.Dtos
             => new(
                 product.Id,
                 product.ProductTypeId,
+                product.ProductType?.Name,
                 product.Name,
            //     product.Capacity,
                 product.ExpirationDate,

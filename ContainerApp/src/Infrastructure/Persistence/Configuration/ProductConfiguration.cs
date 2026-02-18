@@ -19,6 +19,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Navigation(x => x.ProductType).AutoInclude();
+
         builder.Property(x => x.Name)
             .HasMaxLength(255)
             .IsRequired();

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Domain.Products; // Треба підключити, щоб бачити клас Product
+using Domain.Products;
 
 namespace Domain.ProductTypes
 {

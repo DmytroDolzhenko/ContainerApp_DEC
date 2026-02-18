@@ -10,10 +10,12 @@ import { ContainerDetailsPage } from "../features/containers/components/Containe
 import { ContainerEditPage } from "../features/containers/components/ContainerEditPage";
 import { ContainerCreatePage } from "../features/containers/components/ContainerCreatePage";
 import { ContainerFillPage } from "../features/containers/components/ContainerFillPage";
+import { ContainerTypeCreatePage } from '../features/containers/components/ContainerTypeCreatePage';
 
 import { ProductDetailsPage } from "../features/products/components/ProductDetailsPage";
 import { ProductEditPage } from "../features/products/components/ProductEditPage";
 import { ProductCreatePage } from '../features/products/components/ProductCreatePage';
+import { ProductTypeCreatePage } from '../features/products/components/ProductTypeCreatePage';
 
 import { UserDetailsPage } from "../features/users/components/UserDetailsPage";
 import { UserEditPage } from "../features/users/components/UserEditPage";
@@ -34,11 +36,13 @@ export const AppRoutes = () => {
         <Route path="containers/edit/:id" element={<ContainerEditPage />} />
         <Route path="containers/create" element={<ContainerCreatePage />} />
         <Route path="containers/fill/" element={<ContainerFillPage />} />
+        <Route path="/container-types/create" element={<ContainerTypeCreatePage />} />
 
         <Route path="products" element={<ProductList />} />
         <Route path="products/:id" element={<ProductDetailsPage />} />
         <Route path="products/edit/:id" element={<ProductEditPage />} />
         <Route path="products/create" element={<ProductCreatePage />} />
+        <Route path="/product-types/create" element={<ProductTypeCreatePage />} />
 
         <Route path="users/:id" element={<UserDetailsPage />} />
         <Route path="users/edit/:id" element={<UserEditPage />} />

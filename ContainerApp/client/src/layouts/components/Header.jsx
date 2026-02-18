@@ -23,7 +23,6 @@ export const Header = ({ onMenuClick }) => {
       const fetchNotifications = async () => {
         try {
           const [expiring, expired] = await Promise.all([
-            containerApi.getExpiring(),
             containerApi.getExpired()
           ]);
 
@@ -95,8 +94,8 @@ export const Header = ({ onMenuClick }) => {
         width: '100%',
         maxWidth: '100vw',
         boxSizing: 'border-box',
-        overflow: 'hidden', // Жорстка заборона скролу
-        touchAction: 'none', // Заборона жестів панорамного зсуву в самому хедері
+        overflow: 'hidden',
+        touchAction: 'none',
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, minWidth: 0 }}>
@@ -135,7 +134,7 @@ export const Header = ({ onMenuClick }) => {
               </IconButton>
               <InputBase
                 sx={{ ml: 1, flex: 1, color: 'white', fontSize: '0.9rem' }}
-                placeholder="Search..."
+                placeholder="Пошук..."
                 value={searchParams.get('search') || ''}
                 onChange={handleSearchChange}
               />
@@ -205,13 +204,13 @@ export const Header = ({ onMenuClick }) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <Box sx={{ p: 2, pb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Notifications</Typography>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Сповіщення</Typography>
           <Typography 
             variant="caption" 
             onClick={handleMarkAllAsRead}
             sx={{ color: '#bb86fc', cursor: 'pointer' }}
           >
-            Mark all
+            Позначити як прочитані
           </Typography>
         </Box>
         <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} />
@@ -228,7 +227,7 @@ export const Header = ({ onMenuClick }) => {
               </MenuItem>
             ))
           ) : (
-            <Box sx={{ p: 2, textAlign: 'center' }}><Typography variant="body2" color="#a0a0a0">No notifications</Typography></Box>
+            <Box sx={{ p: 2, textAlign: 'center' }}><Typography variant="body2" color="#a0a0a0">Немає сповіщень</Typography></Box>
           )}
         </Box>
       </Menu>

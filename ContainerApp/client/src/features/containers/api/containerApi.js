@@ -47,8 +47,13 @@ export const containerApi = {
   },
 
   getTypes: async () => {
-    const responce = await axiosClient.get(`/container-type`);
-    return responce.data;
+    const response = await axiosClient.get(`/container-type`);
+    return response.data;
+  },
+
+  createType: async (data) => {
+    const response = await axiosClient.post('/container-type', data);
+    return response.data;
   }
 
 };
