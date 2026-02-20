@@ -12,6 +12,7 @@ public record UpdateProductsCommand : IRequest<Product>
     public required string Name { get; init; }
     // public required double Capacity { get; init; }
     public required DateTime ExpirationDate { get; init; }
+    public required DateTime? ManufactureData {  get; init; }
     public string? Description { get; init; }
 }
 
@@ -35,10 +36,14 @@ public class UpdateProductsCommandHandler(
 
         var utcExpirationDate = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
 
+        var utcManufactureData = request.ManufactureData.HasValue
+            ? DateTime.SpecifyKind(request.ManufactureData.Value, DateTimeKind.Utc)
+            : (DateTime?)null;
+
         product.Update(
             request.Name,
-            // request.Capacity, 
             utcExpirationDate,
+            utcManufactureData,
             request.Description ?? string.Empty);
 
         await repository.UpdateAsync(product, cancellationToken);

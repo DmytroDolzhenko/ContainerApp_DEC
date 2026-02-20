@@ -9,7 +9,6 @@ import { UserList } from "../features/users/components/UserList";
 import { ContainerDetailsPage } from "../features/containers/components/ContainerDetailsPage";
 import { ContainerEditPage } from "../features/containers/components/ContainerEditPage";
 import { ContainerCreatePage } from "../features/containers/components/ContainerCreatePage";
-import { ContainerFillPage } from "../features/containers/components/ContainerFillPage";
 import { ContainerTypeCreatePage } from '../features/containers/components/ContainerTypeCreatePage';
 
 import { ProductDetailsPage } from "../features/products/components/ProductDetailsPage";
@@ -35,7 +34,6 @@ export const AppRoutes = () => {
         <Route path="containers/:id" element={<ContainerDetailsPage />} />
         <Route path="containers/edit/:id" element={<ContainerEditPage />} />
         <Route path="containers/create" element={<ContainerCreatePage />} />
-        <Route path="containers/fill/" element={<ContainerFillPage />} />
         <Route path="/container-types/create" element={<ContainerTypeCreatePage />} />
 
         <Route path="products" element={<ProductList />} />

@@ -15,6 +15,7 @@ namespace TestsData.Products
             productTypeId: 1,
             name: "Молоко 3.2%",
             expirationDate: DateTime.UtcNow.AddDays(7),
+            manufactureDate: DateTime.UtcNow.AddDays(3),
             description: "Свіже пастеризоване молоко"
         );
     }

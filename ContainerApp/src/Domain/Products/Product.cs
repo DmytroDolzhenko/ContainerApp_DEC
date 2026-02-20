@@ -27,7 +27,6 @@ namespace Domain.Products
             Id = id;
             ProductTypeId = productTypeId;
             Name = name;
-           // Capacity = capacity;
             ExpirationDate = expirationDate;
             ManufactureDate = manufactureDate;
             Description = description;
@@ -37,17 +36,16 @@ namespace Domain.Products
             int id,
             int productTypeId,
             string name,
-          //  double capacity,
             DateTime expirationDate,
+            DateTime? manufactureDate,
             string description)
         {
             return new Product(
                 id,
                 productTypeId,
                 name,
-             //   capacity,
                 expirationDate,
-                DateTime.UtcNow,
+                manufactureDate,
                 description);
         }
 
@@ -55,11 +53,13 @@ namespace Domain.Products
             string name,
            // double capacity,
             DateTime expirationDate,
+            DateTime? manufactureDate,
             string description)
         {
             Name = name;
          //   Capacity = capacity;
             ExpirationDate = expirationDate;
+            ManufactureDate = manufactureDate;
             Description = description;
         }
     }

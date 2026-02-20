@@ -45,6 +45,9 @@ namespace Api.Controllers
             CancellationToken cancellationToken)
         {
             var expirationDateUtc = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+            var manufactureDateUtc = request.ManufactureDate.HasValue
+            ? DateTime.SpecifyKind(request.ManufactureDate.Value, DateTimeKind.Utc)
+            : (DateTime?)null;
 
             var input = new CreateProductsCommand
             {
@@ -52,6 +55,7 @@ namespace Api.Controllers
                 ProductTypeId = request.TypeId,
                 // Capacity = request.Capacity,
                 ExpirationDate = expirationDateUtc,
+                ManufactureData = manufactureDateUtc,
                 Description = request.Description
             };
 
@@ -62,18 +66,23 @@ namespace Api.Controllers
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ProductDto>> UpdateProduct(
-            [FromRoute] int id,
-            [FromBody] UpdateProductDto request,
-            CancellationToken cancellationToken)
+    [FromRoute] int id,
+    [FromBody] UpdateProductDto request,
+    CancellationToken cancellationToken)
         {
+
             var expirationDateUtc = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+
+            var manufactureDateUtc = request.ManufactureDate != null
+                ? DateTime.SpecifyKind(request.ManufactureDate.Value, DateTimeKind.Utc)
+                : (DateTime?)null;
 
             var input = new UpdateProductsCommand
             {
                 Id = id,
                 Name = request.Name,
-                // Capacity = request.Capacity,
                 ExpirationDate = expirationDateUtc,
+                ManufactureData = manufactureDateUtc,
                 Description = request.Description
             };
 
