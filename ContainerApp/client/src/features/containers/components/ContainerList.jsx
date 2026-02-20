@@ -12,7 +12,9 @@ import { useContainers } from '../hooks/useContainers';
 import { ActionMenu } from '../../../layouts/components/ui/ActionMenu';
 import { containerApi } from '../api/containerApi';
 import { containerHistoryApi } from '../../containerHistory/api/containerHistoryApi';
-import { FillContainerModal } from './FillContainerModal'; // Переконайтеся, що файл створено поруч
+import { FillContainerModal } from './FillContainerModal';
+import { ContainerDetailsModal } from './ContainerDetailsModal';
+import { ContainerEditModal } from './ContainerEditModal'; // Переконайтеся, що файл створено
 
 export const ContainerList = () => {
   const { containers, loading, refetch } = useContainers();
@@ -37,9 +39,15 @@ export const ContainerList = () => {
   const [filterStatus, setFilterStatus] = useState('all'); 
   const [filterProduct, setFilterProduct] = useState('');
 
-  // Стейт для модального вікна заповнення
+  // Стейт для модальних вікон
   const [fillModalOpen, setFillModalOpen] = useState(false);
   const [containerToFill, setContainerToFill] = useState(null);
+
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedContainerId, setSelectedContainerId] = useState(null);
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [containerToEditId, setContainerToEditId] = useState(null);
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
@@ -121,6 +129,16 @@ export const ContainerList = () => {
     setFillModalOpen(true);
   };
 
+  const handleOpenDetails = (id) => {
+    setSelectedContainerId(id);
+    setDetailsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (id) => {
+    setContainerToEditId(id);
+    setEditModalOpen(true);
+  };
+
   const handleShowHistory = async () => {
     const id = selectedId;
     setAnchorEl(null);
@@ -140,7 +158,6 @@ export const ContainerList = () => {
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
-      {/* Панель керування */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Stack direction="row" spacing={1}>
           <Button
@@ -178,19 +195,18 @@ export const ContainerList = () => {
         </Stack>
       </Box>
 
-      {/* Таблиця (Desktop) */}
       {!isMobile && (
-        <TableContainer component={Paper} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px' }}>
+        <TableContainer component={Paper} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px', background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)' }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: '#a0a0a0' }}>Назва / Код</TableCell>
-                <TableCell sx={{ color: '#a0a0a0' }}>Тип</TableCell>
-                <TableCell sx={{ color: '#a0a0a0' }}>Продукт</TableCell>
-                <TableCell sx={{ color: '#a0a0a0' }}>Заповнення</TableCell>
-                <TableCell sx={{ color: '#a0a0a0' }}>Статус</TableCell>
-                <TableCell sx={{ color: '#a0a0a0' }}>Дата</TableCell>
-                <TableCell align="right" sx={{ color: '#a0a0a0' }}>Дії</TableCell>
+                <TableCell sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Назва / Код</TableCell>
+                <TableCell sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Тип</TableCell>
+                <TableCell sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Продукт</TableCell>
+                <TableCell sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Заповнення</TableCell>
+                <TableCell sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Статус</TableCell>
+                <TableCell sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Дата</TableCell>
+                <TableCell align="right" sx={{ color: '#a0a0a0', fontWeight: 'bold', pr: 2 }}>Дії</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -215,21 +231,13 @@ export const ContainerList = () => {
                       <Stack direction="row" spacing={0.5} justifyContent="flex-end">
                         {status.isEmpty ? (
                           <Tooltip title="Заповнити">
-                            <IconButton 
-                              size="small" 
-                              onClick={() => handleOpenFillModal(row)}
-                              sx={{ color: '#bb86fc' }}
-                            >
+                            <IconButton size="small" onClick={() => handleOpenFillModal(row)} sx={{ color: '#bb86fc' }}>
                               <Inventory fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         ) : (
                           <Tooltip title="Очистити">
-                            <IconButton 
-                              size="small" 
-                              onClick={() => handleClear(id)}
-                              sx={{ color: '#ffa726' }}
-                            >
+                            <IconButton size="small" onClick={() => handleClear(id)} sx={{ color: '#ffa726' }}>
                               <CleaningServices fontSize="small" />
                             </IconButton>
                           </Tooltip>
@@ -247,14 +255,13 @@ export const ContainerList = () => {
         </TableContainer>
       )}
 
-      {/* Картки (Mobile) */}
       {isMobile && (
         <Stack spacing={2}>
            {paginatedContainers?.map((row) => {
              const id = row.id ?? row.Id;
              const status = getStatusProps(row.currentCapacity ?? 0, row.capacity ?? 0);
              return (
-               <Card key={id} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d' }}>
+               <Card key={id} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '12px' }}>
                  <CardContent>
                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                       <Box>
@@ -269,25 +276,9 @@ export const ContainerList = () => {
                       <Grid item xs={6}><Typography variant="caption" color="grey.500">Об'єм</Typography><Typography variant="body2" color="white">{row.currentCapacity ?? 0}/{row.capacity ?? 0}L</Typography></Grid>
                    </Grid>
                    {status.isEmpty ? (
-                     <Button 
-                      fullWidth 
-                      variant="outlined" 
-                      startIcon={<Inventory />} 
-                      onClick={() => handleOpenFillModal(row)}
-                      sx={{ mt: 2, color: '#bb86fc', borderColor: '#bb86fc', textTransform: 'none' }}
-                     >
-                       Заповнити
-                     </Button>
+                     <Button fullWidth variant="outlined" startIcon={<Inventory />} onClick={() => handleOpenFillModal(row)} sx={{ mt: 2, color: '#bb86fc', borderColor: '#bb86fc', textTransform: 'none' }}>Заповнити</Button>
                    ) : (
-                    <Button 
-                      fullWidth 
-                      variant="outlined" 
-                      startIcon={<CleaningServices />} 
-                      onClick={() => handleClear(id)}
-                      sx={{ mt: 2, color: '#ffa726', borderColor: '#ffa726', textTransform: 'none' }}
-                     >
-                       Очистити
-                     </Button>
+                    <Button fullWidth variant="outlined" startIcon={<CleaningServices />} onClick={() => handleClear(id)} sx={{ mt: 2, color: '#ffa726', borderColor: '#ffa726', textTransform: 'none' }}>Очистити</Button>
                    )}
                  </CardContent>
                </Card>
@@ -296,26 +287,28 @@ export const ContainerList = () => {
         </Stack>
       )}
 
-      <TablePagination
-        component="div"
-        count={filteredContainers?.length || 0}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={(e, p) => setPage(p)}
-        onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
-        sx={{ color: '#a0a0a0' }}
-      />
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, width: '100%' }}>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={filteredContainers?.length || 0}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(e, p) => setPage(p)}
+          onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
+          labelRowsPerPage="Рядків:"
+          sx={{ color: '#a0a0a0', border: 'none' }}
+        />
+      </Box>
 
-      {/* Menu Фільтрації */}
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
         onClose={() => setFilterAnchorEl(null)}
-        PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', p: 2, minWidth: '250px', border: '1px solid #322d3d' } }}
+        PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', p: 2, minWidth: '250px', border: '1px solid #322d3d', borderRadius: '16px' } }}
       >
         <Stack spacing={2}>
-           <Typography variant="subtitle2">Фільтрація</Typography>
-           
+           <Typography variant="subtitle2" fontWeight="bold">Фільтрація</Typography>
            <FormControl fullWidth size="small">
               <InputLabel sx={{ color: '#777' }}>Тип тари</InputLabel>
               <Select value={filterType} label="Тип тари" onChange={(e) => setFilterType(e.target.value)} sx={{ color: '#fff' }}>
@@ -323,7 +316,6 @@ export const ContainerList = () => {
                 {containerTypesList.map(t => <MenuItem key={t} value={t}>{t}</MenuItem>)}
               </Select>
            </FormControl>
-
            <FormControl fullWidth size="small">
               <InputLabel sx={{ color: '#777' }}>Стан</InputLabel>
               <Select value={filterStatus} label="Стан" onChange={(e) => setFilterStatus(e.target.value)} sx={{ color: '#fff' }}>
@@ -332,17 +324,8 @@ export const ContainerList = () => {
                 <MenuItem value="filled">З продуктом</MenuItem>
               </Select>
            </FormControl>
-
-           <TextField 
-              label="Пошук продукту"
-              size="small"
-              value={filterProduct}
-              onChange={(e) => setFilterProduct(e.target.value)}
-              placeholder="Введіть назву..."
-              sx={{ input: { color: 'white' }, label: { color: '#777' } }}
-           />
-
-           <Button variant="contained" onClick={() => setFilterAnchorEl(null)} sx={{ bgcolor: '#bb86fc', color: '#000' }}>Застосувати</Button>
+           <TextField label="Пошук продукту" size="small" value={filterProduct} onChange={(e) => setFilterProduct(e.target.value)} placeholder="Введіть назву..." sx={{ input: { color: 'white' }, label: { color: '#777' } }} />
+           <Button variant="contained" onClick={() => setFilterAnchorEl(null)} sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold' }}>Застосувати</Button>
         </Stack>
       </Menu>
 
@@ -350,9 +333,9 @@ export const ContainerList = () => {
         anchorEl={anchorEl} 
         open={open} 
         onClose={() => setAnchorEl(null)} 
-        onEdit={() => navigate(`/containers/edit/${selectedId}`)} 
+        onEdit={() => { handleOpenEditModal(selectedId); setAnchorEl(null); }} 
         onDelete={async () => { if(confirm("Видалити?")) { await containerApi.delete(selectedId); refetch(); } setAnchorEl(null); }} 
-        onDetails={() => navigate(`/containers/${selectedId}`)}
+        onDetails={() => { handleOpenDetails(selectedId); setAnchorEl(null); }}
       >
         <MenuItem onClick={handleShowHistory}>
           <ListItemIcon><History fontSize="small" sx={{ color: '#bb86fc' }} /></ListItemIcon>
@@ -360,20 +343,30 @@ export const ContainerList = () => {
         </MenuItem>
       </ActionMenu>
 
-      {/* Модальне вікно заповнення */}
-      <FillContainerModal 
-        open={fillModalOpen} 
-        onClose={() => setFillModalOpen(false)} 
-        container={containerToFill} 
+      {/* Модальні вікна */}
+      <FillContainerModal open={fillModalOpen} onClose={() => setFillModalOpen(false)} container={containerToFill} onRefresh={refetch} />
+      
+      <ContainerDetailsModal 
+        open={detailsModalOpen} 
+        onClose={() => setDetailsModalOpen(false)} 
+        containerId={selectedContainerId} 
+        onRefresh={refetch} 
+        onEdit={(id) => handleOpenEditModal(id)}
+      />
+
+      <ContainerEditModal 
+        open={editModalOpen} 
+        onClose={() => setEditModalOpen(false)} 
+        containerId={containerToEditId} 
         onRefresh={refetch} 
       />
 
-      <Dialog open={historyOpen} onClose={() => setHistoryOpen(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff' } }}>
-        <DialogTitle>Історія контейнера</DialogTitle>
+      <Dialog open={historyOpen} onClose={() => setHistoryOpen(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', borderRadius: '16px', border: '1px solid #322d3d' } }}>
+        <DialogTitle sx={{ fontWeight: 'bold' }}>Історія контейнера</DialogTitle>
         <DialogContent>
           {historyLoading ? <CircularProgress size={24} /> : historyData.map(h => (
-            <Box key={h.id} sx={{ mb: 2, p: 1, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
-              <Typography variant="body2" sx={{ color: '#bb86fc' }}>{h.action}</Typography>
+            <Box key={h.id} sx={{ mb: 2, p: 1.5, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+              <Typography variant="body2" sx={{ color: '#bb86fc', fontWeight: 'bold' }}>{h.action}</Typography>
               <Typography variant="caption" sx={{ color: '#777' }}>{formatDate(h.updatedAt)}</Typography>
             </Box>
           ))}
