@@ -30,13 +30,11 @@ namespace Api.Dtos
 
     public record CreateContainerDto(
         string Name,
-        double Capacity,
         string Description,
         int ContainerTypeId
         );
     public record UpdateContainerDto(
         string Name,
-        double Capacity,
         string Description,
         string ContainerTypeName
         );

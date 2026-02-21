@@ -27,9 +27,9 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(x => x.Description)
                 .HasMaxLength(250)
                 .HasColumnType("varchar(250)");
-
-            builder.Property(x => x.Capacity)
-                .IsRequired();
+            
+           /* builder.Property(x => x.Capacity)
+                .IsRequired();*/
 
             builder.Property(x => x.CurrentCapacity)
                 .IsRequired();

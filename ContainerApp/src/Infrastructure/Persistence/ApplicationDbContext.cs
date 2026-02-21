@@ -32,11 +32,14 @@ namespace Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-          /*  modelBuilder.Entity<Container>()
-        .HasQueryFilter(c => !c.IsDeleted);
+            /*  modelBuilder.Entity<Container>()
+          .HasQueryFilter(c => !c.IsDeleted);
 
-            modelBuilder.Entity<Product>()
-        .HasQueryFilter(c => !c.IsDeleted);*/
+              modelBuilder.Entity<Product>()
+          .HasQueryFilter(c => !c.IsDeleted);*/
+
+            modelBuilder.Entity<Container>()
+                .Ignore(c => c.Capacity);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
