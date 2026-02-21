@@ -44,7 +44,8 @@ namespace Api.Controllers
             var command = new UpdateContainerTypeCommand
             {
                 Id = id,
-                Name = request.Name
+                Name = request.Name,
+                Capacity = request.Capacity
             };
 
             var updatedType = await sender.Send(command, cancellationToken);
@@ -55,7 +56,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ContainerTypeDto>> CreateContainerType([FromBody] CreateContainerTypeDto dto, CancellationToken cancellationToken)
         {
-            var input = new CreateContainerTypeCommand { TypeName = dto.Name };
+            var input = new CreateContainerTypeCommand { TypeName = dto.Name, Capacity = dto.Capacity};
 
             var result = await sender.Send(input, cancellationToken);
 

@@ -16,7 +16,6 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
 
-
 // ===== CORS =====
 builder.Services.AddCors(options =>
 {
@@ -63,8 +62,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // ===== Controllers =====
-builder.Services.AddControllers();
-
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultBufferSize = 16 * 1024;
+    });
 var app = builder.Build();
 
 // ===== Middleware =====

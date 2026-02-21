@@ -27,7 +27,11 @@ namespace Application.Entities.Containers.Commands
                 throw new KeyNotFoundException($"Container with id {request.Id} not found.");
             }
 
-            await repositories.DeleteAsync(container, cancellationToken);
+            container.MarkAsDeleted(0);
+
+            await repositories.UpdateAsync(container, cancellationToken);
+
+            //await repositories.DeleteAsync(container, cancellationToken);
         }
     }
 }

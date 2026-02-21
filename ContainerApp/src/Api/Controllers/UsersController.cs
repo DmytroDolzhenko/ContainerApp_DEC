@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("api/users")]
     [ApiController]
     public class UsersController(

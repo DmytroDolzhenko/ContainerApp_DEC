@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/product-types")]
     [ApiController]
     public class ProductTypesController(
          IGetQueries<ProductType> productTypeQueries,
          ISender sender) : ControllerBase
     {
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProductTypeDtos>>> GetProductTypes(CancellationToken cancellationToken)
         {

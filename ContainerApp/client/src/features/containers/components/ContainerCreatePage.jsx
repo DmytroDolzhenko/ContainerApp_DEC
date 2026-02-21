@@ -74,11 +74,6 @@ export const ContainerCreatePage = () => {
           <Grid item>
             <TextField fullWidth label="Назва" name="name" value={formData.name} onChange={handleChange} sx={commonInputStyles} required />
           </Grid>
-          
-          <Grid item>
-            <TextField fullWidth label="Унікальний код" name="uniqCode" value={formData.uniqCode} onChange={handleChange} sx={commonInputStyles} required />
-          </Grid>
-          
           <Grid item>
             <TextField
               select

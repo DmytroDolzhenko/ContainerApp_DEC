@@ -31,6 +31,13 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+          /*  modelBuilder.Entity<Container>()
+        .HasQueryFilter(c => !c.IsDeleted);
+
+            modelBuilder.Entity<Product>()
+        .HasQueryFilter(c => !c.IsDeleted);*/
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

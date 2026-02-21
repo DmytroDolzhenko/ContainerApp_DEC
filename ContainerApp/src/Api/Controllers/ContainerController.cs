@@ -82,9 +82,16 @@ namespace Api.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteContainer(int id, CancellationToken cancellationToken)
         {
-            var input = new RemoveContainerCommand { Id = id };
+            var container = await containerQueries.GetByIdAsync(id, cancellationToken);
+            if (container is null)
+            {
+                return NotFound();
+            }
+            container.MarkAsDeleted(currentUserService.UserId ?? throw new UnauthorizedAccessException());
 
+            var input = new RemoveContainerCommand { Id = id };
             await sender.Send(input, cancellationToken);
+            //await sender.Send(input, cancellationToken);
 
             return NoContent();
         }
@@ -92,6 +99,8 @@ namespace Api.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateContainer(int id, [FromBody] UpdateContainerDto dto, CancellationToken cancellationToken)
         {
+            var userId = currentUserService.UserId ?? throw new UnauthorizedAccessException();
+
             var input = new UpdateContainerCommand
             {
                 ContainerId = id,
@@ -99,7 +108,7 @@ namespace Api.Controllers
                 Capacity = dto.Capacity,
                 Description = dto.Description,
                 ContainerTypeName = dto.ContainerTypeName,
-                UserId = 1
+                UserId = userId
             };
             var result = await sender.Send(input, cancellationToken);
 

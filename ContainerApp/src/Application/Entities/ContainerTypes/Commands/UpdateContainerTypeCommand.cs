@@ -14,6 +14,8 @@ namespace Application.Entities.ContainerTypes.Commands
     {
         public required int Id;
         public required string Name;
+        public required int Capacity;
+
     }
 
     public class UpdateContainerTypeCommandHandler
@@ -29,7 +31,7 @@ namespace Application.Entities.ContainerTypes.Commands
                 throw new KeyNotFoundException($"ContainerType with Id {request.Id} was not found.");
             }
 
-            containerType.UpdateDetails(request.Name);
+            containerType.UpdateDetails(request.Name, request.Capacity);
 
             await repositories.UpdateAsync(containerType, cancellationToken);
             return containerType;

@@ -1,21 +1,23 @@
 ﻿using Api.Dtos;
+using Application.Common.Interfaces;
 using Application.Common.Interfaces.Queries;
 using Application.Products.Commands;
 using Domain.Products;
+using Infrastructure.Persistence.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/products")]
     [ApiController]
     public class ProductsController(
         IGetQueries<Product> productQueries,
+        ICurrentUserService currentUserService,
         ISender sender) : ControllerBase
     {
-
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<ProductDto>>> GetProducts(CancellationToken cancellationToken)
         {
@@ -50,7 +52,6 @@ namespace Api.Controllers
             {
                 Name = request.Name,
                 ProductTypeId = request.TypeId,
-                // Capacity = request.Capacity,
                 ExpirationDate = expirationDateUtc,
                 Description = request.Description
             };
@@ -72,9 +73,9 @@ namespace Api.Controllers
             {
                 Id = id,
                 Name = request.Name,
-                // Capacity = request.Capacity,
                 ExpirationDate = expirationDateUtc,
-                Description = request.Description
+                Description = request.Description,
+                UpdatedBy = currentUserService.UserId ?? throw new UnauthorizedAccessException()
             };
 
             var updatedProduct = await sender.Send(input, cancellationToken);
@@ -87,6 +88,15 @@ namespace Api.Controllers
             [FromRoute] int productId,
             CancellationToken cancellationToken)
         {
+            var product = await productQueries.GetByIdAsync(productId, cancellationToken);
+
+            if (product is null)
+            {
+                return NotFound();
+            }
+
+            product.MarkAsDeleted(currentUserService.UserId ?? throw new UnauthorizedAccessException());
+
             var input = new DeleteProductsCommand
             {
                 Id = productId

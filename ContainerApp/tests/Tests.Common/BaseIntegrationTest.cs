@@ -15,7 +15,7 @@ namespace Tests.Common
     {
         protected readonly ApplicationDbContext Context;
         protected readonly HttpClient Client;
-
+            
         protected BaseIntegrationTest(IntegrationTestWebFactory factory)
         {
             var scope = factory.Services.CreateScope();

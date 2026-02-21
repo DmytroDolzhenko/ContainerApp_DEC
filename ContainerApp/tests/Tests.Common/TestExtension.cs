@@ -24,9 +24,12 @@ namespace Tests.Common
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddAuthentication(defaultScheme: "TestScheme")
-                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                            "TestScheme", _ => { });
+                    services.AddAuthentication(options =>
+                    {
+                        options.DefaultAuthenticateScheme = "TestScheme";
+                        options.DefaultChallengeScheme = "TestScheme";
+                    })
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", _ => { });
                 });
             });
         }
@@ -48,8 +51,12 @@ namespace Tests.Common
     {
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var claims = new[] { new Claim(ClaimTypes.Role, "admin") };
-            var identity = new ClaimsIdentity(claims, "TestScheme");
+            var claims = new[]
+            {
+    new Claim(ClaimTypes.Name, "TestUser"),
+    new Claim(ClaimTypes.NameIdentifier, "1"),
+    new Claim(ClaimTypes.Role, "Admin")
+}; var identity = new ClaimsIdentity(claims, "TestScheme");
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, "TestScheme");
 

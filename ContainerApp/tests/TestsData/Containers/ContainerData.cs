@@ -12,7 +12,6 @@ namespace TestsData.Containers
         public static Container EmptyContainer()
         => Container.CreateNew(
             name: "Цистерна-А1",
-            capacity: 1000.0,
             description: "Основна цистерна для рідин",
             uniqCode: "TNK-001",
             typeId: 1
@@ -22,7 +21,6 @@ namespace TestsData.Containers
         {
             var container = Container.CreateNew(
                 name: "Цистерна-Б2",
-                capacity: 500.0,
                 description: "Заповнена тестова цистерна",
                 uniqCode: "TNK-002",
                 typeId: 1

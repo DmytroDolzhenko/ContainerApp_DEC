@@ -38,7 +38,6 @@ namespace Application.Entities.Containers.Commands
 
             var container = Container.CreateNew(
                 request.Name,
-                request.Capacity,
                 request.Description,
                 uniqCode,
                 request.ContainerTypeId

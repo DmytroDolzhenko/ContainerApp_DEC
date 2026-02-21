@@ -20,7 +20,7 @@ namespace Domain.Containers
         public Product? Product { get; private set; }
 
         public string Name { get; private set; }
-        public double Capacity { get; private set; }
+        public double Capacity => Type?.Capacity ?? 0;
         public double CurrentCapacity { get; private set; }
         public string Description { get; private set; }
         public string UniqCode { get; private set; }
@@ -28,27 +28,28 @@ namespace Domain.Containers
         public DateTime CreatedAt { get; }
         public int? LastModifiedBy { get; private set; }
         public DateTime? LastModifiedAt { get; private set; }
-        public Container(int id, string name, double capacity, string description, string uniqCode, int typeId, DateTime createdAt)
+
+        public bool IsDeleted { get; private set; }
+        public Container(int id, string name, string description, string uniqCode, int typeId, DateTime createdAt)
         {
             Id = id;
             TypeId = typeId;
             Name = name;
-            Capacity = capacity;
             Description = description;
             UniqCode = uniqCode;
             Status = false;
             CreatedAt = createdAt;
         }
-        public static Container CreateNew(string name, double capacity, string description, string uniqCode, int typeId)
+        public static Container CreateNew(string name, string description, string uniqCode, int typeId)
         {
-            return new Container(0, name, capacity, description, uniqCode, typeId, DateTime.UtcNow);
+            return new Container(0, name, description, uniqCode, typeId, DateTime.UtcNow);
         }
-        public void UpdateDetails(int id, string name, double capacity, string description, int typeId)
+        public void UpdateDetails(int id, string name, string description, int typeId, int updatedBy)
         {
             Name = name;
-            Capacity = capacity;
             Description = description;
             TypeId = typeId;
+            LastModifiedBy = updatedBy;
         }
         public void FillContainer(int productId, int userId, int amount)
         {
@@ -76,6 +77,12 @@ namespace Domain.Containers
             ProductId = null;
             Status = false;
             CurrentCapacity = 0;
+            LastModifiedBy = userId;
+            LastModifiedAt = DateTime.UtcNow;
+        }
+        public void MarkAsDeleted(int userId)
+        {
+            IsDeleted = true;
             LastModifiedBy = userId;
             LastModifiedAt = DateTime.UtcNow;
         }

@@ -17,17 +17,20 @@ namespace Domain.Products
         public ProductType ProductType { get; private set; }
 
         public string Name { get; private set; }
-      //  public double Capacity { get; private set; }
         public DateTime ExpirationDate { get; private set; }
         public DateTime? ManufactureDate { get; private set; }
         public string Description { get; private set; }
+        public bool IsDeleted { get; private set; }
+
+        public int? LastModifiedBy { get; private set; }
+        public DateTime? LastModifiedAt { get; private set; }
+
 
         private Product(int id, int productTypeId, string name, DateTime expirationDate, DateTime? manufactureDate, string description)
         {
             Id = id;
             ProductTypeId = productTypeId;
             Name = name;
-           // Capacity = capacity;
             ExpirationDate = expirationDate;
             ManufactureDate = manufactureDate;
             Description = description;
@@ -37,7 +40,6 @@ namespace Domain.Products
             int id,
             int productTypeId,
             string name,
-          //  double capacity,
             DateTime expirationDate,
             string description)
         {
@@ -45,7 +47,6 @@ namespace Domain.Products
                 id,
                 productTypeId,
                 name,
-             //   capacity,
                 expirationDate,
                 DateTime.UtcNow,
                 description);
@@ -53,14 +54,20 @@ namespace Domain.Products
 
         public void Update(
             string name,
-           // double capacity,
             DateTime expirationDate,
-            string description)
+            string description, int userId)
         {
             Name = name;
-         //   Capacity = capacity;
             ExpirationDate = expirationDate;
             Description = description;
+            LastModifiedAt = DateTime.UtcNow;
+            LastModifiedBy = userId;
+        }
+        public void MarkAsDeleted(int userId)
+        {
+            IsDeleted = true;
+            LastModifiedAt = DateTime.UtcNow;
+            LastModifiedBy = userId;
         }
     }
 }

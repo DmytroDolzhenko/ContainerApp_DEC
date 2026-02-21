@@ -42,9 +42,9 @@ namespace Application.Entities.Containers.Commands
             container.UpdateDetails(
                 request.ContainerId,
                 request.Name,
-                request.Capacity,
                 request.Description,
-                selectedType.Id);
+                selectedType.Id,
+                request.UserId);
 
             await repositories.UpdateAsync(container, cancellationToken);
             return container;

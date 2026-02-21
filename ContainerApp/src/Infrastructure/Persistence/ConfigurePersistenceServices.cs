@@ -22,16 +22,28 @@ namespace Infrastructure.Persistence
     {
         public static void AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(configuration.GetConnectionString("DefaultConnection"));
-            dataSourceBuilder.EnableDynamicJson();
-            var dataSource = dataSourceBuilder.Build();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<ApplicationDbContext>(options => options
-                .UseNpgsql(
-                    dataSource,
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
-                .UseSnakeCaseNamingConvention()
-                .ConfigureWarnings(w => w.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning)));
+            // Додаємо захист: якщо рядка немає (як у вашому випадку в тестах), 
+            // ми просто пропускаємо цей крок, бо фабрика все одно його замінить.
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+                dataSourceBuilder.EnableDynamicJson();
+                var dataSource = dataSourceBuilder.Build();
+                services.AddSingleton(dataSource); // Реєструємо як синглтон
+
+                services.AddDbContext<ApplicationDbContext>(options => options
+                    .UseNpgsql(
+                        dataSource,
+                        builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName))
+                    .UseSnakeCaseNamingConvention()
+                    .ConfigureWarnings(w => w.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning)));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>();
+            }
 
             services.AddScoped<ApplicationDbContextInitialiser>();
             services.AddRepositories();

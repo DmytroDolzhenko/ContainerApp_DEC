@@ -13,7 +13,7 @@ namespace Application.Entities.ContainerTypes.Commands
     public record CreateContainerTypeCommand : IRequest<ContainerType>
     {
         public required string TypeName { get; init; }
-       // public required string Description { get; init; }
+        public required int Capacity { get; init; }
     }
     public class CreateContainerTypeCommandHandler
         (IEntityRepository<ContainerType> repositories)
@@ -22,7 +22,8 @@ namespace Application.Entities.ContainerTypes.Commands
         public Task<ContainerType> Handle(CreateContainerTypeCommand request, CancellationToken cancellationToken)
         {
             var containerType = ContainerType.CreateNew(
-                 request.TypeName
+                 request.TypeName,
+                 request.Capacity
              );
             repositories.AddAsync(containerType, cancellationToken);
             return Task.FromResult(containerType);

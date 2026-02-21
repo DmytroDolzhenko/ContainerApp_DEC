@@ -10,9 +10,9 @@ public record UpdateProductsCommand : IRequest<Product>
 {
     public required int Id { get; init; }
     public required string Name { get; init; }
-    // public required double Capacity { get; init; }
     public required DateTime ExpirationDate { get; init; }
     public string? Description { get; init; }
+    public int UpdatedBy { get; init; }
 }
 
 public class UpdateProductsCommandHandler(
@@ -37,9 +37,10 @@ public class UpdateProductsCommandHandler(
 
         product.Update(
             request.Name,
-            // request.Capacity, 
             utcExpirationDate,
-            request.Description ?? string.Empty);
+            request.Description ?? string.Empty,
+            request.UpdatedBy
+            );
 
         await repository.UpdateAsync(product, cancellationToken);
 

@@ -28,7 +28,10 @@ namespace Application.Products.Commands
                     $"Product with id {request.Id} not found");
             }
 
-            await repository.DeleteAsync(product, cancellationToken);
+            product?.MarkAsDeleted(0);
+
+           // await repository.DeleteAsync(product, cancellationToken);
+            await repository.UpdateAsync(product, cancellationToken);
         }
     }
 }
