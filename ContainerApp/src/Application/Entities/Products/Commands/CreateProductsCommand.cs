@@ -12,8 +12,10 @@ namespace Application.Products.Commands
     {
         public required string Name { get; init; }
         public required int ProductTypeId { get; init; }
-      //  public required double Capacity { get; init; }
         public required DateTime ExpirationDate { get; init; }
+
+        public required DateTime? ManufactureData { get; init; }
+
         public string? Description { get; init; }
     }
 
@@ -25,13 +27,18 @@ namespace Application.Products.Commands
             CreateProductsCommand request,
             CancellationToken cancellationToken)
         {
+            var utcExpirationDate = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+
+            var utcManufactureData = request.ManufactureData.HasValue
+                ? DateTime.SpecifyKind(request.ManufactureData.Value, DateTimeKind.Utc)
+                : (DateTime?)null;
 
             var product = Product.Create(
                 0,
                 request.ProductTypeId,
                 request.Name,
-              //  request.Capacity,
-                request.ExpirationDate,
+                utcExpirationDate,
+                utcManufactureData,
                 request.Description ?? string.Empty
             );
 

@@ -41,6 +41,7 @@ namespace Domain.Products
             int productTypeId,
             string name,
             DateTime expirationDate,
+            DateTime? manufactureDate,
             string description)
         {
             return new Product(
@@ -48,17 +49,20 @@ namespace Domain.Products
                 productTypeId,
                 name,
                 expirationDate,
-                DateTime.UtcNow,
+                manufactureDate,
                 description);
         }
 
         public void Update(
             string name,
             DateTime expirationDate,
-            string description, int userId)
+            DateTime? manufactureDate,
+            string description,
+            int userId)
         {
             Name = name;
             ExpirationDate = expirationDate;
+            ManufactureDate = manufactureDate;
             Description = description;
             LastModifiedAt = DateTime.UtcNow;
             LastModifiedBy = userId;

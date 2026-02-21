@@ -30,6 +30,7 @@ namespace Api.Dtos
         string Name,
      //   double Capacity, 
         DateTime ExpirationDate,
+        DateTime? ManufactureDate,
         string Description
     );
 
@@ -37,6 +38,7 @@ namespace Api.Dtos
         string Name,
     //    double Capacity,
         DateTime ExpirationDate,
+        DateTime? ManufactureDate,
         string Description
     );
 }

@@ -47,12 +47,16 @@ namespace Api.Controllers
             CancellationToken cancellationToken)
         {
             var expirationDateUtc = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+            var manufactureDateUtc = request.ManufactureDate.HasValue
+            ? DateTime.SpecifyKind(request.ManufactureDate.Value, DateTimeKind.Utc)
+            : (DateTime?)null;
 
             var input = new CreateProductsCommand
             {
                 Name = request.Name,
                 ProductTypeId = request.TypeId,
                 ExpirationDate = expirationDateUtc,
+                ManufactureData = manufactureDateUtc,
                 Description = request.Description
             };
 
@@ -63,11 +67,16 @@ namespace Api.Controllers
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ProductDto>> UpdateProduct(
-            [FromRoute] int id,
-            [FromBody] UpdateProductDto request,
-            CancellationToken cancellationToken)
+    [FromRoute] int id,
+    [FromBody] UpdateProductDto request,
+    CancellationToken cancellationToken)
         {
+
             var expirationDateUtc = DateTime.SpecifyKind(request.ExpirationDate, DateTimeKind.Utc);
+
+            var manufactureDateUtc = request.ManufactureDate != null
+                ? DateTime.SpecifyKind(request.ManufactureDate.Value, DateTimeKind.Utc)
+                : (DateTime?)null;
 
             var input = new UpdateProductsCommand
             {
@@ -75,7 +84,8 @@ namespace Api.Controllers
                 Name = request.Name,
                 ExpirationDate = expirationDateUtc,
                 Description = request.Description,
-                UpdatedBy = currentUserService.UserId ?? throw new UnauthorizedAccessException()
+                UpdatedBy = currentUserService.UserId ?? throw new UnauthorizedAccessException(),
+                ManufactureData = manufactureDateUtc
             };
 
             var updatedProduct = await sender.Send(input, cancellationToken);
