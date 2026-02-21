@@ -14,6 +14,7 @@ public record UpdateProductsCommand : IRequest<Product>
     public required DateTime? ManufactureData {  get; init; }
     public string? Description { get; init; }
     public int UpdatedBy { get; init; }
+    public int UserId { get; init; }
 }
 
 public class UpdateProductsCommandHandler(
@@ -45,7 +46,7 @@ public class UpdateProductsCommandHandler(
             utcExpirationDate,
             utcManufactureData,
             request.Description ?? string.Empty,
-            userId);
+            request.UserId);
 
         await repository.UpdateAsync(product, cancellationToken);
 
