@@ -70,7 +70,7 @@ namespace Api.Controllers
             var input = new CreateContainerCommand
             {
                 Name = dto.Name,
-                Capacity = dto.Capacity,
+                //Capacity = dto.Capacity,
                 Description = dto.Description,
                 ContainerTypeId = dto.ContainerTypeId
             };
@@ -105,7 +105,7 @@ namespace Api.Controllers
             {
                 ContainerId = id,
                 Name = dto.Name,
-                Capacity = dto.Capacity,
+                //Capacity = dto.Capacity,
                 Description = dto.Description,
                 ContainerTypeName = dto.ContainerTypeName,
                 UserId = userId

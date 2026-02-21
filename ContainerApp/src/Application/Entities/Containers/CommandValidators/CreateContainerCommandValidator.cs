@@ -14,7 +14,7 @@ namespace Application.Entities.Containers.CommandValidators
         public CreateContainerCommandValidator()
         {
             RuleFor(x => x.ContainerTypeId).NotEmpty();
-            RuleFor(x => x.Capacity).NotEmpty();
+           // RuleFor(x => x.Capacity).NotEmpty();
             RuleFor(x => x.Description).NotEmpty().MaximumLength(150);
             RuleFor(x => x.Name).NotEmpty().MaximumLength(30);
         }
