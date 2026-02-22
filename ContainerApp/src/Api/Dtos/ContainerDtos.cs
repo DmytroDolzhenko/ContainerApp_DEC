@@ -12,7 +12,8 @@ namespace Api.Dtos
         string ContainerTypeName,
         int? ProductId,
         string? ProductName,
-        string UniqCode
+        string UniqCode,
+        DateTime CreatedAt
         )
     {
         public static ContainerDto FromDomain(Container container)
@@ -25,12 +26,13 @@ namespace Api.Dtos
                     container.Type?.Name,
                     container.ProductId,
                     container.Product?.Name,
-                    container.UniqCode);
+                    container.UniqCode,
+                    container.CreatedAt);
     }
 
     public record CreateContainerDto(
         string Name,
-        string Description,
+        string? Description,
         int ContainerTypeId
         );
     public record UpdateContainerDto(

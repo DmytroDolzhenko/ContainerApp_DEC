@@ -19,7 +19,8 @@ namespace Infrastructure.Persistence.Queries
 
         public async Task<IReadOnlyList<T>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Set<T>().ToListAsync(cancellationToken);
+            return await _context.Set<T>()
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken)

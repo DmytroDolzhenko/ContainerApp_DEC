@@ -19,20 +19,20 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-/*        public async Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Product>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Products
-                .AsNoTracking()
+                .Where(x => !x.IsDeleted)
                 .ToListAsync(cancellationToken);
         }
 
         public async Task<Product?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var entity = await _context.Products
-                .AsNoTracking()
+                .Where(x => !x.IsDeleted)
                 .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
 
             return entity;
-        }*/
+        }
     }
 }

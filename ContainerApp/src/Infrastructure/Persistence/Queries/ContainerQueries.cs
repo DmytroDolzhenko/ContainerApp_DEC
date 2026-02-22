@@ -23,6 +23,7 @@ namespace Infrastructure.Persistence.Queries
         public async Task<IReadOnlyList<Container>> GetAllAsync(CancellationToken ct)
         {
             return await _context.Containers
+                .Where(c => !c.IsDeleted)
                 .Include(c => c.Product)
                 .Include(c => c.Type)
                 .Include(c => c.Rules)
@@ -32,6 +33,7 @@ namespace Infrastructure.Persistence.Queries
         public async Task<Container?> GetByContainerType(int containerTypeId, CancellationToken cancellationToken)
         {
             var containers = await _context.Containers
+                .Where (c => !c.IsDeleted)
                 .Where(c => c.TypeId == containerTypeId)
                 .SingleOrDefaultAsync(cancellationToken);
 
