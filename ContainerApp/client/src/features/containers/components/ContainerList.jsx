@@ -7,7 +7,7 @@ import {
   Typography, Divider, useMediaQuery, useTheme, Grid, TablePagination,
   Menu, Tooltip, FormControl, InputLabel, Select, TextField, Dialog, DialogTitle, DialogContent, Stack
 } from '@mui/material';
-import { MoreHoriz, CleaningServices, Add, Inventory, FilterList, RestartAlt, Category, History } from '@mui/icons-material';
+import { MoreHoriz, CleaningServices, Add, Inventory, FilterList, RestartAlt, Category, History, Settings } from '@mui/icons-material';
 import { useContainers } from '../hooks/useContainers';
 import { ActionMenu } from '../../../layouts/components/ui/ActionMenu';
 import { containerApi } from '../api/containerApi';
@@ -17,6 +17,7 @@ import { ContainerDetailsModal } from './ContainerDetailsModal';
 import { ContainerEditModal } from './ContainerEditModal';
 import { ContainerTypeCreateModal } from './ContainerTypeCreateModal';
 import { ContainerCreateModal } from './ContainerCreateModal';
+import { ContainerTypesManageModal } from './ContainerTypesManageModal';
 
 export const ContainerList = () => {
   const { containers, loading, refetch } = useContainers();
@@ -33,25 +34,21 @@ export const ContainerList = () => {
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // Стейт для фільтрації
   const [filterType, setFilterType] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all'); 
+  const [filterStatus, setFilterStatus] = useState('all');
   const [filterProduct, setFilterProduct] = useState('');
 
-  // Стейт для модальних вікон
   const [fillModalOpen, setFillModalOpen] = useState(false);
   const [containerToFill, setContainerToFill] = useState(null);
-
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [selectedContainerId, setSelectedContainerId] = useState(null);
-
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [containerToEditId, setContainerToEditId] = useState(null);
-
   const [typeModalOpen, setTypeModalOpen] = useState(false);
-  const [createModalOpen, setCreateModalOpen] = useState(false); // Додано для створення контейнера
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [manageTypesOpen, setManageTypesOpen] = useState(false);
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
@@ -162,7 +159,6 @@ export const ContainerList = () => {
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
-      {/* Панель керування */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Stack direction="row" spacing={1}>
           <Button
@@ -178,21 +174,31 @@ export const ContainerList = () => {
           )}
         </Stack>
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} alignItems="center">
           {!isMobile && (
-            <Button
-              variant="outlined"
-              startIcon={<Category />}
-              onClick={() => setTypeModalOpen(true)}
-              sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
-            >
-              Новий тип
-            </Button>
+            <Stack direction="row" spacing={1}>
+              <Tooltip title="Керування типами">
+                <IconButton 
+                  onClick={() => setManageTypesOpen(true)}
+                  sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
+                >
+                  <Settings />
+                </IconButton>
+              </Tooltip>
+              <Button
+                variant="outlined"
+                startIcon={<Category />}
+                onClick={() => setTypeModalOpen(true)}
+                sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
+              >
+                Новий тип
+              </Button>
+            </Stack>
           )}
           <Button
             variant="contained"
             startIcon={<Add />}
-            onClick={() => setCreateModalOpen(true)} // Тепер відкриває модалку
+            onClick={() => setCreateModalOpen(true)}
             sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', borderRadius: '10px', textTransform: 'none', '&:hover': { bgcolor: '#9a67ea' } }}
           >
             Додати контейнер
@@ -200,7 +206,6 @@ export const ContainerList = () => {
         </Stack>
       </Box>
 
-      {/* Таблиця (Desktop) */}
       {!isMobile && (
         <TableContainer component={Paper} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px', background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)' }}>
           <Table>
@@ -261,7 +266,6 @@ export const ContainerList = () => {
         </TableContainer>
       )}
 
-      {/* Картки (Mobile) */}
       {isMobile && (
         <Stack spacing={2}>
            {paginatedContainers?.map((row) => {
@@ -294,7 +298,6 @@ export const ContainerList = () => {
         </Stack>
       )}
 
-      {/* Пагінація */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, width: '100%' }}>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
@@ -309,7 +312,6 @@ export const ContainerList = () => {
         />
       </Box>
 
-      {/* Menu Фільтрації */}
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
@@ -352,8 +354,8 @@ export const ContainerList = () => {
         </MenuItem>
       </ActionMenu>
 
-
       <FillContainerModal open={fillModalOpen} onClose={() => setFillModalOpen(false)} container={containerToFill} onRefresh={refetch} />
+      
       <ContainerDetailsModal
         open={detailsModalOpen}
         onClose={() => setDetailsModalOpen(false)}
@@ -378,6 +380,12 @@ export const ContainerList = () => {
       <ContainerCreateModal 
         open={createModalOpen} 
         onClose={() => setCreateModalOpen(false)} 
+        onRefresh={refetch} 
+      />
+
+      <ContainerTypesManageModal 
+        open={manageTypesOpen} 
+        onClose={() => setManageTypesOpen(false)} 
         onRefresh={refetch} 
       />
 

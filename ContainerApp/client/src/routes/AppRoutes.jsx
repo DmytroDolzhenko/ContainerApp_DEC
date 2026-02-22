@@ -7,18 +7,6 @@ import { ProductList } from "../features/products/components/ProductList";
 import { UserList } from "../features/users/components/UserList";
 
 import { ContainerDetailsPage } from "../features/containers/components/ContainerDetailsPage";
-import { ContainerCreatePage } from "../features/containers/components/ContainerCreatePage";
-
-import { ProductDetailsPage } from "../features/products/components/ProductDetailsPage";
-import { ProductEditPage } from "../features/products/components/ProductEditPage";
-import { ProductCreatePage } from '../features/products/components/ProductCreatePage';
-import { ProductTypeCreatePage } from '../features/products/components/ProductTypeCreatePage';
-
-import { UserDetailsPage } from "../features/users/components/UserDetailsPage";
-import { UserEditPage } from "../features/users/components/UserEditPage";
-import { UserCreatePage } from "../features/users/components/UserCreatePage";
-
-import { CompliancePage } from "../features/products/components/CompliancePage";
 
 export const AppRoutes = () => {
   return (
@@ -30,21 +18,11 @@ export const AppRoutes = () => {
 
         <Route path="containers" element={<ContainerList />} />
         <Route path="containers/:id" element={<ContainerDetailsPage />} />
-        <Route path="containers/create" element={<ContainerCreatePage />} />
 
         <Route path="products" element={<ProductList />} />
-        <Route path="products/:id" element={<ProductDetailsPage />} />
-        <Route path="products/edit/:id" element={<ProductEditPage />} />
-        <Route path="products/create" element={<ProductCreatePage />} />
-        <Route path="/product-types/create" element={<ProductTypeCreatePage />} />
-
-        <Route path="users/:id" element={<UserDetailsPage />} />
-        <Route path="users/edit/:id" element={<UserEditPage />} />
-        <Route path="users/create" element={<UserCreatePage />} />
 
         <Route path="users" element={<UserList />} />
 
-        <Route path="product-container-compliance" element={<CompliancePage />} />
       </Route>
     </Routes>
   );

@@ -1,20 +1,24 @@
 import { useState, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Paper, CircularProgress, Box, IconButton,
   MenuItem, Button, Card, CardContent,
   Typography, Divider, useMediaQuery, useTheme, Grid, TablePagination,
-  Menu, Tooltip, FormControl, InputLabel, Select, TextField, Dialog, DialogTitle, DialogContent, Stack
+  Menu, FormControl, InputLabel, Select, TextField, Stack, Tooltip
 } from '@mui/material';
-import { MoreHoriz, Add, CalendarToday, FilterList, RestartAlt, Category } from '@mui/icons-material';
+import { MoreHoriz, Add, FilterList, RestartAlt, Category, Settings } from '@mui/icons-material';
 import { useProducts } from "../hooks/useProducts";
 import { ActionMenu } from '../../../layouts/components/ui/ActionMenu';
 import { productApi } from '../api/productApi';
+import { ProductTypeCreateModal } from './ProductTypeCreateModal';
+import { ProductTypesManageModal } from './ProductTypesManageModal';
+import { ProductEditModal } from './ProductEditModal';
+import { ProductCreateModal } from './ProductCreateModal';
+import { ProductDetailsModal } from './ProductDetailsModal';
 
 export const ProductList = () => {
   const { products, loading, refetch } = useProducts();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
 
@@ -26,13 +30,19 @@ export const ProductList = () => {
   const open = Boolean(anchorEl);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [typeModalOpen, setTypeModalOpen] = useState(false);
+  const [manageTypesOpen, setManageTypesOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [productIdToEdit, setProductIdToEdit] = useState(null);
+  const [productIdToView, setProductIdToView] = useState(null);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [filterType, setFilterType] = useState('');
   const [filterManufactureDate, setFilterManufactureDate] = useState('');
-  const [filterExpirationDate, setFilterExpirationDate] = useState('');
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Не вказано';
@@ -46,7 +56,6 @@ export const ProductList = () => {
   const handleResetFilters = () => {
     setFilterType('');
     setFilterManufactureDate('');
-    setFilterExpirationDate('');
     setPage(0);
   };
 
@@ -83,7 +92,6 @@ export const ProductList = () => {
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
-      {/* Панель керування (Stack ідентичний контейнерам) */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Stack direction="row" spacing={1}>
           <Button
@@ -94,26 +102,36 @@ export const ProductList = () => {
           >
             Фільтри
           </Button>
-          {(filterType || filterManufactureDate || filterExpirationDate) && (
+          {(filterType || filterManufactureDate) && (
             <IconButton onClick={handleResetFilters} sx={{ color: '#ff5252' }}><RestartAlt /></IconButton>
           )}
         </Stack>
 
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} alignItems="center">
           {!isMobile && (
-            <Button
-              variant="outlined"
-              startIcon={<Category />}
-              onClick={() => navigate('/product-types/create')}
-              sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
-            >
-              Новий тип
-            </Button>
+            <Stack direction="row" spacing={1}>
+              <Tooltip title="Керування типами">
+                <IconButton 
+                  onClick={() => setManageTypesOpen(true)}
+                  sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
+                >
+                  <Settings />
+                </IconButton>
+              </Tooltip>
+              <Button
+                variant="outlined"
+                startIcon={<Category />}
+                onClick={() => setTypeModalOpen(true)}
+                sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
+              >
+                Новий тип
+              </Button>
+            </Stack>
           )}
           <Button
             variant="contained"
             startIcon={<Add />}
-            onClick={() => navigate('/products/create')}
+            onClick={() => setCreateModalOpen(true)}
             sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', borderRadius: '10px', textTransform: 'none', '&:hover': { bgcolor: '#9a67ea' } }}
           >
             Додати продукт
@@ -121,7 +139,6 @@ export const ProductList = () => {
         </Stack>
       </Box>
 
-      {/* Таблиця (Desktop з градієнтом як у контейнерів) */}
       {!isMobile && (
         <TableContainer component={Paper} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px', background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)' }}>
           <Table>
@@ -160,7 +177,6 @@ export const ProductList = () => {
         </TableContainer>
       )}
 
-      {/* Картки (Mobile) */}
       {isMobile && (
         <Stack spacing={2}>
            {paginatedProducts?.map((row) => (
@@ -184,7 +200,6 @@ export const ProductList = () => {
         </Stack>
       )}
 
-      {/* Pagination */}
       <TablePagination
         component="div"
         count={filteredProducts?.length || 0}
@@ -193,9 +208,10 @@ export const ProductList = () => {
         onPageChange={(e, p) => setPage(p)}
         onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
         sx={{ color: '#a0a0a0' }}
+        labelRowsPerPage="Рядків:"
+        rowsPerPageOptions={[5, 10, 25]}
       />
 
-      {/* Menu Фільтрації (Дизайн як у контейнерів) */}
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
@@ -203,7 +219,7 @@ export const ProductList = () => {
         PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', p: 2, minWidth: '250px', border: '1px solid #322d3d', borderRadius: '16px' } }}
       >
         <Stack spacing={2}>
-           <Typography variant="subtitle2">Фільтрація</Typography>
+           <Typography variant="subtitle2" fontWeight="bold">Фільтрація</Typography>
            <FormControl fullWidth size="small">
               <InputLabel sx={{ color: '#777' }}>Тип продукту</InputLabel>
               <Select value={filterType} label="Тип продукту" onChange={(e) => setFilterType(e.target.value)} sx={{ color: '#fff' }}>
@@ -225,13 +241,70 @@ export const ProductList = () => {
         </Stack>
       </Menu>
 
-      <ActionMenu 
-        anchorEl={anchorEl} 
-        open={open} 
-        onClose={() => setAnchorEl(null)} 
-        onEdit={() => navigate(`/products/edit/${selectedId}`)} 
-        onDelete={async () => { if(confirm("Видалити?")) { await productApi.delete(selectedId); refetch(); } setAnchorEl(null); }} 
-        onDetails={() => navigate(`/products/${selectedId}`)}
+      <ActionMenu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={() => setAnchorEl(null)}
+        onEdit={() => { 
+          setProductIdToEdit(selectedId); 
+          setEditModalOpen(true); 
+          setAnchorEl(null); 
+        }}
+        onDelete={async () => { 
+          if(window.confirm("Видалити цей продукт?")) { 
+            try {
+              await productApi.delete(selectedId);
+              if (typeof refetch === 'function') {
+                await refetch();
+              }
+            } catch (err) {
+              console.error("Помилка видалення:", err);
+              alert("Не вдалося видалити продукт.");
+            }
+          } 
+          setAnchorEl(null); 
+        }} 
+        onDetails={() => {
+          setProductIdToView(selectedId);
+          setDetailsModalOpen(true);
+          setAnchorEl(null);
+        }}
+      />
+
+      <ProductCreateModal
+        open={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onRefresh={refetch}
+      />
+
+      <ProductTypeCreateModal 
+        open={typeModalOpen} 
+        onClose={() => setTypeModalOpen(false)} 
+        onRefresh={refetch} 
+      />
+
+      <ProductTypesManageModal
+        open={manageTypesOpen}
+        onClose={() => setManageTypesOpen(false)}
+        onRefresh={refetch}
+      />
+
+      <ProductEditModal 
+        open={editModalOpen} 
+        onClose={() => setEditModalOpen(false)} 
+        productId={productIdToEdit}
+        onRefresh={refetch}
+      />
+
+      <ProductDetailsModal
+        open={detailsModalOpen}
+        onClose={() => setDetailsModalOpen(false)}
+        productId={productIdToView}
+        onEditClick={(id) => {
+          setDetailsModalOpen(false);
+          setProductIdToEdit(id);
+          setEditModalOpen(true);
+        }}
       />
     </Box>
   );

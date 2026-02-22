@@ -13,8 +13,7 @@ export const Sidebar = ({ mobileOpen, onMobileClose }) => {
   const menuItems = [
     { text: 'Контейнери', icon: <Inventory />, path: '/containers' },
     { text: 'Продукти', icon: <ShoppingBasket />, path: '/products' },
-    { text: 'Користувачі', icon: <People />, path: '/users' },
-    { text: 'Відповідності', icon: <AssignmentTurnedIn />, path: '/product-container-compliance' },
+    { text: 'Користувачі', icon: <People />, path: '/users' }
   ];
 
   const drawerContent = (

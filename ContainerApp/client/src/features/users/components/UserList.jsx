@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Paper, CircularProgress, Box, IconButton, Alert, Chip, Button,
-  Card, CardContent, Typography, Divider, useMediaQuery, useTheme, Grid,
+  Card, CardContent, Typography, Divider, useMediaQuery, useTheme,
   TablePagination, TextField, MenuItem, FormControl, InputLabel, Select, Menu, Tooltip, Stack
 } from '@mui/material';
 import { MoreHoriz, Add, FilterList, RestartAlt, CalendarToday } from '@mui/icons-material';
@@ -11,9 +11,12 @@ import { useUsers } from "../hooks/useUsers";
 import { ActionMenu } from '../../../layouts/components/ui/ActionMenu';
 import { userApi } from '../api/usersApi';
 
+import { UserCreateModal } from './UserCreateModal';
+import { UserEditModal } from './UserEditModal';
+import { UserDetailsModal } from './UserDetailsModal';
+
 export const UserList = () => {
   const { users, loading, error, refetch } = useUsers();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
 
@@ -24,26 +27,36 @@ export const UserList = () => {
   const [selectedId, setSelectedId] = useState(null);
   const open = Boolean(anchorEl);
 
-  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [userIdToView, setUserIdToView] = useState(null);
 
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+  
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [filterRole, setFilterRole] = useState('');
   const [filterRegDate, setFilterRegDate] = useState('');
 
-  const roleMap = {
-    1: 'Адмін',
-    2: 'Оператор'
-  };
+  const roleMap = { 1: 'Адмін', 2: 'Оператор' };
 
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     return new Date(dateString).toLocaleDateString('uk-UA', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
+      day: '2-digit', month: '2-digit', year: 'numeric',
     });
+  };
+
+  // Функції пагінації
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   const handleMenuClick = (event, id) => {
@@ -62,15 +75,6 @@ export const UserList = () => {
     setPage(0);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const filteredUsers = useMemo(() => {
     return users?.filter((user) => {
       const searchLower = searchTerm.toLowerCase();
@@ -78,13 +82,11 @@ export const UserList = () => {
         (user.fullName && user.fullName.toLowerCase().includes(searchLower)) ||
         (user.email && user.email.toLowerCase().includes(searchLower))
       );
-
       const matchesRole = filterRole === '' || user.role === Number(filterRole);
       const matchesDate = !filterRegDate || (
         user.registrationDate && 
         new Date(user.registrationDate).getTime() >= new Date(filterRegDate).getTime()
       );
-
       return matchesSearch && matchesRole && matchesDate;
     });
   }, [users, searchTerm, filterRole, filterRegDate]);
@@ -104,7 +106,6 @@ export const UserList = () => {
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
-      {/* Панель керування */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Stack direction="row" spacing={1}>
           <Button
@@ -135,32 +136,18 @@ export const UserList = () => {
         <Button
           variant="contained"
           startIcon={<Add />}
-          onClick={() => navigate('/users/create')}
+          onClick={() => setCreateModalOpen(true)}
           sx={{
-            bgcolor: '#bb86fc',
-            color: '#000',
-            fontWeight: 'bold',
-            borderRadius: '10px',
-            textTransform: 'none',
-            '&:hover': { bgcolor: '#9a67ea' }
+            bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold',
+            borderRadius: '10px', textTransform: 'none', '&:hover': { bgcolor: '#9a67ea' }
           }}
         >
           Додати користувача
         </Button>
       </Box>
 
-      {/* Таблиця (Desktop) */}
       {!isMobile ? (
-        <TableContainer 
-          component={Paper} 
-          sx={{ 
-            boxShadow: 'none', 
-            border: '1px solid #322d3d', 
-            borderRadius: '16px', 
-            background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)',
-            overflow: 'hidden'
-          }}
-        >
+        <TableContainer component={Paper} sx={{ boxShadow: 'none', border: '1px solid #322d3d', borderRadius: '16px', background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)', overflow: 'hidden' }}>
           <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
             <TableHead>
               <TableRow>
@@ -172,32 +159,17 @@ export const UserList = () => {
             </TableHead>
             <TableBody>
               {paginatedUsers?.map((row) => (
-                <TableRow 
-                  key={row.id} 
-                  hover 
-                  sx={{ 
-                    '&:last-child td, &:last-child th': { border: 0 }, 
-                    '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.08)' } 
-                  }}
-                >
+                <TableRow key={row.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.08)' } }}>
                   <TableCell>
                     <Typography sx={{ color: '#fff', fontWeight: 'bold' }}>{row.fullName}</Typography>
                     <Typography variant="caption" sx={{ color: '#bb86fc' }}>{row.email}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Chip 
-                      label={roleMap[row.role] || row.role} 
-                      size="small" 
-                      variant="outlined" 
-                      sx={{ color: '#bb86fc', borderColor: '#bb86fc' }} 
-                    />
+                    <Chip label={roleMap[row.role] || row.role} size="small" variant="outlined" sx={{ color: '#bb86fc', borderColor: '#bb86fc' }} />
                   </TableCell>
                   <TableCell sx={{ color: '#fff' }}>{formatDate(row.registrationDate)}</TableCell>
                   <TableCell align="right" sx={{ pr: 1 }}>
-                    <IconButton 
-                      onClick={(e) => handleMenuClick(e, row.id)} 
-                      sx={{ color: '#a0a0a0', '&:hover': { color: '#fff' } }}
-                    >
+                    <IconButton onClick={(e) => handleMenuClick(e, row.id)} sx={{ color: '#a0a0a0', '&:hover': { color: '#fff' } }}>
                       <MoreHoriz />
                     </IconButton>
                   </TableCell>
@@ -207,7 +179,6 @@ export const UserList = () => {
           </Table>
         </TableContainer>
       ) : (
-        /* Мобільні картки */
         <Stack spacing={2}>
           {paginatedUsers?.map((row) => (
             <Card key={row.id} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '12px' }}>
@@ -222,12 +193,7 @@ export const UserList = () => {
                   </IconButton>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, mb: 1.5 }}>
-                  <Chip 
-                    label={roleMap[row.role] || row.role} 
-                    size="small" 
-                    variant="outlined" 
-                    sx={{ color: '#bb86fc', borderColor: '#bb86fc', height: '20px', fontSize: '0.65rem' }} 
-                  />
+                  <Chip label={roleMap[row.role] || row.role} size="small" variant="outlined" sx={{ color: '#bb86fc', borderColor: '#bb86fc', height: '20px', fontSize: '0.65rem' }} />
                   <Box sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)', color: '#777', px: 1, py: 0.3, borderRadius: '4px', fontSize: '0.65rem' }}>ID: {row.id}</Box>
                 </Box>
                 <Divider sx={{ bgcolor: 'rgba(255,255,255,0.05)', mb: 1.5 }} />
@@ -240,8 +206,7 @@ export const UserList = () => {
         </Stack>
       )}
 
-      {/* Пагінація з правої сторони */}
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
@@ -251,52 +216,36 @@ export const UserList = () => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="Рядків:"
-          sx={{
-            color: '#a0a0a0',
-            border: 'none',
-            '& .MuiTablePagination-spacer': { display: 'block' }, // Повертаємо спайсер для вирівнювання
-            '& .MuiTablePagination-toolbar': { gap: 1 }
-          }}
+          sx={{ color: '#a0a0a0', border: 'none' }}
         />
       </Box>
 
-      {/* Меню фільтрації */}
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
         onClose={() => setFilterAnchorEl(null)}
-        PaperProps={{
-          sx: { bgcolor: '#1e1b26', color: '#fff', p: 2, minWidth: '250px', border: '1px solid #322d3d', borderRadius: '16px' }
-        }}
+        PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', p: 2, minWidth: '250px', border: '1px solid #322d3d', borderRadius: '16px' } }}
       >
         <Stack spacing={2}>
           <Typography variant="subtitle2" sx={{ color: '#a0a0a0', fontWeight: 'bold' }}>Фільтрація</Typography>
           <FormControl fullWidth size="small">
             <InputLabel sx={{ color: '#a0a0a0' }}>Роль</InputLabel>
             <Select
-              value={filterRole}
-              label="Роль"
+              value={filterRole} label="Роль"
               onChange={(e) => { setFilterRole(e.target.value); setPage(0); }}
               sx={{ color: '#fff', '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' } }}
             >
               <MenuItem value="">Всі ролі</MenuItem>
-              {rolesList.map(role => (
-                <MenuItem key={role} value={role}>{roleMap[role] || role}</MenuItem>
-              ))}
+              {rolesList.map(role => <MenuItem key={role} value={role}>{roleMap[role] || role}</MenuItem>)}
             </Select>
           </FormControl>
-
           <TextField
-            label="Зареєстрований після"
-            type="date"
-            fullWidth
-            size="small"
+            label="Зареєстрований після" type="date" fullWidth size="small"
             InputLabelProps={{ shrink: true }}
             value={filterRegDate}
             onChange={(e) => { setFilterRegDate(e.target.value); setPage(0); }}
             sx={{ '& input': { color: '#fff' }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' }, '& .MuiInputLabel-root': { color: '#a0a0a0' } }}
           />
-
           <Button fullWidth variant="contained" onClick={() => setFilterAnchorEl(null)} sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold' }}>
             Застосувати
           </Button>
@@ -304,22 +253,24 @@ export const UserList = () => {
       </Menu>
 
       <ActionMenu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-        onEdit={() => { navigate(`/users/edit/${selectedId}`); handleMenuClose(); }}
+        anchorEl={anchorEl} open={open} onClose={handleMenuClose}
+        onEdit={() => { setEditModalOpen(true); handleMenuClose(); }}
         onDelete={async () => {
-          if (window.confirm("Ви дійсно хочете видалити цього користувача?")) {
-            try {
-              await userApi.delete(selectedId);
-              refetch();
-            } catch (err) {
-              console.error(err);
-            }
+          if (window.confirm("Видалити цього користувача?")) {
+            try { await userApi.delete(selectedId); refetch(); } 
+            catch (err) { console.error(err); alert("Помилка видалення"); }
           }
           handleMenuClose();
         }}
-        onDetails={() => { navigate(`/users/${selectedId}`); handleMenuClose(); }}
+        onDetails={() => { setUserIdToView(selectedId); setDetailsModalOpen(true); handleMenuClose(); }}
+      />
+
+      <UserCreateModal open={createModalOpen} onClose={() => setCreateModalOpen(false)} onRefresh={refetch} />
+      <UserEditModal open={editModalOpen} onClose={() => setEditModalOpen(false)} userId={selectedId} onRefresh={refetch} />
+      <UserDetailsModal 
+        open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} 
+        userId={userIdToView}
+        onEditClick={(id) => { setDetailsModalOpen(false); setSelectedId(id); setEditModalOpen(true); }}
       />
     </Box>
   );
