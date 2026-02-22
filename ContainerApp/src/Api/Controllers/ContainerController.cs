@@ -146,5 +146,41 @@ namespace Api.Controllers
 
             return Ok(ContainerDto.FromDomain(result));
         }
+
+        [HttpPatch("{id:int}/addRule")]
+        public async Task<IActionResult> AddRuleToContainer(int id, [FromBody] AddRuleDto dto, CancellationToken cancellationToken)
+        {
+            var input = new AddRuleCommand
+            {
+                ContainerId = id,
+                ProductTypeId = dto.ProductTypeId,
+            };
+
+            var result = await sender.Send(input, cancellationToken);
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}/removeRule")]
+        public async Task<IActionResult> RemoveRuleFromContainer(int id, [FromBody] RemoveRuleDto dto, CancellationToken cancellationToken)
+        {
+            var input = new RemoveRuleCommand
+            {
+                ContainerId = id,
+                RuleId = dto.RuleId
+            };
+            var result = await sender.Send(input, cancellationToken);
+            return Ok();
+        }
+
+        [HttpGet("{id:int}/getContainerRules")]
+        public async Task<IActionResult> GetContainerRules(int id, CancellationToken cancellationToken)
+        {
+            var result = await containerQueries.GetContainerRulesAsync(id, cancellationToken);
+            if (result is null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
     }
 }

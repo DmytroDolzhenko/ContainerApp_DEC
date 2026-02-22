@@ -43,4 +43,12 @@ namespace Api.Dtos
         int ProductId,
         int Amount
         );
+
+    public record AddRuleDto(
+        int ProductTypeId
+        );
+
+    public record RemoveRuleDto(
+        int RuleId
+        );
 }

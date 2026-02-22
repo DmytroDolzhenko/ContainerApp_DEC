@@ -354,20 +354,19 @@ export const ContainerList = () => {
 
 
       <FillContainerModal open={fillModalOpen} onClose={() => setFillModalOpen(false)} container={containerToFill} onRefresh={refetch} />
-      
-      <ContainerDetailsModal 
-        open={detailsModalOpen} 
-        onClose={() => setDetailsModalOpen(false)} 
-        containerId={selectedContainerId} 
-        onRefresh={refetch} 
+      <ContainerDetailsModal
+        open={detailsModalOpen}
+        onClose={() => setDetailsModalOpen(false)}
+        containerId={selectedContainerId}
+        onRefresh={refetch}
         onEdit={(id) => handleOpenEditModal(id)}
       />
 
-      <ContainerEditModal 
-        open={editModalOpen} 
-        onClose={() => setEditModalOpen(false)} 
-        containerId={containerToEditId} 
-        onRefresh={refetch} 
+      <ContainerEditModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        containerId={containerToEditId}
+        onRefresh={refetch}
       />
 
       <ContainerTypeCreateModal 

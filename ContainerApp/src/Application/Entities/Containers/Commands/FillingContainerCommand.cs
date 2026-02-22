@@ -23,7 +23,7 @@ namespace Application.Entities.Containers.Commands
         public string ActionDescription => "Сontainer was filled";
     }
     public class FillingContainerCommandHandler
-        (IGetQueries<Container> getQueries,
+        (IContainerQueries getQueries,
         IGetQueries<Product> getProductQueries,
         IEntityRepository<ContainerHistory> historyRepository,
         IEntityRepository<Container> repository,
@@ -53,7 +53,7 @@ namespace Application.Entities.Containers.Commands
                 throw new InvalidOperationException($"Product with Id {request.ProductId} is not compliant with Container Type Id {container.TypeId}");
             }*/
 
-            container.FillContainer(request.ProductId, request.UserId, request.Amount);
+            container.FillContainer(product, request.UserId, request.Amount);
 
             var history = ContainerHistory.CreateNew(
                  containerId: container.Id,
