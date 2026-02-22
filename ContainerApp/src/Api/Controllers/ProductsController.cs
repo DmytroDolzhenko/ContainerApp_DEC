@@ -14,8 +14,8 @@ namespace Api.Controllers
     [Route("api/products")]
     [ApiController]
     public class ProductsController(
-        IGetQueries<Product> productQueries,
         ICurrentUserService currentUserService,
+        IProductQueries productQueries,
         ISender sender) : ControllerBase
     {
         [HttpGet]
