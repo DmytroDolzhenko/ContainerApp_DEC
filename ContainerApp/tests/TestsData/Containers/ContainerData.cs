@@ -25,7 +25,7 @@ namespace TestsData.Containers
                 uniqCode: "TNK-002",
                 typeId: 1
             );  
-            container.FillContainer(1, 1, 450);
+            //container.FillContainer(1, 1, 450);
             return container;
         }
     }

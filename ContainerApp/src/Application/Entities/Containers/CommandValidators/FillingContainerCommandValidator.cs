@@ -22,7 +22,7 @@ namespace Application.Entities.Containers.CommandValidators
             RuleFor(x => x.Amount)
                 .GreaterThan(0).WithMessage("Amount must be greater than zero.");
 
-            RuleFor(x => x)
+            /*RuleFor(x => x)
                 .MustAsync(async (command, cancellation) =>
                 {
                     if (command.ProductId <= 0 || command.ContainerId <= 0)
@@ -33,7 +33,7 @@ namespace Application.Entities.Containers.CommandValidators
                         command.ContainerId,
                         cancellation);
                 })
-                .WithMessage(command => $"Продукт з Id {command.ProductId} не сумісний з типом цього контейнера.");
+                .WithMessage(command => $"Продукт з Id {command.ProductId} не сумісний з типом цього контейнера.");*/
         }
     }
 }

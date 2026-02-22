@@ -1,4 +1,5 @@
-﻿using Domain.Containers;
+﻿using Domain.ContainerRules;
+using Domain.Containers;
 using Domain.ContainerTypes;
 using Domain.Products;
 using Domain.ProductTypes;
@@ -19,5 +20,6 @@ namespace Application.Common.Interfaces.Queries
         Task<IReadOnlyList<Container>> GetByProductTypeAsync(int productTypeId, CancellationToken cancellationToken);
         Task<Container?> GetContainerByUniqCode(string uniqCode, CancellationToken cancellationToken);
         Task<IReadOnlyList<Container?>> GetExpiringContainersAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyList<ContainerRule>> GetContainerRulesAsync(int containerId, CancellationToken cancellationToken);
     }
 }

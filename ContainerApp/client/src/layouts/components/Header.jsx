@@ -21,34 +21,23 @@ export const Header = ({ onMenuClick }) => {
   useEffect(() => {
     if (user) {
       const fetchNotifications = async () => {
-        try {
-          const [expiring, expired] = await Promise.all([
-            containerApi.getExpired()
-          ]);
+  try {
+    const data = await containerApi.getExpired();
 
-          const expiringMapped = expiring.map(c => ({
-            id: `expiring-${c.id}`,
-            containerId: c.id,
-            text: `Термін у "${c.name}" скоро закінчиться!`,
-            type: 'warning',
-            time: 'Увага',
-            read: false
-          }));
+    const mapped = (data || []).map(c => ({
+      id: `expired-${c.id}`,
+      containerId: c.id,
+      text: `Контейнер "${c.name}": перевірте термін придатності!`,
+      type: 'warning', // або 'error'
+      time: 'Увага',
+      read: false
+    }));
 
-          const expiredMapped = expired.map(c => ({
-            id: `expired-${c.id}`,
-            containerId: c.id,
-            text: `Продукт у контейнері "${c.name}" зіпсувався!`,
-            type: 'error',
-            time: 'Зіпсовано',
-            read: false
-          }));
-
-          setNotifications([...expiredMapped, ...expiringMapped]);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    setNotifications(mapped);
+  } catch (error) {
+    console.error("Помилка завантаження сповіщень:", error);
+  }
+};
       fetchNotifications();
     }
   }, [user]);

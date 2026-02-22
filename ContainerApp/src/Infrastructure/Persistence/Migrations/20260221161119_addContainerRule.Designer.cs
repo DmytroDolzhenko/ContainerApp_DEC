@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260221161119_addContainerRule")]
+    partial class addContainerRule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,22 +83,22 @@ namespace Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ContainerId")
-                        .HasColumnType("integer")
-                        .HasColumnName("container_id");
-
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("product_type_id");
 
+                    b.Property<int?>("container_id")
+                        .HasColumnType("integer")
+                        .HasColumnName("container_id");
+
                     b.HasKey("Id")
                         .HasName("pk_container_rules");
 
-                    b.HasIndex("ContainerId")
-                        .HasDatabaseName("ix_container_rules_container_id");
-
                     b.HasIndex("ProductTypeId")
                         .HasDatabaseName("ix_container_rules_product_type_id");
+
+                    b.HasIndex("container_id")
+                        .HasDatabaseName("ix_container_rules_container_id");
 
                     b.ToTable("containerRules", (string)null);
                 });
@@ -627,19 +630,18 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.ContainerRules.ContainerRule", b =>
                 {
-                    b.HasOne("Domain.Containers.Container", null)
-                        .WithMany("Rules")
-                        .HasForeignKey("ContainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_container_rules_containers_container_id");
-
                     b.HasOne("Domain.ProductTypes.ProductType", "ProductTypeForRule")
                         .WithMany()
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_container_rules_product_types_product_type_id");
+
+                    b.HasOne("Domain.Containers.Container", null)
+                        .WithMany("Rules")
+                        .HasForeignKey("container_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_container_rules_containers_container_id");
 
                     b.Navigation("ProductTypeForRule");
                 });

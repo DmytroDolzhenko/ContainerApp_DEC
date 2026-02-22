@@ -1,4 +1,5 @@
-﻿using Domain.ContainerTypes;
+﻿using Domain.ContainerRules;
+using Domain.ContainerTypes;
 using Domain.Products;
 using Domain.Users;
 using System;
@@ -28,8 +29,8 @@ namespace Domain.Containers
         public DateTime CreatedAt { get; }
         public int? LastModifiedBy { get; private set; }
         public DateTime? LastModifiedAt { get; private set; }
-
         public bool IsDeleted { get; private set; }
+        public List<ContainerRule> Rules { get; private set; } = new();
         public Container(int id, string name, string description, string uniqCode, int typeId, DateTime createdAt)
         {
             Id = id;
@@ -51,18 +52,24 @@ namespace Domain.Containers
             TypeId = typeId;
             LastModifiedBy = updatedBy;
         }
-        public void FillContainer(int productId, int userId, int amount)
+        public void FillContainer(Product product, int userId, int amount)
         {
             if (Status == true)
             {
                 throw new InvalidOperationException("Container is already filled.");
             }
+
+            if (Rules.Any() && !Rules.Any(r => r.ProductTypeId == product.ProductTypeId))
+            {
+                throw new InvalidOperationException($"Product type {product.ProductType?.Name} is not allowed in this container.");
+            }
+
             if (amount > Capacity)
             {
                 throw new InvalidOperationException("Amount exceeds container capacity.");
             }
 
-            ProductId = productId;
+            ProductId = product.Id;
             Status = true;
             CurrentCapacity = amount;
             LastModifiedBy = userId;
@@ -85,6 +92,28 @@ namespace Domain.Containers
             IsDeleted = true;
             LastModifiedBy = userId;
             LastModifiedAt = DateTime.UtcNow;
+        }
+        public void AddRule(int productTypeId)
+        {
+            if (Rules.Any(r => r.ProductTypeId == productTypeId))
+            {
+                throw new InvalidOperationException("Rule already exists for this container.");
+            }
+
+            var rule = ContainerRule.CreateNew(productTypeId, Id);
+
+            Rules.Add(rule);
+        }
+        public void RemoveRule(int ruleId)
+        {
+            var rule = Rules.FirstOrDefault(r => r.Id == ruleId);
+
+            if (rule == null)
+            {
+                throw new KeyNotFoundException($"Rule with Id {ruleId} not found in this container.");
+            }
+
+            Rules.Remove(rule);
         }
     }
 }

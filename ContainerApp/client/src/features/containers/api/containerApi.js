@@ -54,6 +54,21 @@ export const containerApi = {
   createType: async (data) => {
     const response = await axiosClient.post('/container-type', data);
     return response.data;
+  },
+
+  getRules: async (id) => {
+    const response = await axiosClient.get(`/containers/${id}/getContainerRules`);
+    return response.data;
+  },
+
+  addRule: async (id, payload) => {
+    const response = await axiosClient.patch(`/containers/${id}/addRule`, payload);
+    return response.data
+  },
+
+  removeRule: async (id, ruleId) => {
+    const response = await axiosClient.delete(`/containers/${id}/removeRule`, {data: {ruleId} });
+    return response.data;
   }
 
 };

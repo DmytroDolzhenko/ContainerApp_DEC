@@ -1,4 +1,5 @@
 ﻿using Domain.ContainerHistories;
+using Domain.ContainerRules;
 using Domain.Containers;
 using Domain.ContainerTypeProductTypes;
 using Domain.ContainerTypes;
@@ -27,7 +28,7 @@ namespace Infrastructure.Persistence
         public DbSet<Product> Products { get; init; }
         public DbSet<ProductType> ProductTypes { get; init; }
         public DbSet<ContainerTypeProductType> ContainerTypeProductType { get; init; }
-
+        public DbSet<ContainerRule> ContainerRules { get; init; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Queries;
+using Domain.ContainerRules;
 using Domain.Containers;
 using Domain.ContainerTypes;
 using Domain.Products;
@@ -24,6 +25,7 @@ namespace Infrastructure.Persistence.Queries
             return await _context.Containers
                 .Include(c => c.Product)
                 .Include(c => c.Type)
+                .Include(c => c.Rules)
                 .ToListAsync(ct);
         }
 
@@ -42,6 +44,7 @@ namespace Infrastructure.Persistence.Queries
                 .Where(c => c.Id == id)
                 .Include(c => c.Product)
                 .Include(c => c.Type)
+                .Include(c => c.Rules)
                 .SingleOrDefaultAsync(cancellationToken);
 
             return container;
@@ -53,11 +56,11 @@ namespace Infrastructure.Persistence.Queries
                 .Where(c => c.ProductId == productId)
                 .Include(c => c.Product)
                 .Include(c => c.Type)
-                .ToListAsync(cancellationToken);
+                .Include(c => c.Rules)
+                 .ToListAsync(cancellationToken);
 
             return containers;
         }
-
         public async Task<IReadOnlyList<Container>> GetByProductTypeAsync(int productTypeId, CancellationToken cancellationToken)
         {
             return await _context.Containers
@@ -73,7 +76,16 @@ namespace Infrastructure.Persistence.Queries
                 .Where(c => c.UniqCode == uniqCode)
                 .Include(c => c.Product)
                 .Include(c => c.Type)
+                .Include(c => c.Rules)
                 .SingleOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<ContainerRule>> GetContainerRulesAsync(int containerId, CancellationToken cancellationToken)
+        {
+            return await _context.ContainerRules
+                .Where(cr => cr.ContainerId == containerId)
+                .Include(cr => cr.ProductTypeForRule)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<IReadOnlyList<Container?>> GetExpiringContainersAsync(CancellationToken cancellationToken)
@@ -83,6 +95,7 @@ namespace Infrastructure.Persistence.Queries
             return await _context.Containers
                 .Include(c => c.Product)
                 .Include(c => c.Type)
+                .Include(c => c.Rules)
                 .Where(c => c.ProductId != null && c.Product.ExpirationDate <= warningDate)
                 .ToListAsync(cancellationToken);
         }
