@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Paper, Chip, CircularProgress, Box, IconButton,
@@ -14,11 +14,12 @@ import { containerApi } from '../api/containerApi';
 import { containerHistoryApi } from '../../containerHistory/api/containerHistoryApi';
 import { FillContainerModal } from './FillContainerModal';
 import { ContainerDetailsModal } from './ContainerDetailsModal';
-import { ContainerEditModal } from './ContainerEditModal'; // Переконайтеся, що файл створено
+import { ContainerEditModal } from './ContainerEditModal';
+import { ContainerTypeCreateModal } from './ContainerTypeCreateModal';
+import { ContainerCreateModal } from './ContainerCreateModal';
 
 export const ContainerList = () => {
   const { containers, loading, refetch } = useContainers();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
 
@@ -48,6 +49,9 @@ export const ContainerList = () => {
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [containerToEditId, setContainerToEditId] = useState(null);
+
+  const [typeModalOpen, setTypeModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false); // Додано для створення контейнера
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
@@ -158,6 +162,7 @@ export const ContainerList = () => {
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
+      {/* Панель керування */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3, gap: 2, flexWrap: 'wrap' }}>
         <Stack direction="row" spacing={1}>
           <Button
@@ -178,7 +183,7 @@ export const ContainerList = () => {
             <Button
               variant="outlined"
               startIcon={<Category />}
-              onClick={() => navigate('/container-types/create')}
+              onClick={() => setTypeModalOpen(true)}
               sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
             >
               Новий тип
@@ -187,7 +192,7 @@ export const ContainerList = () => {
           <Button
             variant="contained"
             startIcon={<Add />}
-            onClick={() => navigate('/containers/create')}
+            onClick={() => setCreateModalOpen(true)} // Тепер відкриває модалку
             sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', borderRadius: '10px', textTransform: 'none', '&:hover': { bgcolor: '#9a67ea' } }}
           >
             Додати контейнер
@@ -195,6 +200,7 @@ export const ContainerList = () => {
         </Stack>
       </Box>
 
+      {/* Таблиця (Desktop) */}
       {!isMobile && (
         <TableContainer component={Paper} sx={{ bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px', background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)' }}>
           <Table>
@@ -255,6 +261,7 @@ export const ContainerList = () => {
         </TableContainer>
       )}
 
+      {/* Картки (Mobile) */}
       {isMobile && (
         <Stack spacing={2}>
            {paginatedContainers?.map((row) => {
@@ -287,6 +294,7 @@ export const ContainerList = () => {
         </Stack>
       )}
 
+      {/* Пагінація */}
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, width: '100%' }}>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
@@ -301,6 +309,7 @@ export const ContainerList = () => {
         />
       </Box>
 
+      {/* Menu Фільтрації */}
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
@@ -343,7 +352,7 @@ export const ContainerList = () => {
         </MenuItem>
       </ActionMenu>
 
-      {/* Модальні вікна */}
+
       <FillContainerModal open={fillModalOpen} onClose={() => setFillModalOpen(false)} container={containerToFill} onRefresh={refetch} />
       
       <ContainerDetailsModal 
@@ -358,6 +367,18 @@ export const ContainerList = () => {
         open={editModalOpen} 
         onClose={() => setEditModalOpen(false)} 
         containerId={containerToEditId} 
+        onRefresh={refetch} 
+      />
+
+      <ContainerTypeCreateModal 
+        open={typeModalOpen} 
+        onClose={() => setTypeModalOpen(false)} 
+        onRefresh={refetch} 
+      />
+
+      <ContainerCreateModal 
+        open={createModalOpen} 
+        onClose={() => setCreateModalOpen(false)} 
         onRefresh={refetch} 
       />
 

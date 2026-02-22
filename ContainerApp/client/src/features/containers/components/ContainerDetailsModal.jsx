@@ -192,8 +192,8 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
           Очистити
         </Button>
         <Button 
-          startIcon={<Edit />} 
-          variant="contained" 
+          startIcon={<Edit />}
+          variant="contained"
           onClick={() => { onClose(); onEdit(containerId); }}
           sx={{ bgcolor: '#bb86fc', color: '#000', '&:hover': { bgcolor: '#9a67ea' } }}
         >

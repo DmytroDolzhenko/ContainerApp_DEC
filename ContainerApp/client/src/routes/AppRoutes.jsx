@@ -7,9 +7,7 @@ import { ProductList } from "../features/products/components/ProductList";
 import { UserList } from "../features/users/components/UserList";
 
 import { ContainerDetailsPage } from "../features/containers/components/ContainerDetailsPage";
-import { ContainerEditPage } from "../features/containers/components/ContainerEditPage";
 import { ContainerCreatePage } from "../features/containers/components/ContainerCreatePage";
-import { ContainerTypeCreatePage } from '../features/containers/components/ContainerTypeCreatePage';
 
 import { ProductDetailsPage } from "../features/products/components/ProductDetailsPage";
 import { ProductEditPage } from "../features/products/components/ProductEditPage";
@@ -32,9 +30,7 @@ export const AppRoutes = () => {
 
         <Route path="containers" element={<ContainerList />} />
         <Route path="containers/:id" element={<ContainerDetailsPage />} />
-        <Route path="containers/edit/:id" element={<ContainerEditPage />} />
         <Route path="containers/create" element={<ContainerCreatePage />} />
-        <Route path="/container-types/create" element={<ContainerTypeCreatePage />} />
 
         <Route path="products" element={<ProductList />} />
         <Route path="products/:id" element={<ProductDetailsPage />} />

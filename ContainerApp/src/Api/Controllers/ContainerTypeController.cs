@@ -54,13 +54,13 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ContainerTypeDto>> CreateContainerType([FromBody] CreateContainerTypeDto dto, CancellationToken cancellationToken)
+        public async Task<IResult> CreateContainerType([FromBody] CreateContainerTypeDto dto, CancellationToken cancellationToken)
         {
-            var input = new CreateContainerTypeCommand { TypeName = dto.Name, Capacity = dto.Capacity};
+            var input = new CreateContainerTypeCommand { TypeName = dto.Name, Capacity = dto.Capacity };
 
             var result = await sender.Send(input, cancellationToken);
 
-            return ContainerTypeDto.FromDomain(result);
+            return Results.Created($"/container-types/{result.Id}", result);
         }
 
         [HttpDelete("{id:int}")]

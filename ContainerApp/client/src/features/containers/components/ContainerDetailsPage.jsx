@@ -15,7 +15,6 @@ export const ContainerDetailsPage = () => {
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Винесена функція форматування
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     return new Date(dateString).toLocaleString('uk-UA', {
