@@ -45,7 +45,15 @@ namespace Api.Controllers
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
-            if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
+            if (user == null)
+                return Unauthorized("Invalid email or password");
+
+            if (user.IsDeleted)
+            {
+                return Unauthorized("Ваш акаунт було видалено.");
+            }
+
+            if (!await _userManager.CheckPasswordAsync(user, request.Password))
                 return Unauthorized("Invalid email or password");
 
             var generatedToken = _jwtTokenGenerator.GenerateToken(user);
@@ -53,12 +61,7 @@ namespace Api.Controllers
             return Ok(new
             {
                 token = generatedToken,
-                user = new
-                {
-                    id = user.Id,
-                    fullName = user.Name,
-                    role = user.Role.ToString()
-                }
+                user = new { id = user.Id, fullName = user.Name, role = user.Role.ToString() }
             });
         }
     }

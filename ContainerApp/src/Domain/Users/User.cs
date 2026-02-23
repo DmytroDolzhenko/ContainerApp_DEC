@@ -4,15 +4,13 @@ namespace Domain.Users
 {
     public class User : IdentityUser<int>, IEntity
     {
-       // public int Id { get; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public string Middlename { get; private set; }
-        //public string Email { get; private set; }
         public UserRole Role { get; private set; }
-       // public string Identifier {get ; private set; }
         public DateTime? RegistrationDate { get; private set; }
         public bool IsApproved { get; private set; }
+        public bool IsDeleted { get; private set; }
 
         private User(
             int id,
@@ -21,7 +19,6 @@ namespace Domain.Users
             string middlename,
             string email,
             UserRole role,
-           // string identifier,
             bool isApproved)
         {
             Id = id;
@@ -30,7 +27,6 @@ namespace Domain.Users
             Middlename = middlename;
             Email = email;
             Role = role;
-            //Identifier = identifier;
             RegistrationDate = DateTime.UtcNow;
             IsApproved = isApproved;
         }
@@ -41,7 +37,6 @@ namespace Domain.Users
             string middlename,
             string email,
             UserRole role,
-           // string identifier,
             bool isApproved)
         {
             return new User(
@@ -51,7 +46,6 @@ namespace Domain.Users
                 middlename,
                 email,
                 role,
-               // identifier,
                 isApproved);
         }
 
@@ -60,24 +54,34 @@ namespace Domain.Users
             string surname,
             string middlename,
             string email)
-       //     string identifier)
         {
             Name = name;
             Surname = surname;
             Middlename = middlename;
             Email = email;
-           // Identifier = identifier;
         }
 
         public void ChangeRole(UserRole newRole)
         {
             Role = newRole;
         }
-    }
+        public void MarkAsDeleted()
+        {
+            IsDeleted = true;
 
+            var suffix = Guid.NewGuid().ToString().Substring(0, 8);
+            Email = $"deleted_{suffix}_{Email}";
+            NormalizedEmail = Email.ToUpper();
+            UserName = Email;
+            NormalizedUserName = Email.ToUpper();
+
+            PasswordHash = null;
+        }
+    }
     public enum UserRole
     {
         Admin = 1,
         Operator = 2
     }
+    
 }

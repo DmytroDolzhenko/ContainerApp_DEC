@@ -13,6 +13,7 @@ namespace Domain.ContainerTypes
         public int Capacity { get; private set; }
         public DateTime CreatedAt { get; }
         public DateTime? UpdatedAt { get; private set; }
+        public bool IsDeleted { get; private set; }
         public ContainerType(int id, string name, int capacity, DateTime createdAt)
         {
             Id = id;
@@ -28,6 +29,11 @@ namespace Domain.ContainerTypes
         {
             Name = name;
             Capacity = capacity;
+            UpdatedAt = DateTime.UtcNow;
+        }
+        public void MarkAsDeleted()
+        {
+            IsDeleted = true;
             UpdatedAt = DateTime.UtcNow;
         }
     }

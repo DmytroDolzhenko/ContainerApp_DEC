@@ -31,7 +31,7 @@ namespace Infrastructure.Persistence.Services
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             new Claim("name", user.Name),
-
+            new Claim("isDeleted", user.IsDeleted.ToString().ToLower()),
             new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 

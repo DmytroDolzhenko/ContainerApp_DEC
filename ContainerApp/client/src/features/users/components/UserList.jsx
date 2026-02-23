@@ -33,7 +33,7 @@ export const UserList = () => {
   const [userIdToView, setUserIdToView] = useState(null);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-  
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -84,7 +84,7 @@ export const UserList = () => {
       );
       const matchesRole = filterRole === '' || user.role === Number(filterRole);
       const matchesDate = !filterRegDate || (
-        user.registrationDate && 
+        user.registrationDate &&
         new Date(user.registrationDate).getTime() >= new Date(filterRegDate).getTime()
       );
       return matchesSearch && matchesRole && matchesDate;
@@ -256,18 +256,32 @@ export const UserList = () => {
         anchorEl={anchorEl} open={open} onClose={handleMenuClose}
         onEdit={() => { setEditModalOpen(true); handleMenuClose(); }}
         onDelete={async () => {
-          if (window.confirm("Видалити цього користувача?")) {
-            try { await userApi.delete(selectedId); refetch(); } 
-            catch (err) { console.error(err); alert("Помилка видалення"); }
-          }
-          handleMenuClose();
-        }}
+  if (window.confirm("Видалити цього користувача?")) {
+    try {
+      await userApi.delete(selectedId);
+      if (typeof refetch === 'function') {
+        refetch();
+      } else {
+        window.location.reload();
+      }
+      handleMenuClose();
+    } catch (err) {
+      if (err.response?.status === 204) {
+        if (typeof refetch === 'function') refetch();
+        handleMenuClose();
+      } else {
+        console.error("Деталі помилки:", err);
+        alert(`Помилка: ${err.message}`);
+      }
+    }
+  }
+}}
         onDetails={() => { setUserIdToView(selectedId); setDetailsModalOpen(true); handleMenuClose(); }}
       />
 
       <UserCreateModal open={createModalOpen} onClose={() => setCreateModalOpen(false)} onRefresh={refetch} />
       <UserEditModal open={editModalOpen} onClose={() => setEditModalOpen(false)} userId={selectedId} onRefresh={refetch} />
-      <UserDetailsModal 
+      <UserDetailsModal
         open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} 
         userId={userIdToView}
         onEditClick={(id) => { setDetailsModalOpen(false); setSelectedId(id); setEditModalOpen(true); }}

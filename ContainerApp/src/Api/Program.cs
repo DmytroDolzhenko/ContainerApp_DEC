@@ -1,5 +1,6 @@
 using Api.Modules;
 using Application;
+using Application.Common.Securities;
 using Domain.Users;
 using Infrastructure;
 using Infrastructure.Persistence;
@@ -56,6 +57,19 @@ builder.Services.AddAuthentication(options =>
             )
         };
     });
+
+
+// ===== Authorization =====
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("NotDeletedUser", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.AddRequirements(new NotDeletedRequirement());
+    });
+
+    options.DefaultPolicy = options.GetPolicy("NotDeletedUser")!;
+});
 
 // ===== Swagger =====
 builder.Services.AddEndpointsApiExplorer();

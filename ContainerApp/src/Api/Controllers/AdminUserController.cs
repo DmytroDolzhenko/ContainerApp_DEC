@@ -49,7 +49,7 @@ namespace Api.Controllers
 
             return updatedUser ? Ok() : BadRequest();
         }
-        [HttpPost]
+       /* [HttpPost]
         public async Task<ActionResult<string>> CreateReferalLink()
         {
             var adminId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value ?? "0");
@@ -59,6 +59,6 @@ namespace Api.Controllers
             };
             var referalLink = await sender.Send(command);
             return Ok(referalLink);
-        }
+        }*/
     }
 }

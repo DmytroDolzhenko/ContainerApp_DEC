@@ -34,7 +34,9 @@ namespace Application.Entities.ProductTypes.Commands
                     $"Product with id {request.Id} not found");
             }
 
-            await repository.DeleteAsync(productType, cancellationToken);
+            productType.MarkAsDeleted();
+            await repository.UpdateAsync(productType, cancellationToken);
+            // await repository.DeleteAsync(productType, cancellationToken);
         }
     }
 }
