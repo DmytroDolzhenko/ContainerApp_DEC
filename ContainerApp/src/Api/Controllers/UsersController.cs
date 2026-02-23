@@ -13,7 +13,7 @@ namespace Api.Controllers
     [Route("api/users")]
     [ApiController]
     public class UsersController(
-        IGetQueries<User> userQueries,
+        IUserQueries userQueries,
         ISender sender) : ControllerBase
     {
         [HttpGet]
@@ -51,7 +51,6 @@ namespace Api.Controllers
                 Middlename = request.Middlename,
                 Email = request.Email,
                 Role = request.Role,
-                // Identifier = request.Identifier,
                 IsApproved = request.IsApproved
             };
 
@@ -73,7 +72,6 @@ namespace Api.Controllers
                 Surname = request.Surname,
                 Middlename = request.Middlename,
                 Email = request.Email
-                // Identifier = request.Identifier
             };
 
             var updatedUser = await sender.Send(command, cancellationToken);

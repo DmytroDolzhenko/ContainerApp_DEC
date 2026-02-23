@@ -13,13 +13,16 @@ namespace Api.Controllers
     [Authorize]
     [Route("api/container-type")]
     [ApiController]
-    public class ContainerTypeController(IGetQueries<ContainerType> queries, ISender sender) : ControllerBase
+    public class ContainerTypeController(
+        IContainerTypeQueries queries, ISender sender)
+        : ControllerBase
     {
         [HttpGet]
         public async Task<IReadOnlyList<ContainerTypeDto>> GetContainerTypes(CancellationToken cancellationToken)
         {
             var containerTypes = await queries.GetAllAsync(cancellationToken);
-            return containerTypes.Select(ContainerTypeDto.FromDomain).ToList();
+            return containerTypes.Select(ContainerTypeDto.FromDomain)
+                .ToList();
         }
 
         [HttpGet("{id:int}")]

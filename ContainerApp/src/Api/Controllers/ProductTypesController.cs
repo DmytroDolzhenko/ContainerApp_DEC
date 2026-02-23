@@ -13,7 +13,7 @@ namespace Api.Controllers
     [Route("api/product-types")]
     [ApiController]
     public class ProductTypesController(
-         IGetQueries<ProductType> productTypeQueries,
+         IProductTypeQueries productTypeQueries,
          ISender sender) : ControllerBase
     {
         [HttpGet]

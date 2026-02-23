@@ -5,6 +5,7 @@ using Application.Common.Services;
 using Infrastructure.Persistence.Queries;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -92,6 +93,7 @@ namespace Infrastructure.Persistence
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IProductContainerCompliance, ProductContainerCompliance>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IAuthorizationHandler, NotDeletedHandler>();
 
         }
     }

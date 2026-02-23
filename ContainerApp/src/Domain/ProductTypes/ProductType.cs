@@ -10,7 +10,7 @@ namespace Domain.ProductTypes
 
         private readonly List<Product> _products = new();
         public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
-
+        public bool IsDeleted { get; private set; }
         public ProductType(int id, string name)
         {
             Id = id;
@@ -25,6 +25,10 @@ namespace Domain.ProductTypes
         public void Update(string name)
         {
             Name = name;
+        }
+        public void MarkAsDeleted()
+        {
+            IsDeleted = true;
         }
     }
 }

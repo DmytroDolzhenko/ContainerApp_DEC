@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.Queries;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.Users;
 using MediatR;
@@ -16,13 +17,29 @@ namespace Application.Entities.Users.Commands
     }
 
     public class DeleteUsersCommandHandler(
-        IEntityRepository<User> repository, IGetQueries<User> queries)
+        IEntityRepository<User> repository,
+        ICurrentUserService userContext,
+        IGetQueries<User> queries)
         : IRequestHandler<DeleteUsersCommand>
     {
         public async Task Handle(
             DeleteUsersCommand request,
             CancellationToken cancellationToken)
         {
+            var currentUserId = userContext.UserId;
+
+            if (currentUserId is null)
+            {
+                throw new UnauthorizedAccessException(
+                    "User must be authenticated to delete a user");
+            }
+
+            if(currentUserId == request.Id)
+                {
+                throw new InvalidOperationException(
+                    "Users cannot delete themselves");
+            }
+
             var user = await queries.GetByIdAsync(
                 request.Id,
                 cancellationToken);
@@ -30,10 +47,11 @@ namespace Application.Entities.Users.Commands
             if (user is null)
             {
                 throw new KeyNotFoundException(
-                    $"Product with id {request.Id} not found");
+                    $"User with id {request.Id} not found");
             }
 
-            await repository.DeleteAsync(user, cancellationToken);
+            user.MarkAsDeleted();
+            await repository.UpdateAsync(user, cancellationToken);
         }
     }
 }

@@ -56,6 +56,11 @@ export const containerApi = {
     return response.data;
   },
 
+  deleteType: async (id) => {
+    const response = await axiosClient.delete(`/container-type/${id}`);
+    return response.data;
+  },
+
   getRules: async (id) => {
     const response = await axiosClient.get(`/containers/${id}/getContainerRules`);
     return response.data;

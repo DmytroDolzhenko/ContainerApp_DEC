@@ -7,7 +7,6 @@ namespace Api.Dtos
         string FullName,
         string Email,
         UserRole Role,
-       // string Identifier,
         bool IsApproved,
         DateTime? RegistrationDate
     )
@@ -18,7 +17,6 @@ namespace Api.Dtos
                 $"{user.Name} {user.Middlename} {user.Surname}",
                 user.Email,
                 user.Role,
-               // user.Identifier,
                 user.IsApproved,
                 user.RegistrationDate
             );

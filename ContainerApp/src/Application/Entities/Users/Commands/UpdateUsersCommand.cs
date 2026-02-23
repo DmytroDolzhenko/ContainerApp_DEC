@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces.Queries;
+﻿using Application.Common.Interfaces;
+using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
 using Domain.ProductTypes;
 using Domain.Users;
@@ -18,11 +19,11 @@ namespace Application.Entities.Users.Commands
         public required string Surname { get; init; }
         public required string Middlename { get; init; }
         public required string Email { get; init; }
-        //  public required string Identifier { get; init; }
     }
 
     public class UpdateUserCommandHandler(
         IEntityRepository<User> repository,
+        ICurrentUserService userContext,
         IGetQueries<User> queries)
         : IRequestHandler<UpdateUsersCommand, User>
     {
@@ -30,6 +31,18 @@ namespace Application.Entities.Users.Commands
             UpdateUsersCommand request,
             CancellationToken cancellationToken)
         {
+            var currentUserId = userContext.UserId;
+
+            if (currentUserId == null)
+            {
+                throw new Exception("User is not authenticated");
+            }
+
+            if (currentUserId != request.Id)
+            {
+                throw new Exception("User can only update their own information");
+            }
+
             var user = await queries.GetByIdAsync(
                 request.Id,
                 cancellationToken);
@@ -44,7 +57,6 @@ namespace Application.Entities.Users.Commands
                 request.Surname,
                 request.Middlename,
                 request.Email
-             //   request.Identifier
                 );
 
             await repository.UpdateAsync(user, cancellationToken);

@@ -16,14 +16,18 @@ namespace Infrastructure.Persistence.Queries
         {
             _context = context;
         }
-/*        public async Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.ContainerTypes.ToListAsync(cancellationToken);
+            return await _context.ContainerTypes
+                .Where(x => !x.IsDeleted)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<ContainerType?> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            return await _context.ContainerTypes.SingleOrDefaultAsync(ct => ct.Id == id, cancellationToken);
-        }*/
+            return await _context.ContainerTypes
+                .Where(x => !x.IsDeleted)
+                .SingleOrDefaultAsync(ct => ct.Id == id, cancellationToken);
+        }
     }
 }

@@ -22,11 +22,16 @@ namespace Application.Entities.ContainerTypes.Commands
         public async Task Handle(DeleteContainerTypeCommand request, CancellationToken cancellationToken)
         {
             var existingContainerType = await queries.GetByIdAsync(request.ContainerTypeId, cancellationToken);
+
             if (existingContainerType == null)
             {
                 throw new InvalidOperationException("ContainerType with this ID does not ex ist");
             }
-            await repositories.DeleteAsync(existingContainerType, cancellationToken);
+
+            existingContainerType.MarkAsDeleted();
+            await repositories.UpdateAsync(existingContainerType, cancellationToken);
+            //await repositories.DeleteAsync(existingContainerType, cancellationToken);
+
         }
     }
 }
