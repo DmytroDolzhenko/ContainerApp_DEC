@@ -1,26 +1,25 @@
 import { useState } from 'react';
 import {
   Box, Typography, TextField, Button, Alert, CircularProgress,
-  MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Stack, Grid
+  MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Stack, Grid, IconButton, InputAdornment
 } from '@mui/material';
-import { Save, Cancel } from '@mui/icons-material';
-import { userApi } from '../api/usersApi';
+import { Save, Cancel, Visibility, VisibilityOff } from '@mui/icons-material';
+import { authApi } from '../../auth/api/registerApi';
 import { commonInputStyles } from '../../../assets/styles/inputStyles';
 
-const ROLE_MAP_REVERSE = { 'Admin': 1, 'Operator': 2 };
-const roles = ['Admin', 'Operator'];
 
 export const UserCreateModal = ({ open, onClose, onRefresh }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
     middlename: '',
     email: '',
-    role: 'Operator',
-    isApproved: true
+    password: '',
+    role: 'Operator'
   });
 
   const handleChange = (e) => {
@@ -36,24 +35,25 @@ export const UserCreateModal = ({ open, onClose, onRefresh }) => {
 
     try {
       const payload = {
+        email: formData.email.trim(),
+        password: formData.password,
         name: formData.name.trim(),
         surname: formData.surname.trim(),
-        middlename: formData.middlename.trim(),
-        email: formData.email.trim(),
-        role: ROLE_MAP_REVERSE[formData.role],
-        isApproved: formData.isApproved
+        middlename: formData.middlename.trim()
       };
 
-      await userApi.create(payload);
+      await authApi.register(payload);
+
       if (typeof onRefresh === 'function') onRefresh();
       onClose();
+
       setFormData({
         name: '', surname: '', middlename: '',
-        email: '', role: 'Operator', isApproved: true
+        email: '', password: '', role: 'Operator'
       });
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.title || "Помилка при створенні користувача");
+      console.error("Registration error:", err);
+      setError(err.response?.data?.title || err.response?.data?.message || "Помилка при реєстрації користувача");
     } finally {
       setLoading(false);
     }
@@ -132,17 +132,27 @@ export const UserCreateModal = ({ open, onClose, onRefresh }) => {
 
             <TextField
               fullWidth
-              label="Роль"
-              name="role"
-              select
-              value={formData.role}
+              label="Пароль"
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
               onChange={handleChange}
               sx={commonInputStyles}
-            >
-              {roles.map((option) => (
-                <MenuItem key={option} value={option}>{option}</MenuItem>
-              ))}
-            </TextField>
+              required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      sx={{ color: '#a0a0a0' }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Stack>
         </DialogContent>
 
@@ -178,7 +188,7 @@ export const UserCreateModal = ({ open, onClose, onRefresh }) => {
               '&:hover': { bgcolor: '#9a67ea' }
             }}
           >
-            {loading ? 'Створення...' : 'Зберегти'}
+            {loading ? 'Реєстрація...' : 'Зберегти'}
           </Button>
         </DialogActions>
       </form>
