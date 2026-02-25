@@ -39,7 +39,7 @@ namespace Application.Products.Commands
                 request.Name,
                 utcExpirationDate,
                 utcManufactureData,
-                request.Description ?? string.Empty
+                request.Description
             );
 
             await productRepository.AddAsync(product, cancellationToken);

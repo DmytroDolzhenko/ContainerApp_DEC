@@ -19,14 +19,14 @@ namespace Domain.Products
         public string Name { get; private set; }
         public DateTime ExpirationDate { get; private set; }
         public DateTime? ManufactureDate { get; private set; }
-        public string Description { get; private set; }
+        public string? Description { get; private set; }
         public bool IsDeleted { get; private set; }
 
         public int? LastModifiedBy { get; private set; }
         public DateTime? LastModifiedAt { get; private set; }
 
 
-        private Product(int id, int productTypeId, string name, DateTime expirationDate, DateTime? manufactureDate, string description)
+        private Product(int id, int productTypeId, string name, DateTime expirationDate, DateTime? manufactureDate, string? description)
         {
             Id = id;
             ProductTypeId = productTypeId;
@@ -42,7 +42,7 @@ namespace Domain.Products
             string name,
             DateTime expirationDate,
             DateTime? manufactureDate,
-            string description)
+            string? description)
         {
             return new Product(
                 id,
@@ -57,7 +57,7 @@ namespace Domain.Products
             string name,
             DateTime expirationDate,
             DateTime? manufactureDate,
-            string description,
+            string? description,
             int userId)
         {
             Name = name;

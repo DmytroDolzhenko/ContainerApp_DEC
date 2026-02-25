@@ -29,5 +29,11 @@ namespace Infrastructure.Persistence.Queries
                 .Where(x => !x.IsDeleted)
                 .SingleOrDefaultAsync(ct => ct.Id == id, cancellationToken);
         }
+
+        public Task<ContainerType?> GetByNameAsync(string name, CancellationToken cancellationToken)
+        {
+            return _context.ContainerTypes
+                .SingleOrDefaultAsync(ct => ct.Name.Equals(name), cancellationToken);
+        }
     }
 }

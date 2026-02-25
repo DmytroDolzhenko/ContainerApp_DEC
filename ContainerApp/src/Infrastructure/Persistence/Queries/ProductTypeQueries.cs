@@ -31,5 +31,12 @@ namespace Infrastructure.Persistence.Queries
 
             return entity;
         }
+
+        public Task<ProductType?> GetByNameAsync(string name, CancellationToken cancellationToken)
+        {
+            var entity = _context.ProductTypes
+                .FirstOrDefaultAsync(x => x.Name.Equals(name), cancellationToken);
+            return entity;
+        }
     }
 }

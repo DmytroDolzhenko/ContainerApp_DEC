@@ -6,10 +6,9 @@ namespace Api.Dtos
         int ProductTypeId,
         string ProductTypeName,
         string Name,
-      //  double Capacity,
         DateTime ExpirationDate,
         DateTime? ManufactureDate,
-        string Description
+        string? Description
     )
     {
         public static ProductDto FromDomain(Product product)
@@ -18,7 +17,6 @@ namespace Api.Dtos
                 product.ProductTypeId,
                 product.ProductType?.Name,
                 product.Name,
-           //     product.Capacity,
                 product.ExpirationDate,
                 product.ManufactureDate,
                 product.Description
@@ -28,17 +26,15 @@ namespace Api.Dtos
     public record CreateProductDto(
         int TypeId,       
         string Name,
-     //   double Capacity, 
         DateTime ExpirationDate,
         DateTime? ManufactureDate,
-        string Description
+        string? Description
     );
 
     public record UpdateProductDto(
         string Name,
-    //    double Capacity,
         DateTime ExpirationDate,
         DateTime? ManufactureDate,
-        string Description
+        string? Description
     );
 }

@@ -30,5 +30,9 @@ namespace Domain.ProductTypes
         {
             IsDeleted = true;
         }
+        public void MarkAsUndeleted()
+        {
+            IsDeleted = false;
+        }
     }
 }

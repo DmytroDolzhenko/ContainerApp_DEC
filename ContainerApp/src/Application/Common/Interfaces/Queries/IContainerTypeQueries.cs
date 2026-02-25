@@ -11,5 +11,6 @@ namespace Application.Common.Interfaces.Queries
     {
       Task<IReadOnlyList<ContainerType>> GetAllAsync(CancellationToken cancellationToken);
       Task<ContainerType?> GetByIdAsync(int id, CancellationToken cancellationToken);
+      Task<ContainerType?> GetByNameAsync(string name, CancellationToken cancellationToken);
     }
 }

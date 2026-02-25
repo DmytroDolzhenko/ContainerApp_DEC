@@ -16,17 +16,29 @@ namespace Application.Entities.ContainerTypes.Commands
         public required int Capacity { get; init; }
     }
     public class CreateContainerTypeCommandHandler
-        (IEntityRepository<ContainerType> repositories)
+        (IEntityRepository<ContainerType> repositories,
+        IContainerTypeQueries containerTypeQueries)
         : IRequestHandler<CreateContainerTypeCommand, ContainerType>
     {
-        public Task<ContainerType> Handle(CreateContainerTypeCommand request, CancellationToken cancellationToken)
+        public async Task<ContainerType> Handle(CreateContainerTypeCommand request, CancellationToken cancellationToken)
         {
-            var containerType = ContainerType.CreateNew(
-                 request.TypeName,
-                 request.Capacity
-             );
-            repositories.AddAsync(containerType, cancellationToken);
-            return Task.FromResult(containerType);
+            var existingType = await containerTypeQueries.GetByNameAsync(request.TypeName, cancellationToken);
+
+            if (existingType != null)
+            {
+                existingType.MarkAsUndeleted();
+                existingType.UpdateDetails(request.TypeName, request.Capacity);
+                return existingType;
+            }
+            else
+            {
+                var containerType = ContainerType.CreateNew(
+                     request.TypeName,
+                     request.Capacity
+                 );
+                await repositories.AddAsync(containerType, cancellationToken);
+                return containerType;
+            }
         }
     }
 }

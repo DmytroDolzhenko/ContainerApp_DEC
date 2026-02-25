@@ -57,7 +57,7 @@ export const ProductCreateModal = ({ open, onClose, onRefresh }) => {
     try {
       const payload = {
         name: formData.name.trim(),
-        description: formData.description.trim(),
+        description: formData.description.trim() || null,
         typeId: Number(formData.productTypeId),
         manufactureDate: formData.manufactureDate,
         expirationDate: formData.expirationDate

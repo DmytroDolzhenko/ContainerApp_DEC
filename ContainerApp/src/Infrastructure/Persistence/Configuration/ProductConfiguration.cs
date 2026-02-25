@@ -26,12 +26,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(1000)
-            .IsRequired();
-
-/*        builder.Property(x => x.Capacity)
-            .IsRequired();*/
-
+            .HasMaxLength(1000);
 
         builder.Property(x => x.ExpirationDate)
             .IsRequired();

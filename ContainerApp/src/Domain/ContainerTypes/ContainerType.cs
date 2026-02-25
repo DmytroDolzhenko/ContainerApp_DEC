@@ -36,5 +36,10 @@ namespace Domain.ContainerTypes
             IsDeleted = true;
             UpdatedAt = DateTime.UtcNow;
         }
+        public void MarkAsUndeleted()
+        {
+            IsDeleted = false;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

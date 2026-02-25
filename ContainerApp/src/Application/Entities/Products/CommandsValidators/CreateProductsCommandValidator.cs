@@ -13,8 +13,12 @@ namespace Application.Entities.Products.CommandsValidators
         public CreateProductsCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MinimumLength(3).MaximumLength(255);
-            RuleFor(x => x.Description).NotEmpty().MinimumLength(3).MaximumLength(500);
-          //  RuleFor(x => x.Capacity).NotEmpty();
+
+            RuleFor(x => x.Description)
+            .MinimumLength(3)
+            .MaximumLength(500)
+            .When(x => !string.IsNullOrEmpty(x.Description));
+
             RuleFor(x => x.ExpirationDate).NotEmpty();
             RuleFor(x => x.ProductTypeId).NotEmpty();
         }
