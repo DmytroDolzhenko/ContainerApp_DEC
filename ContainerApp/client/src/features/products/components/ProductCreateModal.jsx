@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Typography, TextField, Button, Alert, CircularProgress,
+  Typography, TextField, Button, Alert, CircularProgress,
   MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Stack
 } from '@mui/material';
 import { Save } from '@mui/icons-material';
@@ -57,7 +57,7 @@ export const ProductCreateModal = ({ open, onClose, onRefresh }) => {
     try {
       const payload = {
         name: formData.name.trim(),
-        description: formData.description.trim(),
+        description: formData.description.trim() || null,
         typeId: Number(formData.productTypeId),
         manufactureDate: formData.manufactureDate,
         expirationDate: formData.expirationDate
