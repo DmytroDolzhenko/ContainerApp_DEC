@@ -21,8 +21,7 @@ namespace Infrastructure.Persistence.Configuration
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.HasIndex(ct => ct.Name)
-                .IsUnique();
+            builder.HasIndex(ct => ct.Name);
 
             builder.Property(ct => ct.CreatedAt)
                 .IsRequired();

@@ -15,7 +15,7 @@ public class ProductTypeConfiguration : IEntityTypeConfiguration<ProductType>
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.HasIndex(x => x.Name);
 
 
         builder.ToTable("ProductTypes");
