@@ -47,10 +47,10 @@ export const LoginList = () => {
         }}
       >
         <Typography variant="h4" sx={{ color: "#fff", fontWeight: "bold", mb: 1 }}>
-          Welcome Back
+          Вітаємо!
         </Typography>
         <Typography variant="body2" sx={{ color: "#a0a0a0", mb: 4 }}>
-          Please sign in to continue
+          Будь ласка увійдіть в акаунт
         </Typography>
 
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
@@ -74,7 +74,7 @@ export const LoginList = () => {
           />
           <TextField
             fullWidth
-            label="Password"
+            label="Пароль"
             type="password"
             variant="outlined"
             margin="normal"
@@ -103,7 +103,7 @@ export const LoginList = () => {
               "&:hover": { bgcolor: "#9a67ea" },
             }}
           >
-            Sign In
+            Увійти
           </Button>
         </form>
       </Paper>
