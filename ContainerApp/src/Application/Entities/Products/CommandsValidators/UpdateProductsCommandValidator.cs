@@ -14,7 +14,14 @@ namespace Application.Entities.Products.CommandsValidators
         public UpdateProductsCommandValidator()
         {
             RuleFor(x => x.Name).NotEmpty().MinimumLength(3).MaximumLength(255);
-            RuleFor(x => x.Description).MinimumLength(3).MaximumLength(500);
+
+            RuleFor(x => x.Description)
+            .MaximumLength(500);
+
+            RuleFor(x => x.Description)
+                .MinimumLength(3)
+                .When(x => !string.IsNullOrWhiteSpace(x.Description));
+
             RuleFor(x => x.ExpirationDate).NotEmpty();
         }
     }

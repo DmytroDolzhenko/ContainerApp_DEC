@@ -45,7 +45,7 @@ public class UpdateProductsCommandHandler(
             request.Name,
             utcExpirationDate,
             utcManufactureData,
-            request.Description ?? string.Empty,
+            request.Description,
             request.UserId);
 
         await repository.UpdateAsync(product, cancellationToken);

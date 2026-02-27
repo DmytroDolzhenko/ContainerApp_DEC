@@ -59,16 +59,21 @@ export const ProductEditModal = ({ open, onClose, productId, onRefresh }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await productApi.update(productId, formData);
-      onRefresh();
-      onClose();
-    } catch {
-      setError("Помилка при збереженні. Перевірте дані.");
-    }
-  };
+  e.preventDefault();
+  try {
+    const dataToSend = {
+      ...formData,
+      description: formData.description.trim() === '' ? null : formData.description
+    };
 
+    await productApi.update(productId, dataToSend);
+    onRefresh();
+    onClose();
+  } catch (err) {
+    console.error("API Error details:", err.response?.data);
+    setError("Помилка при збереженні. Можливо, опис занадто короткий?");
+  }
+};
   return (
     <Dialog 
       open={open} 
