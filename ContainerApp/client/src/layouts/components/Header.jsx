@@ -69,24 +69,22 @@ export const Header = ({ onMenuClick }) => {
 
   return (
     <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        px: { xs: 2, md: 4 },
-        py: 1.5,
-        background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)',
-        borderBottom: '1px solid #322d3d',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1100,
-        width: '100%',
-        maxWidth: '100vw',
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-        touchAction: 'none',
-      }}
-    >
+  sx={{
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    px: { xs: 2, md: 4 },
+    py: 1.5,
+    background: 'linear-gradient(135deg, #231e2e 0%, #050505 100%)',
+    borderBottom: '1px solid #322d3d',
+    position: 'sticky',
+    top: 0,
+    zIndex: 1100,
+    width: '100%', // Залиш 100%
+    boxSizing: 'border-box', // Обов'язково
+    left: 0, // Додай це
+  }}
+>
       <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, minWidth: 0 }}>
         <IconButton
           onClick={onMenuClick}

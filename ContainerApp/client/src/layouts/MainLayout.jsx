@@ -17,16 +17,20 @@ export const MainLayout = () => {
     <Box sx={{ display: 'flex' }}>
       <Sidebar mobileOpen={mobileOpen} onMobileClose={handleDrawerToggle} />
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          width: { md: `calc(100% - ${sidebarWidth}px)` },
-          ml: { md: `${sidebarWidth}px` },
-          minHeight: '100vh',
-          bgcolor: '#0f0c14',
-        }}
-      >
+            <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            width: { md: `calc(100% - ${sidebarWidth}px)` },
+            ml: { md: `${sidebarWidth}px` },
+            minHeight: '100vh',
+            bgcolor: '#0f0c14',
+            maxWidth: '100%',
+            overflowX: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
         <Header onMenuClick={handleDrawerToggle} />
 
         <Box sx={{ p: { xs: 2, sm: 3 } }}>
