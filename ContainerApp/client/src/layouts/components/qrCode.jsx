@@ -25,9 +25,9 @@ export const ContainerQrCode = ({ containerId }) => {
       <Typography variant="subtitle1" sx={{ mb: 1 }}>
         Скануйте для перегляду деталей:
       </Typography>
-      <div 
+      <div
         style={{ width: "250px", height: "250px", margin: "0 auto" }}
-        dangerouslySetInnerHTML={{ __html: svg }} 
+        dangerouslySetInnerHTML={{ __html: svg }}
       />
     </Box>
   );

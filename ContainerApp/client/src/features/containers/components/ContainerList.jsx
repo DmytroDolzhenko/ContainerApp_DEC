@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead,
   TableRow, Paper, Chip, CircularProgress, Box, IconButton,
@@ -12,6 +13,7 @@ import { useContainers } from '../hooks/useContainers';
 import { ActionMenu } from '../../../layouts/components/ui/ActionMenu';
 import { containerApi } from '../api/containerApi';
 import { containerHistoryApi } from '../../containerHistory/api/containerHistoryApi';
+import { ConfirmDialog } from '../../../layouts/components/ui/ConfirmDialog';
 import { FillContainerModal } from './FillContainerModal';
 import { ContainerDetailsModal } from './ContainerDetailsModal';
 import { ContainerEditModal } from './ContainerEditModal';
@@ -23,19 +25,23 @@ export const ContainerList = () => {
   const { containers, loading, refetch } = useContainers();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const [confirmConfig, setConfirmConfig] = useState({
+    open: false,
+    title: '',
+    subtitle: '',
+    onConfirm: () => {},
+  });
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const open = Boolean(anchorEl);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState(null);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const [filterType, setFilterType] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterProduct, setFilterProduct] = useState('');
@@ -49,7 +55,6 @@ export const ContainerList = () => {
   const [typeModalOpen, setTypeModalOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [manageTypesOpen, setManageTypesOpen] = useState(false);
-
   const [historyOpen, setHistoryOpen] = useState(false);
   const [historyData, setHistoryData] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -57,23 +62,57 @@ export const ContainerList = () => {
   const formatDate = (dateString) => {
     if (!dateString) return 'Не вказано';
     return new Date(dateString).toLocaleString('uk-UA', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
+      day: '2-digit', month: '2-digit', year: 'numeric',
     });
   };
 
   const handleResetFilters = () => {
-    setFilterType('');
-    setFilterStatus('all');
-    setFilterProduct('');
-    setPage(0);
+    setFilterType(''); setFilterStatus('all'); setFilterProduct(''); setPage(0);
   };
 
   const getStatusProps = (current, max) => {
     if (current === 0) return { label: "Порожній", color: "default", isEmpty: true };
     if (current >= max) return { label: "Повний", color: "success", isEmpty: false };
     return { label: "У процесі", color: "warning", isEmpty: false };
+  };
+
+  const handleClear = (id) => {
+    const targetId = id || selectedId;
+    setAnchorEl(null);
+    setConfirmConfig({
+      open: true,
+      title: "Очистити контейнер?",
+      subtitle: "Весь вміст буде видалено з системи без можливості відновлення.",
+      onConfirm: async () => {
+        try {
+          await containerApi.clean(targetId, {});
+          toast.success("Контейнер очищено");
+          await refetch();
+        } catch (err) {
+          console.error(err);
+          toast.error("Помилка при очищенні");
+        }
+      }
+    });
+  };
+
+  const handleDelete = (id) => {
+    setAnchorEl(null);
+    setConfirmConfig({
+      open: true,
+      title: "Видалити контейнер?",
+      subtitle: "Ця дія повністю видалить одиницю тари з бази даних.",
+      onConfirm: async () => {
+        try {
+          await containerApi.delete(id);
+          toast.success("Контейнер видалено");
+          refetch();
+        } catch (err) {
+          console.error(err);
+          toast.error("Помилка при видалені");
+        }
+      }
+    });
   };
 
   const filteredContainers = useMemo(() => {
@@ -83,21 +122,15 @@ export const ContainerList = () => {
       const productName = container.productName || container.ProductName || '';
       const containerTypeName = container.containerTypeName || container.ContainerTypeName;
       const currentCapacity = container.currentCapacity ?? container.CurrentCapacity ?? 0;
-
       const searchLower = searchTerm.toLowerCase();
       const matchesSearch = (
         name?.toLowerCase().includes(searchLower) ||
         uniqCode?.toLowerCase().includes(searchLower) ||
         productName?.toLowerCase().includes(searchLower)
       );
-
       const matchesType = filterType === '' || containerTypeName === filterType;
-      const matchesStatus = 
-        filterStatus === 'all' ? true :
-        filterStatus === 'empty' ? currentCapacity === 0 : currentCapacity > 0;
-      const matchesProduct = filterProduct === '' || 
-        productName.toLowerCase().includes(filterProduct.toLowerCase());
-
+      const matchesStatus = filterStatus === 'all' ? true : filterStatus === 'empty' ? currentCapacity === 0 : currentCapacity > 0;
+      const matchesProduct = filterProduct === '' || productName.toLowerCase().includes(filterProduct.toLowerCase());
       return matchesSearch && matchesType && matchesStatus && matchesProduct;
     });
   }, [containers, searchTerm, filterType, filterStatus, filterProduct]);
@@ -111,19 +144,6 @@ export const ContainerList = () => {
     const types = containers?.map(c => c.containerTypeName || c.ContainerTypeName).filter(Boolean) || [];
     return [...new Set(types)];
   }, [containers]);
-
-  const handleClear = async (id) => {
-    const targetId = id || selectedId;
-    if (window.confirm("Очистити вміст контейнера?")) {
-      try {
-        await containerApi.clean(targetId, {});
-        await refetch();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    setAnchorEl(null);
-  };
 
   const handleOpenFillModal = (container) => {
     setContainerToFill(container);
@@ -148,8 +168,8 @@ export const ContainerList = () => {
     try {
       const data = await containerHistoryApi.getContainerHistory(id);
       setHistoryData(data);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     } finally {
       setHistoryLoading(false);
     }
@@ -175,26 +195,24 @@ export const ContainerList = () => {
         </Stack>
 
         <Stack direction="row" spacing={2} alignItems="center">
-          {!isMobile && (
-            <Stack direction="row" spacing={1}>
-              <Tooltip title="Керування типами">
-                <IconButton 
-                  onClick={() => setManageTypesOpen(true)}
-                  sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
-                >
-                  <Settings />
-                </IconButton>
-              </Tooltip>
-              <Button
-                variant="outlined"
-                startIcon={<Category />}
-                onClick={() => setTypeModalOpen(true)}
-                sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
+          <Stack direction="row" spacing={1}>
+            <Tooltip title="Керування типами">
+              <IconButton
+                onClick={() => setManageTypesOpen(true)}
+                sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
               >
-                Новий тип
-              </Button>
-            </Stack>
-          )}
+                <Settings />
+              </IconButton>
+            </Tooltip>
+            <Button
+              variant="outlined"
+              startIcon={<Category />}
+              onClick={() => setTypeModalOpen(true)}
+              sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
+            >
+              Новий тип
+            </Button>
+          </Stack>
           <Button
             variant="contained"
             startIcon={<Add />}
@@ -300,22 +318,15 @@ export const ContainerList = () => {
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, width: '100%' }}>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredContainers?.length || 0}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(e, p) => setPage(p)}
+          rowsPerPageOptions={[5, 10, 25]} component="div" count={filteredContainers?.length || 0}
+          rowsPerPage={rowsPerPage} page={page} onPageChange={(e, p) => setPage(p)}
           onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
-          labelRowsPerPage="Рядків:"
-          sx={{ color: '#a0a0a0', border: 'none' }}
+          labelRowsPerPage="Рядків:" sx={{ color: '#a0a0a0', border: 'none' }}
         />
       </Box>
 
       <Menu
-        anchorEl={filterAnchorEl}
-        open={Boolean(filterAnchorEl)}
-        onClose={() => setFilterAnchorEl(null)}
+        anchorEl={filterAnchorEl} open={Boolean(filterAnchorEl)} onClose={() => setFilterAnchorEl(null)}
         PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', p: 2, minWidth: '250px', border: '1px solid #322d3d', borderRadius: '16px' } }}
       >
         <Stack spacing={2}>
@@ -340,12 +351,10 @@ export const ContainerList = () => {
         </Stack>
       </Menu>
 
-      <ActionMenu 
-        anchorEl={anchorEl} 
-        open={open} 
-        onClose={() => setAnchorEl(null)} 
-        onEdit={() => { handleOpenEditModal(selectedId); setAnchorEl(null); }} 
-        onDelete={async () => { if(confirm("Видалити?")) { await containerApi.delete(selectedId); refetch(); } setAnchorEl(null); }} 
+      <ActionMenu
+        anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}
+        onEdit={() => { handleOpenEditModal(selectedId); setAnchorEl(null); }}
+        onDelete={() => handleDelete(selectedId)}
         onDetails={() => { handleOpenDetails(selectedId); setAnchorEl(null); }}
       >
         <MenuItem onClick={handleShowHistory}>
@@ -354,40 +363,20 @@ export const ContainerList = () => {
         </MenuItem>
       </ActionMenu>
 
+      <ConfirmDialog
+        open={confirmConfig.open}
+        title={confirmConfig.title}
+        subtitle={confirmConfig.subtitle}
+        onConfirm={confirmConfig.onConfirm}
+        onClose={() => setConfirmConfig({ ...confirmConfig, open: false })}
+      />
+
       <FillContainerModal open={fillModalOpen} onClose={() => setFillModalOpen(false)} container={containerToFill} onRefresh={refetch} />
-      
-      <ContainerDetailsModal
-        open={detailsModalOpen}
-        onClose={() => setDetailsModalOpen(false)}
-        containerId={selectedContainerId}
-        onRefresh={refetch}
-        onEdit={(id) => handleOpenEditModal(id)}
-      />
-
-      <ContainerEditModal
-        open={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        containerId={containerToEditId}
-        onRefresh={refetch}
-      />
-
-      <ContainerTypeCreateModal 
-        open={typeModalOpen} 
-        onClose={() => setTypeModalOpen(false)} 
-        onRefresh={refetch} 
-      />
-
-      <ContainerCreateModal 
-        open={createModalOpen} 
-        onClose={() => setCreateModalOpen(false)} 
-        onRefresh={refetch} 
-      />
-
-      <ContainerTypesManageModal 
-        open={manageTypesOpen} 
-        onClose={() => setManageTypesOpen(false)} 
-        onRefresh={refetch} 
-      />
+      <ContainerDetailsModal open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} containerId={selectedContainerId} onRefresh={refetch} onEdit={(id) => handleOpenEditModal(id)} />
+      <ContainerEditModal open={editModalOpen} onClose={() => setEditModalOpen(false)} containerId={containerToEditId} onRefresh={refetch} />
+      <ContainerTypeCreateModal open={typeModalOpen} onClose={() => setTypeModalOpen(false)} onRefresh={refetch} />
+      <ContainerCreateModal open={createModalOpen} onClose={() => setCreateModalOpen(false)} onRefresh={refetch} />
+      <ContainerTypesManageModal open={manageTypesOpen} onClose={() => setManageTypesOpen(false)} onRefresh={refetch} />
 
       <Dialog open={historyOpen} onClose={() => setHistoryOpen(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { bgcolor: '#1e1b26', color: '#fff', borderRadius: '16px', border: '1px solid #322d3d' } }}>
         <DialogTitle sx={{ fontWeight: 'bold' }}>Історія контейнера</DialogTitle>

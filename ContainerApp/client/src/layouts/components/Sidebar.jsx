@@ -1,5 +1,5 @@
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Typography, Box, Divider, useMediaQuery, useTheme } from '@mui/material';
-import { Inventory, ShoppingBasket, People, Logout, AssignmentTurnedIn} from '@mui/icons-material';
+import { Inventory, ShoppingBasket, People, Logout} from '@mui/icons-material';
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 

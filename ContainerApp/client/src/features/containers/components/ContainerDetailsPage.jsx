@@ -78,7 +78,6 @@ export const ContainerDetailsPage = () => {
   if (loading) return <Box sx={{ p: 5, textAlign: 'center' }}><CircularProgress /></Box>;
   if (!container) return <Typography sx={{ color: 'white', p: 5 }}>Контейнер не знайдено</Typography>;
 
-  // Уніфікація полів
   const name = container.name || container.Name;
   const containerTypeName = container.containerTypeName || container.ContainerTypeName || "Без типу";
   const productName = container.productName || container.ProductName;
@@ -88,10 +87,9 @@ export const ContainerDetailsPage = () => {
   const description = container.description || container.Description;
   const expirationDate = container.productExpirationDate || container.expirationDate || container.ExpirationDate;
 
-  // Логіка терміну придатності
   const getExpirationStatus = () => {
     if (!expirationDate || !productName || productName === "Порожньо") return null;
-    
+
     const expDate = new Date(expirationDate);
     const today = new Date();
     const diffTime = expDate - today;

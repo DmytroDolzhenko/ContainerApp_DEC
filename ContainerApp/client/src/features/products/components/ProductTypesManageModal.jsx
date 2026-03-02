@@ -45,17 +45,17 @@ export const ProductTypesManageModal = ({ open, onClose, onRefresh }) => {
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
       fullWidth
-      PaperProps={{ 
-        sx: { 
-          bgcolor: '#1e1b26', 
-          border: '1px solid #322d3d', 
-          borderRadius: '16px' 
-        } 
+      PaperProps={{
+        sx: {
+          bgcolor: '#1e1b26',
+          border: '1px solid #322d3d',
+          borderRadius: '16px'
+        }
       }}
     >
       <DialogTitle component="div" sx={{ color: '#fff', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -65,7 +65,6 @@ export const ProductTypesManageModal = ({ open, onClose, onRefresh }) => {
 
       <DialogContent sx={{ minHeight: '300px' }}>
         {error && <Alert severity="error" sx={{ mb: 2, borderRadius: '8px' }}>{error}</Alert>}
-        
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
             <CircularProgress color="secondary" />
@@ -82,11 +81,11 @@ export const ProductTypesManageModal = ({ open, onClose, onRefresh }) => {
                   <Box key={type.id || type.Id}>
                     <ListItem
                       secondaryAction={
-                        <IconButton 
-                          edge="end" 
+                        <IconButton
+                          edge="end"
                           onClick={() => handleDelete(type.id || type.Id)}
-                          sx={{ 
-                            color: 'rgba(255, 82, 82, 0.6)', 
+                          sx={{
+                            color: 'rgba(255, 82, 82, 0.6)',
                             '&:hover': { color: '#ff5252', bgcolor: 'rgba(255, 82, 82, 0.1)' } 
                           }}
                         >
@@ -114,9 +113,9 @@ export const ProductTypesManageModal = ({ open, onClose, onRefresh }) => {
       </DialogContent>
 
       <DialogActions sx={{ p: 2 }}>
-        <Button 
-          onClick={onClose} 
-          fullWidth 
+        <Button
+          onClick={onClose}
+          fullWidth
           sx={{ color: '#a0a0a0', textTransform: 'none', fontWeight: 'bold' }}
         >
           Закрити

@@ -11,13 +11,13 @@ export const ProductEditModal = ({ open, onClose, productId, onRefresh }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [productTypes, setProductTypes] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     productTypeId: '',
     expirationDate: '',
-    manufactureDate: '' 
+    manufactureDate: ''
   });
 
   const formatDateForInput = (isoDate) => {
@@ -75,18 +75,18 @@ export const ProductEditModal = ({ open, onClose, productId, onRefresh }) => {
   }
 };
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
       fullWidth
-      PaperProps={{ 
-        sx: { 
-          bgcolor: '#1e1b26', 
-          backgroundImage: 'none', 
-          borderRadius: '16px', 
-          border: '1px solid #322d3d' 
-        } 
+      PaperProps={{
+        sx: {
+          bgcolor: '#1e1b26',
+          backgroundImage: 'none',
+          borderRadius: '16px',
+          border: '1px solid #322d3d'
+        }
       }}
     >
       <DialogTitle component="div" sx={{ color: '#fff', fontWeight: 'bold', textAlign: 'center', pt: 3 }}>

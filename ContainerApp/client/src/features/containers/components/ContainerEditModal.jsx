@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { 
-  Box, Typography, TextField, Button, Grid, CircularProgress, 
-  Alert, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions 
+import {
+  Box, TextField, Button, CircularProgress,
+  Alert, MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Stack
 } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
 import { containerApi } from '../api/containerApi';
@@ -23,7 +23,6 @@ export const ContainerEditModal = ({ open, onClose, containerId, onRefresh }) =>
   useEffect(() => {
     const loadData = async () => {
       if (!containerId || !open) return;
-      
       try {
         setLoading(true);
         setError('');
@@ -52,10 +51,20 @@ export const ContainerEditModal = ({ open, onClose, containerId, onRefresh }) =>
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'capacity' ? Number(value) : value
-    }));
+
+    if (name === 'containerTypeName') {
+      const selectedType = containerTypes.find(t => t.name === value);
+      setFormData(prev => ({
+        ...prev,
+        containerTypeName: value,
+        capacity: selectedType?.capacity || selectedType?.Capacity || 0
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -63,8 +72,8 @@ export const ContainerEditModal = ({ open, onClose, containerId, onRefresh }) =>
     setIsSubmitting(true);
     try {
       await containerApi.update(containerId, formData);
-      onRefresh(); // Оновлюємо список
-      onClose();   // Закриваємо модалку
+      onRefresh();
+      onClose();
     } catch (err) {
       console.error(err);
       setError("Помилка при збереженні. Перевірте дані.");
@@ -74,97 +83,98 @@ export const ContainerEditModal = ({ open, onClose, containerId, onRefresh }) =>
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="sm" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
       fullWidth
       PaperProps={{ sx: { bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px' } }}
     >
       <DialogTitle sx={{ color: '#fff', fontWeight: 'bold', textAlign: 'center', pt: 3 }}>
         Редагування контейнера
       </DialogTitle>
-      
+
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ pb: 4 }}>
           {loading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}><CircularProgress color="secondary" /></Box>
           ) : (
-            <>
-              {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Назва"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    sx={commonInputStyles}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Ємність (L)"
-                    name="capacity"
-                    type="number"
-                    value={formData.capacity}
-                    onChange={handleChange}
-                    sx={commonInputStyles}
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    fullWidth
-                    label="Тип тари"
-                    name="containerTypeName"
-                    value={formData.containerTypeName}
-                    onChange={handleChange}
-                    sx={commonInputStyles}
-                    required
-                  >
-                    {containerTypes.map((option) => (
-                      <MenuItem key={option.id} value={option.name}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Опис"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    multiline
-                    rows={3}
-                    sx={commonInputStyles}
-                  />
-                </Grid>
-              </Grid>
-            </>
+            <Stack spacing={3}>
+              {error && <Alert severity="error" sx={{ borderRadius: '8px' }}>{error}</Alert>}
+
+              <TextField
+                fullWidth
+                label="Назва"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                sx={commonInputStyles}
+                required
+              />
+
+              <TextField
+                select
+                fullWidth
+                label="Тип тари"
+                name="containerTypeName"
+                value={formData.containerTypeName}
+                onChange={handleChange}
+                sx={commonInputStyles}
+                required
+              >
+                {containerTypes.map((option) => (
+                  <MenuItem key={option.id} value={option.name}>
+                    {option.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                fullWidth
+                label="Ємність (L)"
+                value={formData.capacity ? `${formData.capacity} L` : '—'}
+                InputProps={{ readOnly: true }}
+                sx={{
+                  ...commonInputStyles,
+                  '& .MuiInputBase-input': { color: '#bb86fc', fontWeight: 'bold' }
+                }}
+              />
+
+              <TextField
+                fullWidth
+                label="Опис"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                multiline
+                rows={3}
+                sx={commonInputStyles}
+              />
+            </Stack>
           )}
         </DialogContent>
 
         <DialogActions sx={{ p: 3, justifyContent: 'center', gap: 2, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <Button 
-            onClick={onClose} 
+          <Button
+            onClick={onClose}
             startIcon={<Cancel />}
-            sx={{ color: '#a0a0a0', '&:hover': { color: '#fff' } }}
+            sx={{ color: '#a0a0a0', '&:hover': { color: '#fff' }, textTransform: 'none' }}
           >
             Скасувати
           </Button>
-          <Button 
-            type="submit" 
-            variant="contained" 
+          <Button
+            type="submit"
+            variant="contained"
             disabled={loading || isSubmitting}
             startIcon={<Save />}
-            sx={{ bgcolor: '#bb86fc', color: '#000', fontWeight: 'bold', '&:hover': { bgcolor: '#9a67ea' } }}
+            sx={{
+              bgcolor: '#bb86fc',
+              color: '#000',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              px: 4,
+              '&:hover': { bgcolor: '#9a67ea' }
+            }}
           >
             Зберегти
           </Button>

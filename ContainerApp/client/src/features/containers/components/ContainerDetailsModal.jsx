@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import {
   Box, Typography, Button, Grid, Chip, LinearProgress,
-  CircularProgress, Divider, IconButton, Tooltip, Alert,
+  CircularProgress, IconButton, Alert,
   Dialog, DialogContent, DialogTitle, Stack
 } from '@mui/material';
-import { 
-  Close, Edit, QrCode, CleaningServices, 
-  WarningAmber, EventAvailable, Download 
+import {
+  Close, Edit, QrCode, CleaningServices,
+  Download
 } from '@mui/icons-material';
 import { containerApi } from '../api/containerApi';
 
@@ -94,10 +94,10 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
   const fillPercentage = capacity > 0 ? Math.min((currentCapacity / capacity) * 100, 100) : 0;
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="md" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
       fullWidth
       PaperProps={{ sx: { bgcolor: '#1e1b26', backgroundImage: 'none', borderRadius: '20px', border: '1px solid #322d3d' } }}
     >
@@ -119,8 +119,8 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
               <Grid item xs={12} md={7}>
                 <Box sx={{ mb: 3 }}>
                   <Typography variant="h4" sx={{ color: '#fff', fontWeight: 'bold', mb: 1 }}>{name}</Typography>
-                  <Chip 
-                    label={container?.containerTypeName || "Без типу"} 
+                  <Chip
+                    label={container?.containerTypeName || "Без типу"}
                     size="small"
                     sx={{ bgcolor: 'rgba(187, 134, 252, 0.1)', color: '#bb86fc', fontWeight: 'bold' }} 
                   />
@@ -146,9 +146,9 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
                       <Typography variant="body2" color="white">Заповненість: {currentCapacity} / {capacity} L</Typography>
                       <Typography variant="body2" color="#bb86fc" fontWeight="bold">{fillPercentage.toFixed(1)}%</Typography>
                     </Box>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={fillPercentage} 
+                    <LinearProgress
+                      variant="determinate"
+                      value={fillPercentage}
                       sx={{ height: 10, borderRadius: 5, bgcolor: '#322d3d', '& .MuiLinearProgress-bar': { bgcolor: fillPercentage > 90 ? '#ff5252' : '#bb86fc' } }} 
                     />
                   </Box>
@@ -156,13 +156,13 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
               </Grid>
 
               <Grid item xs={12} md={5} sx={{ textAlign: 'center' }}>
-                <Box sx={{ 
+                <Box sx={{
                   p: 2, bgcolor: '#fff', borderRadius: '16px', display: 'inline-block', mb: 2,
                   boxShadow: '0 8px 32px rgba(0,0,0,0.4)'
                 }}>
                   {qrCode ? (
-                    <Box 
-                      dangerouslySetInnerHTML={{ __html: qrCode }} 
+                    <Box
+                      dangerouslySetInnerHTML={{ __html: qrCode }}
                       sx={{ '& svg': { width: '180px', height: '180px', display: 'block' } }}
                     />
                   ) : (
@@ -172,9 +172,9 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
                   )}
                 </Box>
                 <br />
-                <Button 
-                  startIcon={<Download />} 
-                  variant="outlined" 
+                <Button
+                  startIcon={<Download />}
+                  variant="outlined"
                   disabled={!qrCode}
                   onClick={handleDownloadQr}
                   sx={{ textTransform: 'none', borderRadius: '8px', color: '#bb86fc', borderColor: '#bb86fc' }}
@@ -191,7 +191,7 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
         <Button startIcon={<CleaningServices />} color="warning" onClick={handleClean} disabled={loading || currentCapacity === 0}>
           Очистити
         </Button>
-        <Button 
+        <Button
           startIcon={<Edit />}
           variant="contained"
           onClick={() => { onClose(); onEdit(containerId); }}

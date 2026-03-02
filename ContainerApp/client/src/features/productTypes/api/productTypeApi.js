@@ -5,6 +5,4 @@ export const productTypeApi = {
     const response = await axiosClient.get("/product-types");
     return response.data;
   },
-
-
 };

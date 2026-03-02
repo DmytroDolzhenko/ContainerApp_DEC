@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
-  Box, Typography, Button, Grid, Chip, Divider, 
-  CircularProgress, Alert, Dialog, DialogContent, 
+  Box, Typography, Button, Grid, Chip, Divider,
+  CircularProgress, Alert, Dialog, DialogContent,
   DialogTitle, IconButton, Stack, Avatar
 } from '@mui/material';
 import { Close, Edit, Email, CalendarToday, VerifiedUser } from '@mui/icons-material';
@@ -32,19 +32,19 @@ export const UserDetailsModal = ({ open, onClose, userId, onEditClick }) => {
   }, [open, userId]);
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="sm" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
       fullWidth
-      PaperProps={{ 
-        sx: { 
-          bgcolor: '#1e1b26', 
+      PaperProps={{
+        sx: {
+          bgcolor: '#1e1b26',
           backgroundImage: 'linear-gradient(135deg, #1e1b26 0%, #231e2e 100%)',
           border: '1px solid #322d3d',
           borderRadius: '20px',
           color: '#fff'
-        } 
+        }
       }}
     >
       <DialogTitle sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
@@ -62,12 +62,12 @@ export const UserDetailsModal = ({ open, onClose, userId, onEditClick }) => {
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, gap: 3 }}>
               <Avatar
-                sx={{ 
-                  width: 80, 
-                  height: 80, 
-                  bgcolor: '#bb86fc', 
-                  fontSize: '2rem', 
-                  fontWeight: 'bold', 
+                sx={{
+                  width: 80,
+                  height: 80,
+                  bgcolor: '#bb86fc',
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
                   color: '#000',
                   boxShadow: '0 4px 10px rgba(187, 134, 252, 0.3)'
                 }}

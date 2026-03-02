@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
-  Box, Typography, TextField, Button, Alert, 
-  CircularProgress, MenuItem, Dialog, DialogTitle, 
+  TextField, Button, Alert,
+  CircularProgress, MenuItem, Dialog, DialogTitle,
   DialogContent, DialogActions, Stack
 } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
@@ -13,7 +13,7 @@ export const ContainerCreateModal = ({ open, onClose, onRefresh }) => {
   const [typesLoading, setTypesLoading] = useState(true);
   const [error, setError] = useState('');
   const [containerTypes, setContainerTypes] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     containerTypeId: '',
@@ -72,10 +72,10 @@ export const ContainerCreateModal = ({ open, onClose, onRefresh }) => {
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="sm" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
       fullWidth
       PaperProps={{ sx: { bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px' } }}
     >
@@ -126,7 +126,7 @@ export const ContainerCreateModal = ({ open, onClose, onRefresh }) => {
               label="Місткість"
               value={selectedTypeCapacity !== null ? `${selectedTypeCapacity} L` : '—'}
               InputProps={{ readOnly: true }}
-              sx={{ 
+              sx={{
                 ...commonInputStyles,
                 '& .MuiInputBase-input': { color: '#bb86fc', fontWeight: 'bold' }
               }}
@@ -148,22 +148,22 @@ export const ContainerCreateModal = ({ open, onClose, onRefresh }) => {
         </DialogContent>
 
         <DialogActions sx={{ p: 3, justifyContent: 'center', gap: 2 }}>
-          <Button 
-            onClick={onClose} 
+          <Button
+            onClick={onClose}
             startIcon={<Cancel />}
             sx={{ color: '#a0a0a0', textTransform: 'none' }}
           >
             Скасувати
           </Button>
-          <Button 
-            type="submit" 
-            variant="contained" 
+          <Button
+            type="submit"
+            variant="contained"
             disabled={loading || typesLoading}
             startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />}
-            sx={{ 
-              bgcolor: '#bb86fc', 
-              color: '#000', 
-              fontWeight: 'bold', 
+            sx={{
+              bgcolor: '#bb86fc',
+              color: '#000',
+              fontWeight: 'bold',
               textTransform: 'none',
               px: 4,
               '&:hover': { bgcolor: '#9a67ea' }

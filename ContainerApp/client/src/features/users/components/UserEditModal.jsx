@@ -72,13 +72,11 @@ export const UserEditModal = ({ open, onClose, userId, onRefresh }) => {
         email: formData.email.trim()
       };
 
-      // 1. Оновлення основних даних
       await userApi.update(userId, userPayload);
 
-      // 2. Оновлення ролі, якщо вона змінилася
       if (formData.role !== initialRole) {
-        await userApi.changeRole(userId, { 
-          newRole: ROLE_MAP_REVERSE[formData.role] 
+        await userApi.changeRole(userId, {
+          newRole: ROLE_MAP_REVERSE[formData.role]
         });
       }
 
@@ -93,18 +91,18 @@ export const UserEditModal = ({ open, onClose, userId, onRefresh }) => {
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="sm" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
       fullWidth
-      PaperProps={{ 
-        sx: { 
-          bgcolor: '#1e1b26', 
-          backgroundImage: 'none', 
-          borderRadius: '20px', 
-          border: '1px solid #322d3d' 
-        } 
+      PaperProps={{
+        sx: {
+          bgcolor: '#1e1b26',
+          backgroundImage: 'none',
+          borderRadius: '20px',
+          border: '1px solid #322d3d'
+        }
       }}
     >
       <DialogTitle component="div" sx={{ textAlign: 'center', pt: 4 }}>

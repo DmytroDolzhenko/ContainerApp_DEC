@@ -27,7 +27,6 @@ export const ProductTypeCreateModal = ({ open, onClose, onRefresh }) => {
 
     try {
       await productApi.createType(trimmedName);
-      
       if (typeof onRefresh === 'function') onRefresh();
       onClose();
       setName('');
@@ -46,18 +45,18 @@ export const ProductTypeCreateModal = ({ open, onClose, onRefresh }) => {
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
       fullWidth
-      PaperProps={{ 
-        sx: { 
-          bgcolor: '#1e1b26', 
-          border: '1px solid #322d3d', 
+      PaperProps={{
+        sx: {
+          bgcolor: '#1e1b26',
+          border: '1px solid #322d3d',
           borderRadius: '16px',
-          p: 2 
-        } 
+          p: 2
+        }
       }}
     >
       <DialogTitle component="div" sx={{ textAlign: 'center', pb: 1, pt: 3 }}>
@@ -93,26 +92,26 @@ export const ProductTypeCreateModal = ({ open, onClose, onRefresh }) => {
         </DialogContent>
 
         <DialogActions sx={{ p: 3, justifyContent: 'center', gap: 2 }}>
-          <Button 
-            onClick={onClose} 
+          <Button
+            onClick={onClose}
             sx={{ color: '#a0a0a0', textTransform: 'none' }}
             disabled={loading}
           >
             Скасувати
           </Button>
-          <Button 
-            type="submit" 
-            variant="contained" 
+          <Button
+            type="submit"
+            variant="contained"
             disabled={loading}
             startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />}
-            sx={{ 
-              bgcolor: '#bb86fc', 
-              color: '#000', 
-              fontWeight: 'bold', 
+            sx={{
+              bgcolor: '#bb86fc',
+              color: '#000',
+              fontWeight: 'bold',
               textTransform: 'none',
               px: 4,
               borderRadius: '10px',
-              '&:hover': { bgcolor: '#9a67ea' } 
+              '&:hover': { bgcolor: '#9a67ea' }
             }}
           >
             {loading ? 'Збереження...' : 'Зберегти'}

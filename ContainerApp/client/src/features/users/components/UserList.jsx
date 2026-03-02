@@ -49,7 +49,6 @@ export const UserList = () => {
     });
   };
 
-  // Функції пагінації
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -282,7 +281,7 @@ export const UserList = () => {
       <UserCreateModal open={createModalOpen} onClose={() => setCreateModalOpen(false)} onRefresh={refetch} />
       <UserEditModal open={editModalOpen} onClose={() => setEditModalOpen(false)} userId={selectedId} onRefresh={refetch} />
       <UserDetailsModal
-        open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)} 
+        open={detailsModalOpen} onClose={() => setDetailsModalOpen(false)}
         userId={userIdToView}
         onEditClick={(id) => { setDetailsModalOpen(false); setSelectedId(id); setEditModalOpen(true); }}
       />

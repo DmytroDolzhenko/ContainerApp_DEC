@@ -28,7 +28,7 @@ export const Header = ({ onMenuClick }) => {
       id: `expired-${c.id}`,
       containerId: c.id,
       text: `Контейнер "${c.name}": перевірте термін придатності!`,
-      type: 'warning', // або 'error'
+      type: 'warning',
       time: 'Увага',
       read: false
     }));
@@ -96,9 +96,9 @@ export const Header = ({ onMenuClick }) => {
         </IconButton>
 
         {showSearch && (
-          <Box 
-            sx={{ 
-              width: { xs: 0, sm: 250, md: 400 }, 
+          <Box
+            sx={{
+              width: { xs: 0, sm: 250, md: 400 },
               display: { xs: 'none', sm: 'block' },
               mr: 2,
               flexShrink: 1,
@@ -133,7 +133,7 @@ export const Header = ({ onMenuClick }) => {
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 3 }, flexShrink: 0 }}>
-        <IconButton 
+        <IconButton
           onClick={handleOpen}
           sx={{
             color: '#a0a0a0',
@@ -194,8 +194,8 @@ export const Header = ({ onMenuClick }) => {
       >
         <Box sx={{ p: 2, pb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>Сповіщення</Typography>
-          <Typography 
-            variant="caption" 
+          <Typography
+            variant="caption"
             onClick={handleMarkAllAsRead}
             sx={{ color: '#bb86fc', cursor: 'pointer' }}
           >
@@ -208,7 +208,7 @@ export const Header = ({ onMenuClick }) => {
             notifications.map((item) => (
               <MenuItem key={item.id} onClick={() => { if (item.containerId) navigate(`/containers/${item.containerId}`); handleClose(); }}>
                 <ListItemIcon sx={{ minWidth: '35px' }}>{getIcon(item.type)}</ListItemIcon>
-                <ListItemText 
+                <ListItemText
                   primary={item.text}
                   secondary={item.time}
                   primaryTypographyProps={{ variant: 'body2', sx: { color: '#fff', whiteSpace: 'normal' } }}

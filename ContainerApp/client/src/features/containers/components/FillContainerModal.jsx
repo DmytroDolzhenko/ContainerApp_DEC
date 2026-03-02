@@ -153,7 +153,6 @@ export const FillContainerModal = ({ open, onClose, container, onRefresh }) => {
 
           <Divider sx={{ my: 3, bgcolor: '#322d3d' }} />
 
-          {/* СЕКЦІЯ КЕРУВАННЯ ПРАВИЛАМИ */}
           <Typography variant="subtitle2" sx={{ color: '#bb86fc', mb: 2 }}>
             Обмеження контейнера
           </Typography>
@@ -195,7 +194,7 @@ export const FillContainerModal = ({ open, onClose, container, onRefresh }) => {
                       </IconButton>
                     }
                   >
-                    <ListItemText 
+                    <ListItemText
                       primary={rule.productTypeForRule?.name || `Тип #${rule.productTypeId}`} 
                       primaryTypographyProps={{ sx: { color: '#fff', fontSize: '0.85rem' } }}
                     />
@@ -208,9 +207,9 @@ export const FillContainerModal = ({ open, onClose, container, onRefresh }) => {
 
         <DialogActions sx={{ p: 3, justifyContent: 'center', gap: 2 }}>
           <Button onClick={onClose} sx={{ color: '#a0a0a0' }}>Скасувати</Button>
-          <Button 
-            type="submit" 
-            variant="contained" 
+          <Button
+            type="submit"
+            variant="contained"
             disabled={isSubmitting}
             sx={{ bgcolor: '#bb86fc', color: '#000', '&:hover': { bgcolor: '#9a67ea' } }}
           >

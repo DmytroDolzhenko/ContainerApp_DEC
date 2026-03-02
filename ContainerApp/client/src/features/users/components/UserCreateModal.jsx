@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {
-  Box, Typography, TextField, Button, Alert, CircularProgress,
-  MenuItem, Dialog, DialogTitle, DialogContent, DialogActions, Stack, Grid, IconButton, InputAdornment
+  Typography, TextField, Button, Alert, CircularProgress,
+  Dialog, DialogTitle, DialogContent, DialogActions, Stack, Grid, IconButton, InputAdornment
 } from '@mui/material';
 import { Save, Cancel, Visibility, VisibilityOff } from '@mui/icons-material';
 import { authApi } from '../../auth/api/registerApi';

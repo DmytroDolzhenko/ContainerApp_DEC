@@ -111,7 +111,7 @@ export const ProductList = () => {
           {!isMobile && (
             <Stack direction="row" spacing={1}>
               <Tooltip title="Керування типами">
-                <IconButton 
+                <IconButton
                   onClick={() => setManageTypesOpen(true)}
                   sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
                 >
@@ -245,13 +245,13 @@ export const ProductList = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={() => setAnchorEl(null)}
-        onEdit={() => { 
-          setProductIdToEdit(selectedId); 
-          setEditModalOpen(true); 
-          setAnchorEl(null); 
+        onEdit={() => {
+          setProductIdToEdit(selectedId);
+          setEditModalOpen(true);
+          setAnchorEl(null);
         }}
-        onDelete={async () => { 
-          if(window.confirm("Видалити цей продукт?")) { 
+        onDelete={async () => {
+          if(window.confirm("Видалити цей продукт?")) {
             try {
               await productApi.delete(selectedId);
               if (typeof refetch === 'function') {
@@ -261,9 +261,9 @@ export const ProductList = () => {
               console.error("Помилка видалення:", err);
               alert("Не вдалося видалити продукт.");
             }
-          } 
-          setAnchorEl(null); 
-        }} 
+          }
+          setAnchorEl(null);
+        }}
         onDetails={() => {
           setProductIdToView(selectedId);
           setDetailsModalOpen(true);
@@ -277,10 +277,10 @@ export const ProductList = () => {
         onRefresh={refetch}
       />
 
-      <ProductTypeCreateModal 
-        open={typeModalOpen} 
-        onClose={() => setTypeModalOpen(false)} 
-        onRefresh={refetch} 
+      <ProductTypeCreateModal
+        open={typeModalOpen}
+        onClose={() => setTypeModalOpen(false)}
+        onRefresh={refetch}
       />
 
       <ProductTypesManageModal
@@ -289,9 +289,9 @@ export const ProductList = () => {
         onRefresh={refetch}
       />
 
-      <ProductEditModal 
-        open={editModalOpen} 
-        onClose={() => setEditModalOpen(false)} 
+      <ProductEditModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
         productId={productIdToEdit}
         onRefresh={refetch}
       />

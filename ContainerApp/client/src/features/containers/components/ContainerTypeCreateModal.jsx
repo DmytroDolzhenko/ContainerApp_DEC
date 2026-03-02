@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Box, TextField, Button, Alert, CircularProgress,
+  TextField, Button, Alert, CircularProgress,
   Dialog, DialogTitle, DialogContent, DialogActions, Stack
 } from '@mui/material';
 import { Save } from '@mui/icons-material';
@@ -10,7 +10,7 @@ import { commonInputStyles } from '../../../assets/styles/inputStyles';
 export const ContainerTypeCreateModal = ({ open, onClose, onRefresh }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState({
     name: '',
     capacity: ''
@@ -32,9 +32,9 @@ export const ContainerTypeCreateModal = ({ open, onClose, onRefresh }) => {
     setError('');
 
     try {
-      await containerApi.createType({ 
-        name: formData.name, 
-        capacity: Number(formData.capacity) 
+      await containerApi.createType({
+        name: formData.name,
+        capacity: Number(formData.capacity)
       });
 
       onRefresh();
@@ -49,17 +49,17 @@ export const ContainerTypeCreateModal = ({ open, onClose, onRefresh }) => {
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
       fullWidth
       PaperProps={{ sx: { bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px' } }}
     >
       <DialogTitle sx={{ color: '#fff', fontWeight: 'bold', textAlign: 'center', pt: 3 }}>
         Новий тип тари
       </DialogTitle>
-      
+
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <Stack spacing={3}>
@@ -90,16 +90,16 @@ export const ContainerTypeCreateModal = ({ open, onClose, onRefresh }) => {
 
         <DialogActions sx={{ p: 3, justifyContent: 'center', gap: 2 }}>
           <Button onClick={onClose} sx={{ color: '#a0a0a0', textTransform: 'none' }}>Скасувати</Button>
-          <Button 
-            type="submit" 
-            variant="contained" 
+          <Button
+            type="submit"
+            variant="contained"
             disabled={loading}
             startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Save />}
-            sx={{ 
-              bgcolor: '#bb86fc', 
-              color: '#000', 
-              fontWeight: 'bold', 
-              textTransform: 'none', 
+            sx={{
+              bgcolor: '#bb86fc',
+              color: '#000',
+              fontWeight: 'bold',
+              textTransform: 'none',
               px: 4,
               '&:hover': { bgcolor: '#9a67ea' }
             }}

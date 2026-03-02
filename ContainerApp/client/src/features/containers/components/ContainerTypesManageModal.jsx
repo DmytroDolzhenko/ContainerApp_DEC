@@ -32,17 +32,17 @@ export const ContainerTypesManageModal = ({ open, onClose, onRefresh }) => {
     try {
       await containerApi.deleteType(id);
       setTypes(types.filter(t => (t.id || t.Id) !== id));
-      onRefresh(); // Оновлюємо основний список контейнерів
+      onRefresh();
     } catch (err) {
       setError(err.response?.data?.message || 'Помилка при видаленні. Можливо, цей тип використовується.');
     }
   };
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
       fullWidth
       PaperProps={{ sx: { bgcolor: '#1e1b26', border: '1px solid #322d3d', borderRadius: '16px' } }}
     >
@@ -53,7 +53,7 @@ export const ContainerTypesManageModal = ({ open, onClose, onRefresh }) => {
 
       <DialogContent sx={{ minHeight: '300px' }}>
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        
+
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}><CircularProgress color="secondary" /></Box>
         ) : (
@@ -66,8 +66,8 @@ export const ContainerTypesManageModal = ({ open, onClose, onRefresh }) => {
                   <Box key={type.id || type.Id}>
                     <ListItem
                       secondaryAction={
-                        <IconButton 
-                          edge="end" 
+                        <IconButton
+                          edge="end"
                           onClick={() => handleDelete(type.id || type.Id)}
                           sx={{ color: 'rgba(255, 82, 82, 0.6)', '&:hover': { color: '#ff5252' } }}
                         >
