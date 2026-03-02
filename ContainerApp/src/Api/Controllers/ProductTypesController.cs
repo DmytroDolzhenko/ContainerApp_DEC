@@ -24,6 +24,7 @@ namespace Api.Controllers
             return types.Select(ProductTypeDtos.FromDomain).ToList();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<int>> CreateProductType(
             [FromBody] CreateProductTypeDto request,
@@ -39,6 +40,7 @@ namespace Api.Controllers
             return Ok(newTypeId);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ProductTypeDtos>> UpdateProductType(
             [FromRoute] int id,
@@ -56,6 +58,7 @@ namespace Api.Controllers
             return Ok(ProductTypeDtos.FromDomain(updatedType));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteProductType(
             [FromRoute] int id,

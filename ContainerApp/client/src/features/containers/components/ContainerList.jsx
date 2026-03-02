@@ -18,11 +18,16 @@ import { ContainerEditModal } from './ContainerEditModal';
 import { ContainerTypeCreateModal } from './ContainerTypeCreateModal';
 import { ContainerCreateModal } from './ContainerCreateModal';
 import { ContainerTypesManageModal } from './ContainerTypesManageModal';
+import { useAuth } from '../../auth/hooks/useAuth';
+
 
 export const ContainerList = () => {
   const { containers, loading, refetch } = useContainers();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
+
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'Admin';
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -175,7 +180,7 @@ export const ContainerList = () => {
         </Stack>
 
         <Stack direction="row" spacing={2} alignItems="center">
-          {!isMobile && (
+          {!isMobile && isAdmin &&(
             <Stack direction="row" spacing={1}>
               <Tooltip title="Керування типами">
                 <IconButton 
@@ -195,6 +200,7 @@ export const ContainerList = () => {
               </Button>
             </Stack>
           )}
+          {isAdmin && (
           <Button
             variant="contained"
             startIcon={<Add />}
@@ -203,6 +209,7 @@ export const ContainerList = () => {
           >
             Додати контейнер
           </Button>
+          )}
         </Stack>
       </Box>
 

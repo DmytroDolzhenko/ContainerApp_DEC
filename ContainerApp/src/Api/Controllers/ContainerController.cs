@@ -64,6 +64,7 @@ namespace Api.Controllers
             return result.Select(ContainerDto.FromDomain).ToList();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ContainerDto> CreateContainer([FromBody] CreateContainerDto dto, CancellationToken cancellationToken)
         {
@@ -79,6 +80,7 @@ namespace Api.Controllers
             return ContainerDto.FromDomain(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteContainer(int id, CancellationToken cancellationToken)
         {
@@ -96,6 +98,7 @@ namespace Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateContainer(int id, [FromBody] UpdateContainerDto dto, CancellationToken cancellationToken)
         {

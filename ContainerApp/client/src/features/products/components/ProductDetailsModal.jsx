@@ -6,11 +6,15 @@ import {
 } from '@mui/material';
 import { Close, Edit, Event, EventAvailable } from '@mui/icons-material';
 import { productApi } from '../api/productApi';
+import { useAuth } from '../../auth/hooks/useAuth';
 
 export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'Admin';
 
   const formatDate = (dateString) => {
     if (!dateString) return '—';
@@ -38,19 +42,19 @@ export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) =
   }, [open, productId]);
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="sm" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
       fullWidth
-      PaperProps={{ 
-        sx: { 
-          bgcolor: '#1e1b26', 
+      PaperProps={{
+        sx: {
+          bgcolor: '#1e1b26',
           backgroundImage: 'linear-gradient(135deg, #1e1b26 0%, #231e2e 100%)',
           border: '1px solid #322d3d',
           borderRadius: '20px',
           color: '#fff'
-        } 
+        }
       }}
     >
       <DialogTitle sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
@@ -71,20 +75,20 @@ export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) =
                 {product.name}
               </Typography>
               <Stack direction="row" spacing={1}>
-                <Chip 
-                  label={product.productTypeName || `ID: ${product.productTypeId}`} 
-                  sx={{ bgcolor: 'rgba(187, 134, 252, 0.1)', color: '#bb86fc', fontWeight: 'bold' }} 
+                <Chip
+                  label={product.productTypeName || `ID: ${product.productTypeId}`}
+                  sx={{ bgcolor: 'rgba(187, 134, 252, 0.1)', color: '#bb86fc', fontWeight: 'bold' }}
                 />
               </Stack>
             </Box>
-            
+
             <Typography variant="body2" sx={{ color: '#a0a0a0', mb: 0.5 }}>Опис:</Typography>
             <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.6 }}>
               {product.description || "Опис відсутній"}
             </Typography>
-            
+
             <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', mb: 4 }} />
-            
+
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
@@ -106,7 +110,8 @@ export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) =
                 </Typography>
               </Grid>
             </Grid>
-            
+
+            {isAdmin && (
             <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="caption" sx={{ color: '#555' }}>ID: #{product.id}</Typography>
               <Button 
@@ -125,6 +130,7 @@ export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) =
                 Редагувати
               </Button>
             </Box>
+            )}
           </Box>
         ) : null}
       </DialogContent>

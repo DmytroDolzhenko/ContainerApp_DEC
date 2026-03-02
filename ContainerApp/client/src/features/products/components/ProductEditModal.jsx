@@ -75,12 +75,12 @@ export const ProductEditModal = ({ open, onClose, productId, onRefresh }) => {
   }
 };
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
       fullWidth
-      PaperProps={{ 
+      PaperProps={{
         sx: { 
           bgcolor: '#1e1b26', 
           backgroundImage: 'none', 
