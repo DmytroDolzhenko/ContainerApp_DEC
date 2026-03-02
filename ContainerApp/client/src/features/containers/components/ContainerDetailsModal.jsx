@@ -10,10 +10,15 @@ import {
 } from '@mui/icons-material';
 import { containerApi } from '../api/containerApi';
 
+import { useAuth } from '../../auth/hooks/useAuth';
+
 export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRefresh }) => {
   const [container, setContainer] = useState(null);
   const [qrCode, setQrCode] = useState(null);
   const [loading, setLoading] = useState(true);
+
+    const { user } = useAuth();
+    const isAdmin = user?.role === 'Admin';
 
   const formatDate = (dateString) => {
     if (!dateString) return '—';
@@ -186,7 +191,7 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
           </Box>
         )}
       </DialogContent>
-
+      {isAdmin && (
       <Box sx={{ p: 2, display: 'flex', gap: 2, justifyContent: 'flex-end', bgcolor: '#1e1b26' }}>
         <Button startIcon={<CleaningServices />} color="warning" onClick={handleClean} disabled={loading || currentCapacity === 0}>
           Очистити
@@ -200,6 +205,7 @@ export const ContainerDetailsModal = ({ open, onClose, containerId, onEdit, onRe
           Редагувати
         </Button>
       </Box>
+      )}
     </Dialog>
   );
 };

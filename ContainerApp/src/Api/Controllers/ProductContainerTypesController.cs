@@ -12,6 +12,7 @@ namespace Api.Controllers
     [Route("api/product-container-compliance")]
     public class ProductContainerTypesController(ISender sender, IGetQueries<ContainerTypeProductType> queries) : ControllerBase
     {
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(
             [FromBody] CreateComplianceCommand command,
@@ -28,6 +29,7 @@ namespace Api.Controllers
             return compliances;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(
             [FromQuery] int productTypeId,

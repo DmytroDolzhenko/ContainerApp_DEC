@@ -41,6 +41,7 @@ namespace Api.Controllers
             return ProductDto.FromDomain(product);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductDto>> CreateProduct(
             [FromBody] CreateProductDto request,
@@ -66,6 +67,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductDto>> UpdateProduct(
     [FromRoute] int id,
     [FromBody] UpdateProductDto request,
@@ -93,6 +95,7 @@ namespace Api.Controllers
             return ProductDto.FromDomain(updatedProduct);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{productId:int}")]
         public async Task<ActionResult<ProductDto>> DeleteProduct(
             [FromRoute] int productId,

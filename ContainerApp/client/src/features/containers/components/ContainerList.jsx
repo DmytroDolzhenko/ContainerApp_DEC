@@ -20,11 +20,17 @@ import { ContainerEditModal } from './ContainerEditModal';
 import { ContainerTypeCreateModal } from './ContainerTypeCreateModal';
 import { ContainerCreateModal } from './ContainerCreateModal';
 import { ContainerTypesManageModal } from './ContainerTypesManageModal';
+import { useAuth } from '../../auth/hooks/useAuth';
+
 
 export const ContainerList = () => {
   const { containers, loading, refetch } = useContainers();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
+
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'Admin';
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -195,24 +201,27 @@ export const ContainerList = () => {
         </Stack>
 
         <Stack direction="row" spacing={2} alignItems="center">
-          <Stack direction="row" spacing={1}>
-            <Tooltip title="Керування типами">
-              <IconButton
-                onClick={() => setManageTypesOpen(true)}
-                sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
+          {!isMobile && isAdmin &&(
+            <Stack direction="row" spacing={1}>
+              <Tooltip title="Керування типами">
+                <IconButton 
+                  onClick={() => setManageTypesOpen(true)}
+                  sx={{ color: '#bb86fc', border: '1px solid rgba(187, 134, 252, 0.3)', borderRadius: '10px' }}
+                >
+                  <Settings />
+                </IconButton>
+              </Tooltip>
+              <Button
+                variant="outlined"
+                startIcon={<Category />}
+                onClick={() => setTypeModalOpen(true)}
+                sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
               >
-                <Settings />
-              </IconButton>
-            </Tooltip>
-            <Button
-              variant="outlined"
-              startIcon={<Category />}
-              onClick={() => setTypeModalOpen(true)}
-              sx={{ color: '#bb86fc', borderColor: '#bb86fc', borderRadius: '10px', textTransform: 'none' }}
-            >
-              Новий тип
-            </Button>
-          </Stack>
+                Новий тип
+              </Button>
+            </Stack>
+          )}
+          {isAdmin && (
           <Button
             variant="contained"
             startIcon={<Add />}
@@ -221,6 +230,7 @@ export const ContainerList = () => {
           >
             Додати контейнер
           </Button>
+          )}
         </Stack>
       </Box>
 

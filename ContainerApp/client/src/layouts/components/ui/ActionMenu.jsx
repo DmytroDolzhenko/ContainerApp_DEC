@@ -1,7 +1,12 @@
 import { Menu, MenuItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
 import { Edit, Delete, Visibility } from '@mui/icons-material';
+import { useAuth } from '../../../features/auth/hooks/useAuth';
 
 export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetails, children }) => {
+
+const { user } = useAuth();
+const isAdmin = user?.role === 'Admin';
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -18,10 +23,12 @@ export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetail
         }
       }}
     >
+      {isAdmin && (
       <MenuItem onClick={onEdit} sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' } }}>
         <ListItemIcon><Edit fontSize="small" sx={{ color: '#a0a0a0' }} /></ListItemIcon>
         <ListItemText>Редагувати</ListItemText>
       </MenuItem>
+      )}
 
       <MenuItem onClick={onDetails} sx={{ '&:hover': { bgcolor: 'rgba(255,255,255,0.05)' } }}>
         <ListItemIcon><Visibility fontSize="small" sx={{ color: '#a0a0a0' }} /></ListItemIcon>
@@ -30,12 +37,16 @@ export const ActionMenu = ({ anchorEl, open, onClose, onEdit, onDelete, onDetail
 
       {children}
 
+      {isAdmin && (
       <Divider sx={{ bgcolor: 'rgba(255,255,255,0.1)', my: 1 }} />
+      )}
 
+      {isAdmin && (
       <MenuItem onClick={onDelete} sx={{ '&:hover': { bgcolor: 'rgba(255,0,0,0.1)' }, color: '#ff5252' }}>
         <ListItemIcon><Delete fontSize="small" sx={{ color: '#ff5252' }} /></ListItemIcon>
         <ListItemText>Видалити</ListItemText>
       </MenuItem>
+      )}
     </Menu>
   );
 };

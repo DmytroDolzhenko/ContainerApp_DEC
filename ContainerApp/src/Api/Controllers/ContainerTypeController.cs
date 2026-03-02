@@ -38,6 +38,7 @@ namespace Api.Controllers
             return ContainerTypeDto.FromDomain(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ContainerTypeDto>> UpdateContainerType(
            [FromRoute] int id,
@@ -56,6 +57,7 @@ namespace Api.Controllers
             return ContainerTypeDto.FromDomain(updatedType);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IResult> CreateContainerType([FromBody] CreateContainerTypeDto dto, CancellationToken cancellationToken)
         {
@@ -66,6 +68,7 @@ namespace Api.Controllers
             return Results.Created($"/container-types/{result.Id}", result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteContainerType(int id, CancellationToken cancellationToken)
         {

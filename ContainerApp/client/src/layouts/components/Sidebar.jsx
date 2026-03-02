@@ -6,15 +6,18 @@ import { useAuth } from '../../features/auth/hooks/useAuth';
 const sidebarWidth = 240;
 
 export const Sidebar = ({ mobileOpen, onMobileClose }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   const menuItems = [
-    { text: 'Контейнери', icon: <Inventory />, path: '/containers' },
-    { text: 'Продукти', icon: <ShoppingBasket />, path: '/products' },
-    { text: 'Користувачі', icon: <People />, path: '/users' }
+    { text: 'Контейнери', icon: <Inventory />, path: '/containers', roles: ['Admin', 'Operator'] },
+    { text: 'Продукти', icon: <ShoppingBasket />, path: '/products', roles: ['Admin', 'Operator'] },
+    { text: 'Користувачі', icon: <People />, path: '/users', roles: ['Admin'] }
   ];
+
+  const visibleMenuItems = menuItems.filter(item => item.roles.includes(user?.role));
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'linear-gradient(180deg, #231e2e 0%, #050505 100%)' }}>
@@ -24,7 +27,7 @@ export const Sidebar = ({ mobileOpen, onMobileClose }) => {
         </Typography>
       </Box>
       <List sx={{ flexGrow: 1 }}>
-        {menuItems.map((item) => (
+        {visibleMenuItems.map((item) => (
           <ListItemButton
             key={item.text}
             component={Link}

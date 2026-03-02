@@ -16,11 +16,16 @@ import { ProductTypesManageModal } from './ProductTypesManageModal';
 import { ProductEditModal } from './ProductEditModal';
 import { ProductCreateModal } from './ProductCreateModal';
 import { ProductDetailsModal } from './ProductDetailsModal';
+import { useAuth } from '../../auth/hooks/useAuth';
+
 
 export const ProductList = () => {
   const { products, loading, refetch } = useProducts();
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get('search') || '';
+
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'Admin';
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -108,7 +113,7 @@ export const ProductList = () => {
         </Stack>
 
         <Stack direction="row" spacing={2} alignItems="center">
-          {!isMobile && (
+          {!isMobile && isAdmin && (
             <Stack direction="row" spacing={1}>
               <Tooltip title="Керування типами">
                 <IconButton
@@ -128,6 +133,7 @@ export const ProductList = () => {
               </Button>
             </Stack>
           )}
+          {isAdmin && (
           <Button
             variant="contained"
             startIcon={<Add />}
@@ -136,6 +142,7 @@ export const ProductList = () => {
           >
             Додати продукт
           </Button>
+          )}
         </Stack>
       </Box>
 

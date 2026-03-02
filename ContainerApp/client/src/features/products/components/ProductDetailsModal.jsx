@@ -6,11 +6,15 @@ import {
 } from '@mui/material';
 import { Close, Edit, Event, EventAvailable } from '@mui/icons-material';
 import { productApi } from '../api/productApi';
+import { useAuth } from '../../auth/hooks/useAuth';
 
 export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'Admin';
 
   const formatDate = (dateString) => {
     if (!dateString) return '—';
@@ -107,6 +111,7 @@ export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) =
               </Grid>
             </Grid>
 
+            {isAdmin && (
             <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <Typography variant="caption" sx={{ color: '#555' }}>ID: #{product.id}</Typography>
               <Button
@@ -125,6 +130,7 @@ export const ProductDetailsModal = ({ open, onClose, productId, onEditClick }) =
                 Редагувати
               </Button>
             </Box>
+            )}
           </Box>
         ) : null}
       </DialogContent>
